@@ -1,0 +1,56 @@
+---
+const year = new Date().getFullYear();
+---
+
+<footer class="footer" role="contentinfo">
+  <div class="container">
+    <div class="footer-grid">
+      <!-- Left: brand -->
+      <div>
+        <a href="/" class="footer-logo">
+          RealWord<span class="logo-accent">Count</span>er
+        </a>
+        <p class="footer-desc">
+          Free writing tools for Indian students, bloggers, and content creators.
+          Word counter, UPSC exam presets, platform limits checker, and more —
+          all running privately in your browser.
+        </p>
+        <span class="footer-privacy-note">
+          🔒 No data stored — runs 100% in your browser
+        </span>
+      </div>
+
+      <!-- Middle: tools -->
+      <div>
+        <div class="footer-col-title">Tools</div>
+        <ul class="footer-links">
+          <li><a href="/word-counter">Word Counter</a></li>
+          <li><a href="/upsc-word-counter">UPSC Word Counter</a></li>
+          <li><a href="/word-counter">Character Counter</a></li>
+          <li><a href="/word-counter">Reading Time Calculator</a></li>
+        </ul>
+      </div>
+
+      <!-- Right: more pages (Phase 2+) -->
+      <div>
+        <div class="footer-col-title">Resources</div>
+        <ul class="footer-links">
+          <li><a href="/">Home</a></li>
+          <li><a href="/word-counter">Word Counter</a></li>
+          <li><a href="/upsc-word-counter">UPSC Counter</a></li>
+          <li><span style="color:#4B5563; font-size:13px">More tools coming soon</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom bar -->
+    <div class="footer-bottom">
+      <p class="footer-copyright">
+        &copy; {year} RealWordCounter.com — Free forever
+      </p>
+      <span class="footer-private-badge">
+        🔒 100% Private — No data stored
+      </span>
+    </div>
+  </div>
+</footer>

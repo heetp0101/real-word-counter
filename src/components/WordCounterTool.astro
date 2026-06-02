@@ -1,0 +1,1198 @@
+---
+interface Props {
+  defaultGoal?: number;
+  defaultPreset?: string;
+}
+
+const { defaultGoal = 0, defaultPreset = '' } = Astro.props;
+
+const platforms = [
+  { id: 'twitter',       emoji: '🐦', name: 'Twitter / X',         limit: 280 },
+  { id: 'ig-post',       emoji: '📸', name: 'Instagram Post',       limit: 2200 },
+  { id: 'ig-bio',        emoji: '📱', name: 'Instagram Bio',        limit: 150 },
+  { id: 'whatsapp',      emoji: '💬', name: 'WhatsApp',             limit: 65536 },
+  { id: 'linkedin',      emoji: '💼', name: 'LinkedIn Post',        limit: 3000 },
+  { id: 'meta-desc',     emoji: '🔍', name: 'Meta Description',     limit: 155 },
+  { id: 'yt-title',      emoji: '▶️', name: 'YouTube Title',        limit: 100 },
+  { id: 'yt-desc',       emoji: '📺', name: 'YouTube Description',  limit: 5000 },
+  { id: 'sms',           emoji: '📨', name: 'SMS',                  limit: 160 },
+  { id: 'facebook',      emoji: '👍', name: 'Facebook Post',        limit: 63206 },
+];
+
+const presets = [
+  { label: 'UPSC 150',      value: 150 },
+  { label: 'UPSC 250',      value: 250 },
+  { label: 'UPSC Essay',    value: 1100 },
+  { label: 'CBSE 500',      value: 500 },
+  { label: 'IELTS Task 1',  value: 150 },
+  { label: 'IELTS Task 2',  value: 250 },
+  { label: 'Blog 1500',     value: 1500 },
+  { label: 'LinkedIn',      value: 300 },
+];
+---
+
+<div
+  class="wct-root"
+  data-default-goal={defaultGoal}
+  data-default-preset={defaultPreset}
+>
+  <!-- ── Two-column tool layout ── -->
+  <div class="tool-layout">
+
+    <!-- ════ LEFT COLUMN ════ -->
+    <div class="tool-left">
+
+      <!-- Textarea card -->
+      <div class="card editor-card">
+        <textarea
+          id="editor"
+          class="editor-textarea"
+          placeholder="Start typing or paste your text here... Your draft is automatically saved."
+          spellcheck="true"
+          aria-label="Text editor"
+        ></textarea>
+        <div class="autosave-bar">
+          <span id="autosave-indicator" class="autosave-indicator">
+            <span class="autosave-dot"></span>
+            Auto-save on
+          </span>
+        </div>
+      </div>
+
+      <!-- Action buttons -->
+      <div class="action-row">
+        <button id="btn-paste" class="btn btn-secondary btn-sm">📋 Paste</button>
+        <button id="btn-clear" class="btn btn-secondary btn-sm">🗑️ Clear</button>
+        <label class="btn btn-secondary btn-sm" for="file-upload" style="cursor:pointer">
+          📁 Upload
+        </label>
+        <input type="file" id="file-upload" accept=".txt,.docx" style="display:none" aria-label="Upload text file" />
+        <button id="btn-copy-stats" class="btn btn-secondary btn-sm">📊 Copy Stats</button>
+      </div>
+
+      <!-- Ad Zone 1 -->
+      <div class="ad-zone" aria-hidden="true">
+        <!-- Google AdSense ad unit goes here after approval -->
+        <span>Advertisement</span>
+      </div>
+
+      <!-- Stats grid -->
+      <div class="stats-grid" role="region" aria-label="Text statistics">
+        <div class="stat-card">
+          <div class="stat-value" id="stat-words">0</div>
+          <div class="stat-label">Words</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-chars">0</div>
+          <div class="stat-label">Characters</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-chars-ns">0</div>
+          <div class="stat-label">No Spaces</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-sentences">0</div>
+          <div class="stat-label">Sentences</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-paragraphs">0</div>
+          <div class="stat-label">Paragraphs</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-reading">0 min</div>
+          <div class="stat-label">Reading Time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-speaking">0 min</div>
+          <div class="stat-label">Speaking Time</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="stat-unique">0</div>
+          <div class="stat-label">Unique Words</div>
+        </div>
+      </div>
+
+      <!-- Readability card -->
+      <div id="readability-card" class="card card-body readability-card" style="display:none" role="region" aria-label="Readability score">
+        <div class="card-title">📖 Readability Score</div>
+        <div class="readability-body">
+          <div class="readability-score-wrap">
+            <span class="readability-number" id="readability-score">0</span>
+            <span class="readability-label">/100</span>
+          </div>
+          <div>
+            <span id="readability-badge" class="badge badge-neutral">—</span>
+            <div class="readability-grade" id="readability-grade" style="margin-top:4px; font-size:13px; color:var(--color-mute)"></div>
+          </div>
+        </div>
+        <p class="readability-hint">Flesch Reading Ease score — higher is easier to read.</p>
+      </div>
+
+      <!-- Case converter -->
+      <div class="card card-body">
+        <div class="card-title">✏️ Text Case Converter</div>
+        <div class="case-grid">
+          <button id="case-upper"  class="btn btn-secondary btn-sm">UPPERCASE</button>
+          <button id="case-lower"  class="btn btn-secondary btn-sm">lowercase</button>
+          <button id="case-title"  class="btn btn-secondary btn-sm">Title Case</button>
+          <button id="case-sent"   class="btn btn-secondary btn-sm">Sentence case</button>
+          <button id="case-alt"    class="btn btn-secondary btn-sm">aLtErNaTiNg</button>
+          <button id="case-spaces" class="btn btn-secondary btn-sm">Remove Extra Spaces</button>
+          <button id="case-rev"    class="btn btn-secondary btn-sm">Reverse Text</button>
+        </div>
+      </div>
+
+      <!-- Keyword density -->
+      <div id="keyword-section" class="card card-body" style="display:none" role="region" aria-label="Keyword density">
+        <div class="card-title">🔑 Keyword Density <span style="font-size:12px; font-weight:400; color:var(--color-mute)">(top 10)</span></div>
+        <div id="keyword-list" class="keyword-list"></div>
+      </div>
+
+    </div><!-- /.tool-left -->
+
+    <!-- ════ RIGHT COLUMN ════ -->
+    <div class="tool-right">
+
+      <!-- Word Goal Tracker -->
+      <div class="card card-body" role="region" aria-label="Word goal tracker">
+        <div class="card-title">🎯 Word Goal Tracker</div>
+
+        <div class="goal-input-row">
+          <input
+            type="number"
+            id="goal-input"
+            class="goal-number-input"
+            placeholder="Target words"
+            min="1"
+            max="100000"
+            aria-label="Target word count"
+          />
+        </div>
+
+        <div class="preset-grid">
+          {presets.map(p => (
+            <button
+              class={`btn btn-secondary btn-sm preset-btn${defaultPreset === p.label ? ' preset-active' : ''}`}
+              data-preset={p.value}
+              data-preset-label={p.label}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+
+        <div class="goal-progress-wrap" aria-label="Goal progress">
+          <div class="goal-bar">
+            <div id="goal-bar-fill" class="goal-bar-fill" style="width:0%"></div>
+          </div>
+          <p id="goal-status" class="goal-status">Set a target and start writing</p>
+        </div>
+      </div>
+
+      <!-- Platform Limits Checker -->
+      <div class="card card-body" role="region" aria-label="Platform character limits">
+        <div class="card-title">📱 Platform Limits Checker</div>
+        <div class="platforms-grid">
+          {platforms.map(p => (
+            <div class="platform-card" data-platform={p.id} data-limit={p.limit}>
+              <div class="platform-top">
+                <span class="platform-emoji">{p.emoji}</span>
+                <span class="platform-name">{p.name}</span>
+              </div>
+              <div class="platform-count-row">
+                <span class="platform-count">0</span>
+                <span class="platform-sep"> / {p.limit}</span>
+              </div>
+              <div class="platform-mini-bar">
+                <div class="platform-bar-fill"></div>
+              </div>
+              <div class="platform-status">—</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <!-- Writing Session Analytics -->
+      <div class="card card-body" role="region" aria-label="Writing session analytics">
+        <div class="card-title">⚡ Session Analytics</div>
+        <div class="session-grid">
+          <div class="session-stat">
+            <div class="session-value" id="session-wpm">0</div>
+            <div class="session-label">WPM</div>
+          </div>
+          <div class="session-stat">
+            <div class="session-value" id="session-time">0:00</div>
+            <div class="session-label">Session Time</div>
+          </div>
+          <div class="session-stat">
+            <div class="session-value" id="session-words">0</div>
+            <div class="session-label">Words Written</div>
+          </div>
+          <div class="session-stat">
+            <div class="session-value" id="session-goal-pct">—</div>
+            <div class="session-label">Goal %</div>
+          </div>
+        </div>
+        <p class="session-note">Tracks from your first keystroke. Data stays local.</p>
+      </div>
+
+      <!-- Export Panel -->
+      <div class="card card-body">
+        <div class="card-title">⬇️ Export</div>
+        <div class="export-grid">
+          <button id="export-copy"  class="btn btn-secondary">📋 Copy Text</button>
+          <button id="export-txt"   class="btn btn-secondary">📄 Download .txt</button>
+          <button id="export-md"    class="btn btn-secondary">📝 Download .md</button>
+          <button id="export-print" class="btn btn-secondary">🖨️ Print</button>
+        </div>
+      </div>
+
+      <!-- Ad Zone 2 -->
+      <div class="ad-zone" aria-hidden="true">
+        <!-- Google AdSense ad unit goes here after approval -->
+        <span>Advertisement</span>
+      </div>
+
+    </div><!-- /.tool-right -->
+  </div><!-- /.tool-layout -->
+</div><!-- /.wct-root -->
+
+<style>
+  /* ── Tool Layout ─────────────────────── */
+  .tool-layout {
+    display: grid;
+    grid-template-columns: 60fr 40fr;
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .tool-left, .tool-right {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  /* ── Editor ──────────────────────────── */
+  .editor-card {
+    padding: 0;
+    overflow: hidden;
+  }
+
+  .editor-textarea {
+    display: block;
+    width: 100%;
+    min-height: 280px;
+    padding: var(--space-4);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--color-ink);
+    background: var(--color-canvas);
+    border: none;
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    resize: vertical;
+    transition: box-shadow var(--transition-fast);
+  }
+
+  .editor-textarea:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 2px var(--color-primary);
+  }
+
+  .autosave-bar {
+    padding: var(--space-2) var(--space-4);
+    border-top: 1px solid var(--color-hairline);
+    background: var(--color-canvas-soft);
+  }
+
+  /* ── Action row ──────────────────────── */
+  .action-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  /* ── Stats grid ──────────────────────── */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+  }
+
+  .stat-card {
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-4) var(--space-3);
+    text-align: center;
+    box-shadow: var(--shadow-xs);
+    transition: box-shadow var(--transition-fast);
+  }
+
+  .stat-card:hover { box-shadow: var(--shadow-sm); }
+
+  .stat-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--color-mute);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  /* ── Readability ─────────────────────── */
+  .readability-card { background: var(--color-primary-soft); border-color: var(--color-primary-light); }
+
+  .readability-body {
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
+    margin-bottom: var(--space-2);
+  }
+
+  .readability-score-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 3px;
+  }
+
+  .readability-number {
+    font-size: 40px;
+    font-weight: 700;
+    color: var(--color-ink);
+    letter-spacing: -0.04em;
+    line-height: 1;
+  }
+
+  .readability-label { font-size: 16px; color: var(--color-mute); }
+
+  .readability-hint {
+    font-size: 12px;
+    color: var(--color-mute);
+    margin-top: var(--space-2);
+  }
+
+  /* ── Case converter ──────────────────── */
+  .case-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  /* ── Keyword density ─────────────────── */
+  .keyword-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .keyword-item { display: flex; flex-direction: column; gap: 3px; }
+
+  .keyword-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+
+  .keyword-word { color: var(--color-ink); font-weight: 500; }
+  .keyword-count { color: var(--color-mute); }
+
+  .keyword-bar {
+    height: 4px;
+    background: var(--color-canvas-soft-2);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .keyword-bar-fill {
+    height: 100%;
+    background: var(--color-primary);
+    border-radius: var(--radius-full);
+    transition: width 200ms ease;
+  }
+
+  /* ── Goal Tracker ────────────────────── */
+  .goal-input-row {
+    margin-bottom: var(--space-3);
+  }
+
+  .goal-number-input {
+    width: 100%;
+    height: 40px;
+    padding: 0 var(--space-3);
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .preset-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-4);
+  }
+
+  .preset-btn { font-size: 12px; }
+
+  .preset-active {
+    background: var(--color-primary) !important;
+    color: white !important;
+    border-color: var(--color-primary) !important;
+  }
+
+  .goal-progress-wrap { margin-top: var(--space-2); }
+
+  .goal-bar {
+    height: 8px;
+    background: var(--color-canvas-soft-2);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: var(--space-3);
+  }
+
+  .goal-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-light);
+    transition: width 200ms ease, background 200ms ease;
+  }
+
+  .bar-blue-light { background: #BFDBFE; }
+  .bar-blue       { background: var(--color-primary); }
+  .bar-amber      { background: var(--color-warning); }
+  .bar-green      { background: var(--color-success); }
+  .bar-red        { background: var(--color-error); }
+
+  .goal-status {
+    font-size: 13px;
+    color: var(--color-body);
+    min-height: 1.5em;
+  }
+
+  /* ── Platform limits ─────────────────── */
+  .platforms-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+
+  .platform-card {
+    background: var(--color-canvas-soft);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    transition: border-color var(--transition-fast);
+  }
+
+  .platform-card.platform-ok  { border-color: var(--color-success); background: var(--color-success-soft); }
+  .platform-card.platform-over { border-color: var(--color-error);   background: var(--color-error-soft); }
+
+  .platform-top {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 5px;
+  }
+
+  .platform-emoji { font-size: 14px; }
+
+  .platform-name {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--color-ink);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .platform-count-row {
+    font-size: 12px;
+    color: var(--color-body);
+    margin-bottom: 5px;
+  }
+
+  .platform-count { font-weight: 700; color: var(--color-ink); }
+  .platform-sep   { color: var(--color-mute); }
+
+  .platform-mini-bar {
+    height: 3px;
+    background: var(--color-hairline);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+    margin-bottom: 4px;
+  }
+
+  .platform-bar-fill {
+    height: 100%;
+    border-radius: var(--radius-full);
+    background: var(--color-primary-light);
+    transition: width 150ms ease, background 150ms ease;
+  }
+
+  .platform-status {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-mute);
+  }
+
+  .platform-card.platform-ok .platform-status  { color: var(--color-success); }
+  .platform-card.platform-over .platform-status { color: var(--color-error); }
+
+  /* ── Session Analytics ───────────────── */
+  .session-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    margin-bottom: var(--space-3);
+  }
+
+  .session-stat {
+    text-align: center;
+    padding: var(--space-3);
+    background: var(--color-canvas-soft);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-hairline);
+  }
+
+  .session-value {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .session-label {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-mute);
+  }
+
+  .session-note {
+    font-size: 12px;
+    color: var(--color-mute);
+    margin: 0;
+  }
+
+  /* ── Export panel ────────────────────── */
+  .export-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+  }
+
+  .export-grid .btn { justify-content: flex-start; font-size: 13px; }
+
+  /* ── Responsive ──────────────────────── */
+  @media (max-width: 1024px) {
+    .tool-layout { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 768px) {
+    .editor-textarea { min-height: 200px; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .platforms-grid { grid-template-columns: 1fr; }
+    .export-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 480px) {
+    .preset-grid { gap: 5px; }
+    .preset-btn { font-size: 11px; padding: 0 var(--space-2); height: 28px; }
+  }
+</style>
+
+<script>
+  // ====================================================
+  //  RealWordCounter — Core Tool Logic
+  // ====================================================
+  (function () {
+    'use strict';
+
+    // ── DOM refs ───────────────────────────────────────
+    const editor   = document.getElementById('editor') as HTMLTextAreaElement;
+    const root     = document.querySelector('.wct-root') as HTMLElement;
+
+    if (!editor || !root) return;
+
+    const $id = (id: string) => document.getElementById(id);
+
+    const statWords     = $id('stat-words');
+    const statChars     = $id('stat-chars');
+    const statCharsNs   = $id('stat-chars-ns');
+    const statSentences = $id('stat-sentences');
+    const statParagraphs= $id('stat-paragraphs');
+    const statReading   = $id('stat-reading');
+    const statSpeaking  = $id('stat-speaking');
+    const statUnique    = $id('stat-unique');
+
+    const readabilityCard  = $id('readability-card');
+    const readabilityScore = $id('readability-score');
+    const readabilityBadge = $id('readability-badge');
+    const readabilityGrade = $id('readability-grade');
+
+    const goalInput    = $id('goal-input') as HTMLInputElement;
+    const goalBarFill  = $id('goal-bar-fill');
+    const goalStatus   = $id('goal-status');
+
+    const keywordSection = $id('keyword-section');
+    const keywordList    = $id('keyword-list');
+
+    const sessionWpm     = $id('session-wpm');
+    const sessionTime    = $id('session-time');
+    const sessionWords   = $id('session-words');
+    const sessionGoalPct = $id('session-goal-pct');
+
+    const autosaveIndicator = $id('autosave-indicator');
+
+    const platformCards = document.querySelectorAll<HTMLElement>('[data-platform]');
+    const presetBtns    = document.querySelectorAll<HTMLElement>('[data-preset]');
+
+    // ── Constants ─────────────────────────────────────
+    const STORAGE_DRAFT = 'RealWordCounter_draft';
+    const STORAGE_GOAL  = 'RealWordCounter_goal';
+
+    const STOP_WORDS = new Set([
+      'a','about','above','after','again','against','all','am','an','and','any','are','as','at',
+      'be','because','been','before','being','below','between','both','but','by','can','cannot',
+      'could','did','do','does','doing','down','during','each','few','for','from','further','get',
+      'got','had','has','have','having','he','her','here','hers','herself','him','himself','his',
+      'how','i','if','in','into','is','it','its','itself','just','let','me','more','most','my',
+      'myself','no','nor','not','now','of','off','on','once','only','or','other','our','ours',
+      'ourselves','out','over','own','same','she','should','so','some','such','than','that','the',
+      'their','theirs','them','themselves','then','there','these','they','this','those','through',
+      'to','too','under','until','up','very','was','we','were','what','when','where','which',
+      'while','who','whom','why','will','with','would','you','your','yours','yourself','yourselves',
+      'also','back','even','still','well','way','take','every','good','new','first','last','long',
+      'great','little','own','right','high','old','like','look','make','know','see','think','come',
+      'use','go','said','done','just','time','much','many','need','want','may','might','shall',
+      'must','let','got','put','say','set','keep','find','here','there','where','when','why','how',
+      'im','youre','hes','shes','its','were','theyre','ive','youve','weve','theyve','id','youd',
+      'hed','shed','wed','theyd','ill','youll','hell','shell','theyll','dont','doesnt','didnt',
+      'wont','cant','wouldnt','shouldnt','couldnt','isnt','arent','wasnt','werent','hasnt',
+      'havent','hadnt',
+    ]);
+
+    // ── State ──────────────────────────────────────────
+    let currentWords = 0;
+    let currentChars = 0;
+    let goalValue    = 0;
+    let sessionStart: number | null = null;
+    let autosaveTimer: number;
+    let keywordTimer: number;
+
+    // ── Syllable counting (for Flesch) ─────────────────
+    function syllables(word: string): number {
+      word = word.toLowerCase().replace(/[^a-z]/g, '');
+      if (!word) return 0;
+      if (word.length <= 3) return 1;
+      word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/, '');
+      word = word.replace(/^y/, '');
+      const m = word.match(/[aeiouy]{1,2}/g);
+      return m ? m.length : 1;
+    }
+
+    // ── Core stats ─────────────────────────────────────
+    function computeStats(text: string) {
+      const trimmed = text.trim();
+      if (!trimmed) {
+        return { words: 0, chars: 0, charsNs: 0, sentences: 0, paragraphs: 0, reading: 0, speaking: 0, unique: 0 };
+      }
+      const wordList  = trimmed.split(/\s+/).filter(Boolean);
+      const words     = wordList.length;
+      const chars     = text.length;
+      const charsNs   = text.replace(/\s/g, '').length;
+      const sentences = Math.max(text.split(/[.!?]+/).filter(s => s.trim().length > 2).length, 1);
+      const paragraphs= text.split(/\n\n+/).filter(p => p.trim()).length || 1;
+      const reading   = Math.ceil(words / 200);
+      const speaking  = Math.ceil(words / 130);
+      const unique    = new Set(
+        trimmed.toLowerCase().replace(/[^\w\s]/g, '').split(/\s+/).filter(Boolean)
+      ).size;
+      return { words, chars, charsNs, sentences, paragraphs, reading, speaking, unique };
+    }
+
+    // ── Readability ────────────────────────────────────
+    function computeReadability(text: string) {
+      const wordList = text.trim().split(/\s+/).filter(Boolean);
+      if (wordList.length < 10) return null;
+      const sentences = Math.max(text.split(/[.!?]+/).filter(s => s.trim().length > 2).length, 1);
+      const totalSyl  = wordList.reduce((n, w) => n + syllables(w), 0);
+      const asl = wordList.length / sentences;
+      const asw = totalSyl / wordList.length;
+      const raw = Math.round(206.835 - 1.015 * asl - 84.6 * asw);
+      const score = Math.max(0, Math.min(100, raw));
+      let grade = '', level = '', badgeClass = 'badge-neutral';
+      if (score >= 90) { grade = 'Very Easy';       level = 'Grade 5';      badgeClass = 'badge-success'; }
+      else if (score >= 70) { grade = 'Easy';        level = 'Grade 6';      badgeClass = 'badge-success'; }
+      else if (score >= 60) { grade = 'Standard';    level = 'Grade 7–8';    badgeClass = 'badge-primary'; }
+      else if (score >= 50) { grade = 'Fairly Difficult'; level = 'Grade 9–10'; badgeClass = 'badge-warning'; }
+      else if (score >= 30) { grade = 'Difficult';   level = 'Grade 11–12'; badgeClass = 'badge-warning'; }
+      else                  { grade = 'Very Difficult'; level = 'College';   badgeClass = 'badge-error'; }
+      return { score, grade, level, badgeClass };
+    }
+
+    // ── Goal tracker ───────────────────────────────────
+    function updateGoal(words: number) {
+      goalValue = parseInt((goalInput as HTMLInputElement)?.value || '0', 10) || 0;
+      if (!goalBarFill || !goalStatus) return;
+      if (goalValue <= 0) {
+        goalBarFill.style.width = '0%';
+        goalBarFill.className = 'goal-bar-fill bar-blue-light';
+        goalStatus.textContent = 'Set a target and start writing';
+        return;
+      }
+      const pct = Math.min((words / goalValue) * 100, 100);
+      goalBarFill.style.width = pct + '%';
+
+      let cls = 'goal-bar-fill ';
+      if (words > goalValue)      cls += 'bar-red';
+      else if (words === goalValue) cls += 'bar-green';
+      else if (pct >= 80)         cls += 'bar-amber';
+      else if (pct >= 50)         cls += 'bar-blue';
+      else                        cls += 'bar-blue-light';
+      goalBarFill.className = cls;
+
+      if (words === 0) {
+        goalStatus.textContent = 'Set a target and start writing';
+      } else if (words > goalValue) {
+        goalStatus.textContent = `⚠️ ${words - goalValue} words over limit (${words}/${goalValue})`;
+      } else if (words === goalValue) {
+        goalStatus.textContent = `🎉 Goal reached! ${words}/${goalValue} words`;
+      } else if (pct >= 80) {
+        goalStatus.textContent = `Almost there! ${goalValue - words} words to go`;
+      } else if (pct >= 50) {
+        goalStatus.textContent = `${words}/${goalValue} words — ${Math.round(pct)}% complete`;
+      } else {
+        goalStatus.textContent = `${words}/${goalValue} words — ${goalValue - words} remaining`;
+      }
+    }
+
+    // ── Platform limits ────────────────────────────────
+    function updatePlatforms(chars: number) {
+      platformCards.forEach(card => {
+        const limit  = parseInt(card.dataset.limit || '0', 10);
+        const countEl  = card.querySelector('.platform-count');
+        const fillEl   = card.querySelector<HTMLElement>('.platform-bar-fill');
+        const statusEl = card.querySelector('.platform-status');
+
+        if (countEl) countEl.textContent = chars.toLocaleString();
+        const pct = Math.min((chars / limit) * 100, 100);
+        if (fillEl) fillEl.style.width = pct + '%';
+
+        card.classList.remove('platform-ok', 'platform-over');
+        if (chars === 0) {
+          if (statusEl) statusEl.textContent = '—';
+          if (fillEl) fillEl.style.background = '';
+        } else if (chars > limit) {
+          card.classList.add('platform-over');
+          if (statusEl) statusEl.textContent = `✕ Over by ${chars - limit}`;
+          if (fillEl) fillEl.style.background = 'var(--color-error)';
+        } else {
+          card.classList.add('platform-ok');
+          if (statusEl) statusEl.textContent = '✓ Fits';
+          if (fillEl) fillEl.style.background = 'var(--color-success)';
+        }
+      });
+    }
+
+    // ── Keyword density ────────────────────────────────
+    function updateKeywords(text: string) {
+      if (!keywordSection || !keywordList) return;
+      const words = text.toLowerCase()
+        .replace(/[^\w\s]/g, '').split(/\s+/)
+        .filter(w => w.length > 2 && !STOP_WORDS.has(w));
+
+      if (words.length === 0) {
+        keywordSection.style.display = 'none';
+        return;
+      }
+
+      const freq: Record<string, number> = {};
+      words.forEach(w => { freq[w] = (freq[w] || 0) + 1; });
+      const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 10);
+      const max = sorted[0][1];
+
+      keywordSection.style.display = 'block';
+      keywordList.innerHTML = '';
+
+      sorted.forEach(([word, count]) => {
+        const pct = Math.round((count / max) * 100);
+        const el  = document.createElement('div');
+        el.className = 'keyword-item';
+        const meta = document.createElement('div');
+        meta.className = 'keyword-meta';
+        const wSpan = document.createElement('span');
+        wSpan.className = 'keyword-word';
+        wSpan.textContent = word;
+        const cSpan = document.createElement('span');
+        cSpan.className = 'keyword-count';
+        cSpan.textContent = String(count);
+        meta.appendChild(wSpan);
+        meta.appendChild(cSpan);
+        const bar = document.createElement('div');
+        bar.className = 'keyword-bar';
+        const fill = document.createElement('div');
+        fill.className = 'keyword-bar-fill';
+        fill.style.width = pct + '%';
+        bar.appendChild(fill);
+        el.appendChild(meta);
+        el.appendChild(bar);
+        keywordList.appendChild(el);
+      });
+    }
+
+    // ── Session analytics ──────────────────────────────
+    function startSession() {
+      if (sessionStart !== null) return;
+      sessionStart = Date.now();
+      setInterval(() => {
+        if (sessionStart === null) return;
+        const elapsed = Math.floor((Date.now() - sessionStart) / 1000);
+        const mins    = Math.floor(elapsed / 60);
+        const secs    = elapsed % 60;
+        if (sessionTime) sessionTime.textContent = `${mins}:${secs.toString().padStart(2, '0')}`;
+        if (currentWords > 0 && elapsed > 0) {
+          const wpm = Math.round((currentWords / elapsed) * 60);
+          if (sessionWpm) sessionWpm.textContent = String(wpm);
+        }
+      }, 1000);
+    }
+
+    function updateSession(words: number) {
+      if (sessionWords) sessionWords.textContent = String(words);
+      if (sessionGoalPct) {
+        sessionGoalPct.textContent = goalValue > 0
+          ? Math.min(100, Math.round((words / goalValue) * 100)) + '%'
+          : '—';
+      }
+    }
+
+    // ── Autosave ───────────────────────────────────────
+    function autosave(text: string) {
+      clearTimeout(autosaveTimer);
+      autosaveTimer = window.setTimeout(() => {
+        try {
+          localStorage.setItem(STORAGE_DRAFT, text);
+          localStorage.setItem(STORAGE_GOAL, goalInput?.value || '0');
+          if (autosaveIndicator) {
+            autosaveIndicator.innerHTML = '<span class="autosave-dot"></span> Draft auto-saved';
+            autosaveIndicator.className = 'autosave-indicator saved';
+          }
+        } catch (_) {}
+      }, 1000);
+    }
+
+    function restoreDraft() {
+      try {
+        const saved     = localStorage.getItem(STORAGE_DRAFT);
+        const savedGoal = localStorage.getItem(STORAGE_GOAL);
+        if (saved) {
+          editor.value = saved;
+          updateAll(saved);
+          if (autosaveIndicator) {
+            autosaveIndicator.innerHTML = '<span class="autosave-dot"></span> Draft restored';
+            autosaveIndicator.className = 'autosave-indicator restored';
+            setTimeout(() => {
+              if (autosaveIndicator) {
+                autosaveIndicator.innerHTML = '<span class="autosave-dot"></span> Auto-save on';
+                autosaveIndicator.className = 'autosave-indicator';
+              }
+            }, 2500);
+          }
+        }
+        if (savedGoal && goalInput && parseInt(savedGoal) > 0 && !goalInput.value) {
+          goalInput.value = savedGoal;
+          updateGoal(currentWords);
+        }
+      } catch (_) {}
+    }
+
+    // ── Toast ──────────────────────────────────────────
+    function toast(msg: string, type = 'success') {
+      const container = document.getElementById('toast-container');
+      if (!container) return;
+      const el = document.createElement('div');
+      el.className = `toast toast-${type}`;
+      el.textContent = msg;
+      container.appendChild(el);
+      requestAnimationFrame(() => el.classList.add('toast-visible'));
+      setTimeout(() => {
+        el.classList.remove('toast-visible');
+        el.classList.add('toast-hiding');
+        setTimeout(() => el.remove(), 350);
+      }, 2000);
+    }
+
+    // ── Master update ──────────────────────────────────
+    function updateAll(text: string) {
+      const s = computeStats(text);
+      currentWords = s.words;
+      currentChars = s.chars;
+
+      if (statWords)     statWords.textContent     = s.words.toLocaleString();
+      if (statChars)     statChars.textContent     = s.chars.toLocaleString();
+      if (statCharsNs)   statCharsNs.textContent   = s.charsNs.toLocaleString();
+      if (statSentences) statSentences.textContent = s.sentences.toLocaleString();
+      if (statParagraphs)statParagraphs.textContent= s.paragraphs.toLocaleString();
+      if (statReading)   statReading.textContent   = s.words > 0 ? s.reading + ' min' : '0 min';
+      if (statSpeaking)  statSpeaking.textContent  = s.words > 0 ? s.speaking + ' min' : '0 min';
+      if (statUnique)    statUnique.textContent    = s.unique.toLocaleString();
+
+      // Readability
+      if (readabilityCard) {
+        const r = computeReadability(text);
+        if (r) {
+          readabilityCard.style.display = 'block';
+          if (readabilityScore) readabilityScore.textContent = String(r.score);
+          if (readabilityBadge) {
+            readabilityBadge.className = `badge ${r.badgeClass}`;
+            readabilityBadge.textContent = r.grade;
+          }
+          if (readabilityGrade) readabilityGrade.textContent = r.level;
+        } else {
+          readabilityCard.style.display = 'none';
+        }
+      }
+
+      updateGoal(s.words);
+      updatePlatforms(s.chars);
+      updateSession(s.words);
+
+      clearTimeout(keywordTimer);
+      if (s.words > 20) {
+        keywordTimer = window.setTimeout(() => updateKeywords(text), 300);
+      } else if (keywordSection) {
+        keywordSection.style.display = 'none';
+      }
+    }
+
+    // ── Event listeners ────────────────────────────────
+
+    // Main editor input
+    editor.addEventListener('input', () => {
+      startSession();
+      updateAll(editor.value);
+      autosave(editor.value);
+    });
+
+    // Presets
+    presetBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const val = btn.dataset.preset;
+        if (val && goalInput) goalInput.value = val;
+        presetBtns.forEach(b => b.classList.remove('preset-active'));
+        btn.classList.add('preset-active');
+        updateGoal(currentWords);
+        updateSession(currentWords);
+      });
+    });
+
+    if (goalInput) {
+      goalInput.addEventListener('input', () => {
+        presetBtns.forEach(b => b.classList.remove('preset-active'));
+        // Re-activate if matches a preset
+        const v = goalInput.value;
+        presetBtns.forEach(b => {
+          if (b.dataset.preset === v) b.classList.add('preset-active');
+        });
+        updateGoal(currentWords);
+        updateSession(currentWords);
+      });
+    }
+
+    // Action buttons
+    const pasteBtn = $id('btn-paste');
+    if (pasteBtn) {
+      pasteBtn.addEventListener('click', async () => {
+        try {
+          const text = await navigator.clipboard.readText();
+          editor.value = text;
+          startSession();
+          updateAll(text);
+          autosave(text);
+          toast('Text pasted from clipboard');
+        } catch (_) { toast('Clipboard access denied', 'error'); }
+      });
+    }
+
+    const clearBtn = $id('btn-clear');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', () => {
+        if (currentWords > 50 && !confirm('Clear all text? This cannot be undone.')) return;
+        editor.value = '';
+        updateAll('');
+        try { localStorage.removeItem(STORAGE_DRAFT); } catch (_) {}
+        toast('Text cleared', 'info');
+      });
+    }
+
+    const copyStatsBtn = $id('btn-copy-stats');
+    if (copyStatsBtn) {
+      copyStatsBtn.addEventListener('click', () => {
+        const text = [
+          `Words: ${currentWords}`,
+          `Characters: ${currentChars}`,
+          `Reading time: ${Math.ceil(currentWords / 200)} min`,
+          `Speaking time: ${Math.ceil(currentWords / 130)} min`,
+        ].join('\n');
+        navigator.clipboard.writeText(text)
+          .then(() => toast('Stats copied!'))
+          .catch(() => toast('Copy failed', 'error'));
+      });
+    }
+
+    // File upload
+    const fileInput = $id('file-upload') as HTMLInputElement;
+    if (fileInput) {
+      fileInput.addEventListener('change', async () => {
+        const file = fileInput.files?.[0];
+        if (!file) return;
+        fileInput.value = '';
+
+        if (file.name.endsWith('.txt')) {
+          const reader = new FileReader();
+          reader.onload = e => {
+            const text = (e.target?.result as string) || '';
+            editor.value = text;
+            updateAll(text);
+            autosave(text);
+            toast('File loaded successfully');
+          };
+          reader.onerror = () => toast('Error reading file', 'error');
+          reader.readAsText(file);
+        } else if (file.name.endsWith('.docx')) {
+          toast('Loading document...', 'info');
+          try {
+            if (!(window as any).mammoth) {
+              await new Promise<void>((resolve, reject) => {
+                const s = document.createElement('script');
+                s.src = 'https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js';
+                s.onload = () => resolve();
+                s.onerror = reject;
+                document.head.appendChild(s);
+              });
+            }
+            const buf = await file.arrayBuffer();
+            const result = await (window as any).mammoth.extractRawValue({ arrayBuffer: buf });
+            editor.value = result.value;
+            updateAll(result.value);
+            autosave(result.value);
+            toast('Document loaded successfully');
+          } catch (_) { toast('Error loading .docx file', 'error'); }
+        } else {
+          toast('Upload .txt or .docx files only', 'error');
+        }
+      });
+    }
+
+    // Case converter
+    const caseOps: Record<string, (t: string) => string> = {
+      'case-upper':  t => t.toUpperCase(),
+      'case-lower':  t => t.toLowerCase(),
+      'case-title':  t => t.replace(/\w\S*/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase()),
+      'case-sent':   t => t.toLowerCase().replace(/(?:^|\.\s+|\!\s+|\?\s+)\w/g, c => c.toUpperCase()),
+      'case-alt':    t => [...t].map((c, i) => i % 2 === 0 ? c.toLowerCase() : c.toUpperCase()).join(''),
+      'case-spaces': t => t.replace(/[ \t]+/g, ' ').trim(),
+      'case-rev':    t => [...t].reverse().join(''),
+    };
+
+    Object.entries(caseOps).forEach(([id, fn]) => {
+      const btn = $id(id);
+      if (btn) {
+        btn.addEventListener('click', () => {
+          editor.value = fn(editor.value);
+          updateAll(editor.value);
+          autosave(editor.value);
+          toast('Text transformed');
+        });
+      }
+    });
+
+    // Export
+    const exportCopy = $id('export-copy');
+    if (exportCopy) {
+      exportCopy.addEventListener('click', () => {
+        navigator.clipboard.writeText(editor.value)
+          .then(() => toast('Text copied!'))
+          .catch(() => toast('Copy failed', 'error'));
+      });
+    }
+
+    function download(content: string, filename: string, mime: string) {
+      const blob = new Blob([content], { type: mime });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      a.href = url; a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    const exportTxt = $id('export-txt');
+    if (exportTxt) {
+      exportTxt.addEventListener('click', () => {
+        download(editor.value, 'document.txt', 'text/plain');
+        toast('Downloading .txt file');
+      });
+    }
+
+    const exportMd = $id('export-md');
+    if (exportMd) {
+      exportMd.addEventListener('click', () => {
+        download(`# Document\n\n${editor.value}`, 'document.md', 'text/markdown');
+        toast('Downloading .md file');
+      });
+    }
+
+    const exportPrint = $id('export-print');
+    if (exportPrint) {
+      exportPrint.addEventListener('click', () => {
+        const win = window.open('', '_blank');
+        if (!win) return;
+        const safe = editor.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        win.document.write(`<!doctype html><html><head><title>Document</title><style>body{font-family:serif;max-width:800px;margin:40px auto;line-height:1.7;white-space:pre-wrap;font-size:16px}@media print{body{margin:0}}</style></head><body>${safe}</body></html>`);
+        win.document.close();
+        win.print();
+        toast('Print dialog opened', 'info');
+      });
+    }
+
+    // ── Allow UPSC reference table to set goal ─────────
+    document.addEventListener('rwc:set-goal', (e: Event) => {
+      const value = (e as CustomEvent).detail?.value;
+      if (value && goalInput) {
+        goalInput.value = String(value);
+        presetBtns.forEach(b => {
+          b.classList.toggle('preset-active', b.dataset.preset === String(value));
+        });
+        updateGoal(currentWords);
+        updateSession(currentWords);
+        editor.focus();
+      }
+    });
+
+    // ── Init ───────────────────────────────────────────
+    const defaultGoal = root.dataset.defaultGoal;
+    const defaultPreset = root.dataset.defaultPreset;
+
+    if (defaultGoal && parseInt(defaultGoal) > 0 && goalInput) {
+      goalInput.value = defaultGoal;
+      presetBtns.forEach(b => {
+        if (b.dataset.presetLabel === defaultPreset) b.classList.add('preset-active');
+      });
+      updateGoal(0);
+    }
+
+    restoreDraft();
+    if (editor.value) updateAll(editor.value);
+  })();
+</script>

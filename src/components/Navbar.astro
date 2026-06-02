@@ -1,0 +1,78 @@
+---
+const path = Astro.url.pathname;
+
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/word-counter', label: 'Word Counter' },
+  { href: '/upsc-word-counter', label: 'UPSC Counter' },
+];
+---
+
+<header class="navbar" role="banner">
+  <div class="navbar-inner">
+    <!-- Logo -->
+    <a href="/" class="navbar-logo" aria-label="RealWordCounter home">
+      RealWord<span class="logo-accent">Count</span>er
+    </a>
+
+    <!-- Desktop nav -->
+    <nav aria-label="Main navigation">
+      <ul class="navbar-links">
+        {links.map(({ href, label }) => (
+          <li>
+            <a
+              href={href}
+              class={path === href || (href !== '/' && path.startsWith(href)) ? 'active' : ''}
+              aria-current={path === href ? 'page' : undefined}
+            >
+              {label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+
+    <!-- Right side -->
+    <div class="navbar-right">
+      <span class="privacy-pill" aria-label="Privacy: 100% private">100% Private</span>
+
+      <button
+        id="theme-toggle-btn"
+        class="theme-toggle"
+        onclick="toggleTheme()"
+        aria-label="Toggle dark mode"
+        title="Toggle dark mode"
+      >
+        🌙
+      </button>
+
+      <!-- Hamburger (mobile) -->
+      <button
+        id="hamburger-btn"
+        class="hamburger"
+        aria-label="Open navigation menu"
+        aria-expanded="false"
+        aria-controls="mobile-menu"
+      >
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Mobile menu -->
+  <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation">
+    {links.map(({ href, label }) => (
+      <a
+        href={href}
+        class={path === href || (href !== '/' && path.startsWith(href)) ? 'active' : ''}
+      >
+        {label}
+      </a>
+    ))}
+    <div style="margin-top: 8px; padding: 8px 12px;">
+      <span class="privacy-pill">100% Private</span>
+    </div>
+  </nav>
+</header>

@@ -1,0 +1,282 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WordCounterTool from '../components/WordCounterTool.astro';
+
+const faqSchema = [
+  {
+    q: 'Is this word counter completely free?',
+    a: 'Yes, 100% free. No sign-up, no account, no subscription needed. Use it as much as you want.',
+  },
+  {
+    q: 'Is my text private when I use this tool?',
+    a: 'Completely private. Your text never leaves your browser. All word counting, readability analysis, and keyword density are calculated in JavaScript on your device.',
+  },
+  {
+    q: 'How does the word goal tracker work?',
+    a: 'Click a preset button (UPSC 150, CBSE 500, IELTS Task 2, etc.) or type a custom target in the input box. A live progress bar fills as you write and the status message updates with words remaining.',
+  },
+  {
+    q: 'Can I use this for UPSC answer writing practice?',
+    a: 'Yes. Select "UPSC 150" for 10-mark GS answers or "UPSC 250" for 15-mark answers. The progress bar turns amber when you are close to the limit and red when you exceed it.',
+  },
+  {
+    q: 'Does this work for Hindi and other Indian languages?',
+    a: 'Character count and paragraph count work for any language including Hindi, Tamil, and Bengali. Word count works best for space-separated languages. For Hindi exam prep, track character count.',
+  },
+];
+---
+
+<BaseLayout
+  title="Word Counter Online Free — Live Word Count, Character Count and Goal Tracker"
+  description="Free online word counter with live stats, word goal tracker, UPSC and CBSE exam presets, and platform character limits checker. 100% private — your text never leaves your browser. No signup needed."
+  canonical="https://realwordcounter.com/word-counter"
+  schemaType="WebApplication"
+  faqSchema={faqSchema}
+>
+
+  <div class="container" style="padding-top: var(--space-8); padding-bottom: var(--space-4);">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Word Counter</span>
+    </nav>
+
+    <!-- Page header -->
+    <div class="page-header">
+      <h1>Word Counter — Free Online Tool</h1>
+      <p class="page-sub">
+        Live word count, character count, readability score, goal tracker, platform limits checker,
+        file upload, and more. <strong>100% private</strong> — your text never leaves your browser.
+      </p>
+      <span class="tool-privacy-badge">🔒 100% Private — Runs in your browser</span>
+    </div>
+  </div>
+
+  <!-- The tool -->
+  <div class="container tool-container">
+    <WordCounterTool />
+  </div>
+
+  <!-- ── SEO content below the tool ──────────────────── -->
+  <div class="container seo-content">
+
+    <section class="seo-section">
+      <h2>How to Use This Word Counter</h2>
+      <p>
+        RealWordCounter is designed to be simple and powerful. Type or paste your text in
+        the editor on the left — all statistics update live with every keystroke. Here is
+        how to get the most out of it:
+      </p>
+      <ol class="how-to-list">
+        <li>
+          <strong>Type or paste your text</strong> into the large editor area. You can also
+          click <em>Upload</em> to load a <code>.txt</code> or <code>.docx</code> file
+          directly from your device.
+        </li>
+        <li>
+          <strong>Set a word goal</strong> using one of the preset buttons (UPSC 150, CBSE 500,
+          IELTS Task 2, Blog 1500, etc.) or enter a custom number in the Goal input. The
+          progress bar fills and changes colour as you approach the target.
+        </li>
+        <li>
+          <strong>Check platform limits</strong> in the right column. All 10 platform cards
+          update live with your current character count and turn green when your text fits,
+          or red if you have gone over.
+        </li>
+        <li>
+          <strong>Use the case converter</strong> to instantly transform your text to UPPERCASE,
+          Title Case, Sentence case, and more — without having to retype anything.
+        </li>
+        <li>
+          <strong>Export your work</strong> via the Export panel: copy to clipboard, download
+          as <code>.txt</code>, download as <code>.md</code> Markdown, or print a clean version.
+        </li>
+      </ol>
+      <p>
+        Your draft is automatically saved every second to your browser. If you close the tab
+        or refresh the page, your text will be restored when you come back — no account needed.
+      </p>
+    </section>
+
+    <section class="seo-section">
+      <h2>Who Uses RealWordCounter</h2>
+      <div class="use-case-grid">
+        <div class="use-case-card">
+          <div class="use-case-icon">🎓</div>
+          <h3>Students</h3>
+          <p>
+            UPSC aspirants practise answer writing within 150 and 250-word limits. CBSE
+            students stay within essay word counts. IELTS candidates target Task 1 (150
+            words) and Task 2 (250 words) precisely.
+          </p>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">✍️</div>
+          <h3>Bloggers &amp; Writers</h3>
+          <p>
+            Check readability scores to ensure content is accessible. Track blog post
+            length targets. Use keyword density to avoid over-optimising. Export to
+            Markdown for CMS publishing.
+          </p>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">📱</div>
+          <h3>Social Media Creators</h3>
+          <p>
+            Instagram captions (2200 chars), Twitter posts (280), LinkedIn articles (3000),
+            YouTube titles (100), and Meta descriptions (155) — all tracked live as you
+            write.
+          </p>
+        </div>
+        <div class="use-case-card">
+          <div class="use-case-icon">💼</div>
+          <h3>Freelance Writers</h3>
+          <p>
+            Hit client word-count briefs precisely. Use the goal tracker to pace long-form
+            articles. Export content directly as <code>.txt</code> or <code>.md</code>
+            for client delivery.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="seo-section">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        {faqSchema.map(({ q, a }) => (
+          <details>
+            <summary>{q}</summary>
+            <div class="details-body">{a}</div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="seo-section">
+      <h2>More Writing Tools</h2>
+      <p>Explore our other free tools built for Indian writers and students:</p>
+      <div class="more-tools-row">
+        <a href="/upsc-word-counter" class="more-tool-link">
+          🏛️ UPSC Word Counter — Practice within 150 and 250 word limits
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+</BaseLayout>
+
+<style>
+  .page-header {
+    margin-bottom: var(--space-8);
+  }
+
+  .page-header h1 {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    margin-bottom: var(--space-3);
+  }
+
+  .page-sub {
+    font-size: 17px;
+    color: var(--color-body);
+    line-height: 1.6;
+    max-width: 700px;
+    margin-bottom: var(--space-4);
+  }
+
+  .tool-container {
+    padding-bottom: var(--space-12);
+  }
+
+  .seo-content {
+    padding-top: var(--space-4);
+    padding-bottom: var(--space-16);
+  }
+
+  .seo-section {
+    margin-bottom: var(--space-12);
+  }
+
+  .seo-section h2 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .seo-section p {
+    margin-bottom: var(--space-4);
+    max-width: 800px;
+  }
+
+  .how-to-list {
+    margin: var(--space-4) 0;
+    padding-left: var(--space-6);
+  }
+
+  .how-to-list li {
+    margin-bottom: var(--space-3);
+    color: var(--color-body);
+    line-height: 1.7;
+  }
+
+  .use-case-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .use-case-card {
+    padding: var(--space-6);
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .use-case-icon { font-size: 28px; margin-bottom: var(--space-3); }
+
+  .use-case-card h3 {
+    font-size: var(--text-md);
+    margin-bottom: var(--space-2);
+  }
+
+  .use-case-card p { font-size: 14px; line-height: 1.6; }
+
+  .faq-list { max-width: 800px; margin-top: var(--space-4); }
+
+  .more-tools-row { margin-top: var(--space-4); }
+
+  .more-tool-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-ink);
+    text-decoration: none;
+    box-shadow: var(--shadow-xs);
+    transition: all var(--transition-fast);
+  }
+
+  .more-tool-link:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+  }
+
+  @media (max-width: 1024px) {
+    .use-case-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .use-case-grid { grid-template-columns: 1fr; }
+  }
+</style>

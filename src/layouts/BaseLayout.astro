@@ -1,0 +1,162 @@
+---
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+import '../styles/global.css';
+import '../styles/components.css';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  schemaType?: 'WebPage' | 'WebApplication';
+  faqSchema?: Array<{ q: string; a: string }>;
+}
+
+const {
+  title,
+  description,
+  canonical = Astro.url.href,
+  schemaType = 'WebPage',
+  faqSchema,
+} = Astro.props;
+
+const siteUrl = 'https://realwordcounter.com';
+const siteName = 'RealWordCounter';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': schemaType,
+  name: title,
+  description,
+  url: canonical,
+  ...(schemaType === 'WebApplication' && {
+    applicationCategory: 'UtilityApplication',
+    operatingSystem: 'Any',
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'INR' },
+  }),
+};
+
+const faqJsonLd = faqSchema
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqSchema.map(({ q, a }) => ({
+        '@type': 'Question',
+        name: q,
+        acceptedAnswer: { '@type': 'Answer', text: a },
+      })),
+    }
+  : null;
+---
+
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary SEO -->
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="robots" content="index, follow" />
+
+    <!-- Geo targeting — India -->
+    <meta name="geo.region" content="IN" />
+    <meta name="geo.placename" content="India" />
+    <meta name="geo.position" content="20.5937;78.9629" />
+    <meta name="ICBM" content="20.5937, 78.9629" />
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:locale" content="en_IN" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Google Fonts — Inter, preconnect for perf -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap"
+    />
+
+    <!-- Schema Markup -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    {faqJsonLd && <script type="application/ld+json" set:html={JSON.stringify(faqJsonLd)} />}
+
+    <!-- Google Search Console verification — placeholder -->
+    <!-- <meta name="google-site-verification" content="YOUR_CODE_HERE" /> -->
+
+    <!-- Google Analytics — placeholder -->
+    <!-- <script async src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXX"></script> -->
+
+    <!-- Google AdSense — placeholder -->
+    <!-- <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+
+    <!-- Inline dark mode init — must run before paint -->
+    <script is:inline>
+      (function () {
+        try {
+          const saved = localStorage.getItem('rwc_theme');
+          if (saved === 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <Navbar />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+
+    <!-- Toast container (global) -->
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <!-- Dark mode toggle handler + mobile menu -->
+    <script is:inline>
+      window.toggleTheme = function () {
+        const html = document.documentElement;
+        const isDark = html.getAttribute('data-theme') === 'dark';
+        const next = isDark ? 'light' : 'dark';
+        html.setAttribute('data-theme', next);
+        try { localStorage.setItem('rwc_theme', next); } catch (e) {}
+        const btn = document.getElementById('theme-toggle-btn');
+        if (btn) btn.textContent = next === 'dark' ? '☀️' : '🌙';
+      };
+
+      document.addEventListener('DOMContentLoaded', function () {
+        // Hamburger toggle
+        const hamburger = document.getElementById('hamburger-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        if (hamburger && mobileMenu) {
+          hamburger.addEventListener('click', function () {
+            const isOpen = mobileMenu.classList.contains('open');
+            mobileMenu.classList.toggle('open', !isOpen);
+            hamburger.classList.toggle('open', !isOpen);
+            hamburger.setAttribute('aria-expanded', String(!isOpen));
+          });
+        }
+
+        // Sync theme icon
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        const btn = document.getElementById('theme-toggle-btn');
+        if (btn) btn.textContent = isDark ? '☀️' : '🌙';
+      });
+    </script>
+  </body>
+</html>

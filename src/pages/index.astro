@@ -1,11 +1,519 @@
 ---
-import Welcome from '../components/Welcome.astro';
-import Layout from '../layouts/Layout.astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
+const faqSchema = [
+  {
+    q: 'Is RealWordCounter completely free?',
+    a: 'Yes, RealWordCounter is 100% free. No sign-up, no subscription, no credit card required. All tools are free forever.',
+  },
+  {
+    q: 'Does my text ever leave my device?',
+    a: 'No. All text processing happens entirely in your browser using JavaScript. Your text is never uploaded to any server. We cannot see what you write.',
+  },
+  {
+    q: 'Which Indian exams are supported?',
+    a: 'RealWordCounter has built-in presets for UPSC Mains (150 words for 10-mark answers, 250 words for 15-mark answers, 1100 words for essays), CBSE (500 words), and IELTS Task 1 and Task 2.',
+  },
+  {
+    q: 'Can I use this offline?',
+    a: 'Yes. Once the page has loaded, the word counter and all analysis tools work without an internet connection. Your draft is saved to your browser using localStorage.',
+  },
+  {
+    q: 'Does it support Hindi and other Indian languages?',
+    a: 'Character count and paragraph count work for Hindi and any Unicode language. Word count works best with space-separated words. For Hindi, the character count is most useful for exam preparation.',
+  },
+];
 ---
 
-<Layout>
-	<Welcome />
-</Layout>
+<BaseLayout
+  title="RealWordCounter — Free Word Counter and Writing Tools for India"
+  description="Free writing tools for Indian students and creators. Word counter with goal tracker, UPSC and CBSE exam presets, platform limits checker. 100% private, no signup required."
+  canonical="https://realwordcounter.com/"
+  faqSchema={faqSchema}
+>
+
+  <!-- ── Hero ──────────────────────────────────────── -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <div class="hero-eyebrow">
+          <span class="badge badge-primary">Free for Indian students &amp; writers</span>
+        </div>
+
+        <h1 class="hero-heading">
+          Free Writing Tools<br />That Help You<br />
+          <span class="hero-accent">Write Better.</span>
+        </h1>
+
+        <p class="hero-sub">
+          Track word goals, prep for UPSC &amp; CBSE exams, check platform limits,
+          and write with full privacy — no sign-up, no data stored, works offline.
+        </p>
+
+        <div class="hero-cta-row">
+          <a href="/word-counter" class="btn btn-primary btn-pill">Start Writing →</a>
+          <a href="#tools" class="btn btn-secondary btn-pill">Explore Tools</a>
+        </div>
+
+        <div class="trust-badges">
+          <span class="trust-badge">✓ No Signup</span>
+          <span class="trust-badge">✓ No Data Stored</span>
+          <span class="trust-badge">✓ Works Offline</span>
+          <span class="trust-badge trust-badge-green">🔒 100% Private</span>
+        </div>
+      </div>
+
+      <div class="hero-visual" aria-hidden="true">
+        <div class="hero-card-mockup">
+          <div class="mockup-row">
+            <div class="mockup-stat"><span class="mockup-num">1,247</span><span class="mockup-lbl">Words</span></div>
+            <div class="mockup-stat"><span class="mockup-num">6,843</span><span class="mockup-lbl">Characters</span></div>
+            <div class="mockup-stat"><span class="mockup-num">6 min</span><span class="mockup-lbl">Reading Time</span></div>
+            <div class="mockup-stat"><span class="mockup-num">248</span><span class="mockup-lbl">Unique Words</span></div>
+          </div>
+          <div class="mockup-goal">
+            <div class="mockup-goal-label">Goal: 1500 words — 83% complete</div>
+            <div class="mockup-bar"><div class="mockup-bar-fill" style="width:83%"></div></div>
+          </div>
+          <div class="mockup-presets">
+            <span class="mockup-preset active">UPSC 150</span>
+            <span class="mockup-preset">CBSE 500</span>
+            <span class="mockup-preset">IELTS Task 2</span>
+            <span class="mockup-preset">Blog 1500</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Tools directory ───────────────────────────── -->
+  <section class="section tools-section" id="tools">
+    <div class="container">
+      <div class="section-eyebrow">Tools</div>
+      <h2 class="section-heading">Everything a writer needs</h2>
+      <p class="section-subtext">Purpose-built for Indian students, bloggers, and content creators.</p>
+
+      <div class="tools-grid">
+
+        <a href="/word-counter" class="tool-card">
+          <div class="tool-card-icon">📝</div>
+          <div class="tool-card-body">
+            <h3>Word Counter</h3>
+            <p>Live word, character, sentence &amp; paragraph count. Goal tracker, readability score, file upload, case converter, keyword density, and export — all in one page.</p>
+            <div class="tool-card-features">
+              <span>Goal Tracker</span>
+              <span>Platform Limits</span>
+              <span>File Upload</span>
+              <span>Export</span>
+            </div>
+          </div>
+          <span class="tool-card-cta">Open tool →</span>
+        </a>
+
+        <a href="/upsc-word-counter" class="tool-card">
+          <div class="tool-card-icon">🏛️</div>
+          <div class="tool-card-body">
+            <h3>UPSC Word Counter</h3>
+            <p>Specifically designed for UPSC Mains answer writing practice. Pre-loaded with GS 150-word and 250-word limits, essay presets, and a UPSC reference table.</p>
+            <div class="tool-card-features">
+              <span>UPSC Presets</span>
+              <span>GS Reference</span>
+              <span>Essay Mode</span>
+            </div>
+          </div>
+          <span class="tool-card-cta">Open tool →</span>
+        </a>
+
+        <div class="tool-card tool-card-coming">
+          <div class="tool-card-icon">🔡</div>
+          <div class="tool-card-body">
+            <h3>Grammar Checker <span class="badge badge-neutral" style="font-size:10px; vertical-align:middle">Soon</span></h3>
+            <p>Catch grammar mistakes, punctuation errors, and suggest improvements for formal Indian English.</p>
+          </div>
+        </div>
+
+        <div class="tool-card tool-card-coming">
+          <div class="tool-card-icon">📱</div>
+          <div class="tool-card-body">
+            <h3>Social Media Toolkit <span class="badge badge-neutral" style="font-size:10px; vertical-align:middle">Soon</span></h3>
+            <p>Optimize posts for Instagram, Twitter, LinkedIn, and WhatsApp with live character limits and hashtag counting.</p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Why RealWordCounter ───────────────────────── -->
+  <section class="section why-section">
+    <div class="container">
+      <div class="section-eyebrow">Why us</div>
+      <h2 class="section-heading">Built to beat the competition</h2>
+      <p class="section-subtext">Every feature here is missing from wordcounter.net, countwordsfree.com, and toolninja.in.</p>
+
+      <div class="why-grid">
+        <div class="why-card">
+          <div class="why-icon">🎯</div>
+          <h4>Word Goal Tracker</h4>
+          <p>Set a target and watch a live progress bar fill as you write. Presets for UPSC 150, UPSC 250, CBSE 500, IELTS Task 1 &amp; 2, Blog, and LinkedIn built in. No competitor has this.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">📱</div>
+          <h4>Platform Limits Checker</h4>
+          <p>See instantly if your text fits Twitter, Instagram, LinkedIn, Meta Description, YouTube, and 6 more platforms — all updating live as you type.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">💾</div>
+          <h4>Autosave — Never Lose Work</h4>
+          <p>Your draft is saved to your browser every second you type. Refresh the page and your text comes right back. No account needed.</p>
+        </div>
+        <div class="why-card">
+          <div class="why-icon">🔒</div>
+          <h4>100% Private — Zero Tracking</h4>
+          <p>Text never leaves your device. All computation happens in JavaScript in your browser. No login, no cookies for tracking, no server uploads. Ever.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Privacy section ───────────────────────────── -->
+  <section class="section privacy-section">
+    <div class="container">
+      <div class="privacy-card">
+        <div class="privacy-icon">🔒</div>
+        <div>
+          <h2>Your privacy is not negotiable</h2>
+          <p>
+            Every analysis — word count, readability, keyword density — happens in your
+            browser using JavaScript. Your text is never uploaded anywhere.
+            We never see it. There is no server, no database, no account.
+            RealWordCounter works fully offline after the first load.
+            The only thing stored is your own draft in your own browser's localStorage,
+            accessible only by you.
+          </p>
+          <div class="privacy-badges">
+            <span class="trust-badge trust-badge-green">🔒 No server uploads</span>
+            <span class="trust-badge trust-badge-green">🔒 No cookies</span>
+            <span class="trust-badge trust-badge-green">🔒 No account required</span>
+            <span class="trust-badge trust-badge-green">🔒 Works offline</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FAQ ───────────────────────────────────────── -->
+  <section class="section faq-section">
+    <div class="container">
+      <div class="section-eyebrow">FAQ</div>
+      <h2 class="section-heading">Frequently asked questions</h2>
+
+      <div class="faq-list">
+        {faqSchema.map(({ q, a }) => (
+          <details>
+            <summary>{q}</summary>
+            <div class="details-body">{a}</div>
+          </details>
+        ))}
+      </div>
+    </div>
+  </section>
+
+</BaseLayout>
+
+<style>
+  /* ── Hero ─────────────────────────────── */
+  .hero {
+    background: var(--color-canvas);
+    border-bottom: 1px solid var(--color-hairline);
+    padding: var(--space-16) 0;
+    overflow: hidden;
+  }
+
+  .hero .container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-16);
+    align-items: center;
+  }
+
+  .hero-eyebrow { margin-bottom: var(--space-4); }
+
+  .hero-heading {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: var(--space-5);
+  }
+
+  .hero-accent {
+    color: var(--color-primary);
+    display: inline-block;
+  }
+
+  .hero-sub {
+    font-size: 18px;
+    color: var(--color-body);
+    line-height: 1.6;
+    max-width: 500px;
+    margin-bottom: var(--space-8);
+  }
+
+  .hero-cta-row {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-6);
+  }
+
+  .trust-badges {
+    display: flex;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .trust-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px var(--space-3);
+    background: var(--color-canvas-soft-2);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-full);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-body);
+  }
+
+  .trust-badge-green {
+    background: var(--color-success-soft);
+    border-color: rgba(22,163,74,0.2);
+    color: var(--color-success);
+  }
+
+  /* Hero visual / mockup */
+  .hero-visual { display: flex; justify-content: flex-end; }
+
+  .hero-card-mockup {
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-6);
+    width: 100%;
+    max-width: 420px;
+  }
+
+  .mockup-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    margin-bottom: var(--space-4);
+  }
+
+  .mockup-stat {
+    background: var(--color-canvas-soft);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    text-align: center;
+  }
+
+  .mockup-num {
+    display: block;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--color-ink);
+    letter-spacing: -0.02em;
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .mockup-lbl {
+    font-size: 11px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-mute);
+  }
+
+  .mockup-goal { margin-bottom: var(--space-4); }
+
+  .mockup-goal-label {
+    font-size: 12px;
+    color: var(--color-body);
+    margin-bottom: var(--space-2);
+  }
+
+  .mockup-bar {
+    height: 8px;
+    background: var(--color-canvas-soft-2);
+    border-radius: var(--radius-full);
+    overflow: hidden;
+  }
+
+  .mockup-bar-fill {
+    height: 100%;
+    background: var(--color-warning);
+    border-radius: var(--radius-full);
+  }
+
+  .mockup-presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .mockup-preset {
+    padding: 4px var(--space-3);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-body);
+  }
+
+  .mockup-preset.active {
+    background: var(--color-primary);
+    color: white;
+    border-color: var(--color-primary);
+  }
+
+  /* ── Tools grid ──────────────────────── */
+  .tools-section { background: var(--color-canvas-soft); }
+
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+
+  .tool-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    padding: var(--space-6);
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none !important;
+    transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+    color: inherit;
+  }
+
+  .tool-card:not(.tool-card-coming):hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+  }
+
+  .tool-card-coming { opacity: 0.7; cursor: default; }
+
+  .tool-card-icon { font-size: 32px; }
+
+  .tool-card h3 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-2);
+  }
+
+  .tool-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-body);
+    margin-bottom: var(--space-3);
+  }
+
+  .tool-card-features {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+
+  .tool-card-features span {
+    padding: 3px var(--space-2);
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  .tool-card-cta {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: auto;
+  }
+
+  /* ── Why grid ────────────────────────── */
+  .why-section { background: var(--color-canvas); }
+
+  .why-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+
+  .why-card {
+    padding: var(--space-6);
+    background: var(--color-canvas-soft);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .why-icon { font-size: 28px; margin-bottom: var(--space-3); }
+
+  .why-card h4 {
+    font-size: var(--text-md);
+    margin-bottom: var(--space-2);
+  }
+
+  .why-card p { font-size: 14px; line-height: 1.6; }
+
+  /* ── Privacy section ─────────────────── */
+  .privacy-section { background: var(--color-canvas-soft); }
+
+  .privacy-card {
+    display: flex;
+    gap: var(--space-8);
+    align-items: flex-start;
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-xl);
+    padding: var(--space-10);
+    box-shadow: var(--shadow-md);
+  }
+
+  .privacy-icon { font-size: 48px; flex-shrink: 0; }
+
+  .privacy-card h2 { margin-bottom: var(--space-3); }
+
+  .privacy-card p {
+    font-size: 16px;
+    line-height: 1.7;
+    margin-bottom: var(--space-4);
+  }
+
+  .privacy-badges { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+
+  /* ── FAQ ─────────────────────────────── */
+  .faq-section { background: var(--color-canvas); }
+  .faq-list { margin-top: var(--space-8); max-width: 800px; }
+
+  /* ── Responsive ──────────────────────── */
+  @media (max-width: 1024px) {
+    .why-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 768px) {
+    .hero .container { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+    .tools-grid { grid-template-columns: 1fr; }
+    .why-grid { grid-template-columns: 1fr; }
+    .privacy-card { flex-direction: column; gap: var(--space-4); padding: var(--space-6); }
+    .hero-heading { font-size: 2rem; }
+  }
+</style>

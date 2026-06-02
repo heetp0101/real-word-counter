@@ -1,0 +1,404 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import WordCounterTool from '../components/WordCounterTool.astro';
+
+const faqSchema = [
+  {
+    q: 'What is the UPSC word limit for GS Mains answers?',
+    a: 'For General Studies (GS) Mains, UPSC expects answers of approximately 150 words for 10-mark questions and 250 words for 15-mark questions. These are guidelines, not strict limits, but staying close to them is good practice.',
+  },
+  {
+    q: 'What happens if I exceed the word limit in the UPSC exam?',
+    a: 'UPSC does not cut marks for exceeding word limits, but longer answers do not earn more marks. An answer that goes significantly over the expected length may suggest you are unable to structure your thoughts concisely — a skill the exam tests.',
+  },
+  {
+    q: 'How do I practice writing within word limits effectively?',
+    a: 'Start by writing without a limit, then identify the 3-4 key points of your answer. Rewrite around only those points. Use this tool to track your count live. Practice the 150-word format daily — within 3-4 weeks most aspirants can self-assess their length without tools.',
+  },
+  {
+    q: 'Does UPSC count words or sentences?',
+    a: 'UPSC evaluators read for content quality, not word count. However, the word limits are designed so that an answer with the right structure and content naturally fits within them. Sentence quality matters more than sentence count.',
+  },
+  {
+    q: 'What is the word limit for the UPSC essay paper?',
+    a: 'The UPSC Essay paper (GS Paper VI in some streams) typically expects essays of around 1000 to 1200 words for each topic. Some optional papers have different requirements — always check the official UPSC syllabus for your specific paper.',
+  },
+];
+
+const upscTable = [
+  { paper: 'GS Short Answer',        marks: '10',  limit: 150,  detail: 'Most GS I–IV questions' },
+  { paper: 'GS Long Answer',         marks: '15',  limit: 250,  detail: 'Analysis / evaluation questions' },
+  { paper: 'Essay Paper',            marks: '125', limit: 1100, detail: '1000–1200 words recommended' },
+  { paper: 'Optional Short Answer',  marks: '10',  limit: 150,  detail: 'Optional paper 10-mark Qs' },
+  { paper: 'Compulsory English',     marks: '75',  limit: 600,  detail: 'Essay section' },
+];
+---
+
+<BaseLayout
+  title="UPSC Word Counter Online — Practice Answers Within 150 and 250 Word Limits"
+  description="Free word counter for UPSC Mains answer writing practice. Pre-set 150-word and 250-word limits with live progress bar. Track GS answers, essays, and optional papers. Built for Indian civil services aspirants."
+  canonical="https://realwordcounter.com/upsc-word-counter"
+  schemaType="WebApplication"
+  faqSchema={faqSchema}
+>
+
+  <div class="container" style="padding-top: var(--space-8); padding-bottom: var(--space-4);">
+    <!-- Breadcrumb -->
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">UPSC Word Counter</span>
+    </nav>
+
+    <!-- Page header -->
+    <div class="page-header">
+      <div class="upsc-badge-row">
+        <span class="badge badge-primary">UPSC Mains 2025</span>
+        <span class="badge badge-success">Free Tool</span>
+      </div>
+      <h1>UPSC Word Counter — Practice Answer Writing</h1>
+      <p class="page-sub">
+        Practise UPSC Mains answer writing with live word count and built-in 150-word and
+        250-word goal presets. Track GS short answers, long answers, and essays.
+        <strong>100% private</strong> — no data stored, works offline.
+      </p>
+      <span class="tool-privacy-badge">🔒 100% Private — Runs in your browser</span>
+    </div>
+
+    <!-- UPSC Reference Table -->
+    <div class="upsc-ref-card card card-body">
+      <div class="card-title">📋 UPSC Word Limit Reference Table</div>
+      <div class="upsc-table-wrap">
+        <table class="upsc-table">
+          <thead>
+            <tr>
+              <th>Paper / Question Type</th>
+              <th>Marks</th>
+              <th>Expected Words</th>
+              <th>Notes</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {upscTable.map(row => (
+              <tr>
+                <td class="paper-cell">{row.paper}</td>
+                <td class="marks-cell">{row.marks}</td>
+                <td class="limit-cell"><strong>{row.limit}</strong></td>
+                <td class="detail-cell">{row.detail}</td>
+                <td>
+                  <button
+                    class="btn btn-primary btn-sm set-goal-btn"
+                    data-set-goal={row.limit}
+                    data-label={row.paper}
+                  >
+                    Set Goal
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="upsc-table-note">
+        * These are guidelines based on UPSC patterns. Always verify with the latest UPSC notification.
+        The tool defaults to 150 words — click any "Set Goal" button to change it.
+      </p>
+    </div>
+  </div>
+
+  <!-- The tool — preloaded with UPSC 150 -->
+  <div class="container tool-container">
+    <WordCounterTool defaultGoal={150} defaultPreset="UPSC 150" />
+  </div>
+
+  <!-- ── SEO content ─────────────────────────────────── -->
+  <div class="container seo-content">
+
+    <section class="seo-section">
+      <h2>How to Use the UPSC Word Counter</h2>
+      <p>
+        This tool is pre-set to 150 words — the standard UPSC Mains 10-mark answer limit. Here
+        is the recommended practice workflow:
+      </p>
+      <ol class="how-to-list">
+        <li>
+          <strong>Choose your question type</strong> using the reference table above. Click
+          "Set Goal" to instantly set the word target. For 10-mark GS questions, use 150.
+          For 15-mark questions, use 250.
+        </li>
+        <li>
+          <strong>Write your answer without self-censoring first.</strong> Let your thoughts
+          flow. The live word count will show you how far over or under you are.
+        </li>
+        <li>
+          <strong>When the bar turns amber</strong> (80% of goal), start concluding your answer.
+          When it turns red, you have exceeded the target — trim aggressively.
+        </li>
+        <li>
+          <strong>Rewrite the answer</strong> staying within the limit. Repeat 3–5 times daily.
+          Most aspirants build instinctive word-sense within 6–8 weeks of daily practice.
+        </li>
+        <li>
+          <strong>Use autosave</strong> to keep multiple practice attempts across sessions.
+          Your last draft is restored on every visit.
+        </li>
+      </ol>
+    </section>
+
+    <section class="seo-section">
+      <h2>UPSC Answer Writing Strategy — Word Limits</h2>
+      <div class="strategy-grid">
+        <div class="strategy-card">
+          <h3>📝 The 150-Word Formula (10 marks)</h3>
+          <p>
+            A 10-mark UPSC answer has roughly 3 structural elements: introduction (20–25 words),
+            body with 3–4 key points (100–110 words), and conclusion (20–25 words).
+            Use this tool to practise each element in isolation before combining them.
+          </p>
+        </div>
+        <div class="strategy-card">
+          <h3>📄 The 250-Word Formula (15 marks)</h3>
+          <p>
+            A 15-mark answer needs a stronger analytical thread. Structure: introduction
+            (30 words), 4–5 developed points with context (180–190 words), and a balanced
+            conclusion with a forward-looking statement (30 words).
+          </p>
+        </div>
+        <div class="strategy-card">
+          <h3>✍️ Why Word Discipline Matters</h3>
+          <p>
+            UPSC evaluators review hundreds of scripts. A concise, well-structured answer
+            within the expected length signals clarity of thought. An answer that rambles
+            beyond the limit does not earn extra marks — it wastes the evaluator's time.
+          </p>
+        </div>
+        <div class="strategy-card">
+          <h3>🔒 Practise Privately</h3>
+          <p>
+            Your practice answers are stored only in your browser. No data is ever uploaded.
+            Practise sensitive topics — current affairs, governance, ethics — without any
+            privacy concern. Everything is deleted when you clear your browser storage.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="seo-section">
+      <h2>How to Stay Within Word Limits</h2>
+      <ul class="tips-list">
+        <li><strong>Use the BLUF structure:</strong> Bottom Line Up Front. State your main point in the first sentence.</li>
+        <li><strong>One idea per sentence.</strong> Avoid compound sentences that carry multiple ideas — they are harder to cut.</li>
+        <li><strong>Eliminate filler phrases:</strong> Remove "It is important to note that", "In this context", "As mentioned above".</li>
+        <li><strong>Use numbers and data efficiently:</strong> "GDP grew 7.2%" instead of "the gross domestic product of India grew by approximately 7.2 percent".</li>
+        <li><strong>Practise the reverse outline:</strong> After writing, list just the main idea of each sentence. Remove any that repeat a point already made.</li>
+      </ul>
+    </section>
+
+    <section class="seo-section">
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        {faqSchema.map(({ q, a }) => (
+          <details>
+            <summary>{q}</summary>
+            <div class="details-body">{a}</div>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <section class="seo-section">
+      <h2>More Writing Tools</h2>
+      <div class="more-tools-row">
+        <a href="/word-counter" class="more-tool-link">
+          📝 General Word Counter — All writing tools, goal tracker, platform limits
+        </a>
+      </div>
+    </section>
+
+  </div>
+
+</BaseLayout>
+
+<!-- Set goal from reference table -->
+<script is:inline>
+  document.addEventListener('DOMContentLoaded', function () {
+    document.querySelectorAll('.set-goal-btn').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var value = parseInt(btn.getAttribute('data-set-goal'), 10);
+        document.dispatchEvent(new CustomEvent('rwc:set-goal', { detail: { value: value } }));
+        // Smooth scroll to tool
+        var tool = document.querySelector('.wct-root');
+        if (tool) tool.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  });
+</script>
+
+<style>
+  .page-header { margin-bottom: var(--space-6); }
+
+  .upsc-badge-row {
+    display: flex;
+    gap: var(--space-2);
+    margin-bottom: var(--space-3);
+  }
+
+  .page-header h1 {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    margin-bottom: var(--space-3);
+  }
+
+  .page-sub {
+    font-size: 17px;
+    color: var(--color-body);
+    line-height: 1.6;
+    max-width: 700px;
+    margin-bottom: var(--space-4);
+  }
+
+  /* UPSC Reference Table */
+  .upsc-ref-card {
+    margin-bottom: var(--space-8);
+    overflow: hidden;
+  }
+
+  .upsc-table-wrap { overflow-x: auto; margin-bottom: var(--space-4); }
+
+  .upsc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+
+  .upsc-table th {
+    background: var(--color-canvas-soft-2);
+    text-align: left;
+    padding: var(--space-3) var(--space-4);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-mute);
+    border-bottom: 1px solid var(--color-hairline);
+    white-space: nowrap;
+  }
+
+  .upsc-table td {
+    padding: var(--space-3) var(--space-4);
+    border-bottom: 1px solid var(--color-hairline);
+    vertical-align: middle;
+  }
+
+  .upsc-table tr:last-child td { border-bottom: none; }
+  .upsc-table tr:hover td { background: var(--color-canvas-soft); }
+
+  .paper-cell { font-weight: 500; color: var(--color-ink); }
+  .marks-cell { color: var(--color-body); text-align: center; }
+  .limit-cell { color: var(--color-primary); font-size: 15px; text-align: center; }
+  .detail-cell { color: var(--color-mute); font-size: 13px; }
+
+  .upsc-table-note {
+    font-size: 12px;
+    color: var(--color-mute);
+    margin: 0;
+  }
+
+  /* Tool container */
+  .tool-container { padding-bottom: var(--space-12); }
+
+  /* SEO content */
+  .seo-content { padding-top: var(--space-4); padding-bottom: var(--space-16); }
+
+  .seo-section { margin-bottom: var(--space-12); }
+
+  .seo-section h2 {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .seo-section p {
+    margin-bottom: var(--space-4);
+    max-width: 800px;
+  }
+
+  .how-to-list {
+    margin: var(--space-4) 0;
+    padding-left: var(--space-6);
+  }
+
+  .how-to-list li {
+    margin-bottom: var(--space-3);
+    color: var(--color-body);
+    line-height: 1.7;
+  }
+
+  /* Strategy grid */
+  .strategy-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .strategy-card {
+    padding: var(--space-6);
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .strategy-card h3 {
+    font-size: var(--text-md);
+    margin-bottom: var(--space-3);
+  }
+
+  .strategy-card p { font-size: 14px; line-height: 1.6; }
+
+  /* Tips */
+  .tips-list {
+    padding-left: var(--space-5);
+    max-width: 800px;
+  }
+
+  .tips-list li {
+    margin-bottom: var(--space-3);
+    color: var(--color-body);
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .faq-list { max-width: 800px; margin-top: var(--space-4); }
+
+  .more-tools-row { margin-top: var(--space-4); }
+
+  .more-tool-link {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--color-ink);
+    text-decoration: none;
+    box-shadow: var(--shadow-xs);
+    transition: all var(--transition-fast);
+  }
+
+  .more-tool-link:hover {
+    border-color: var(--color-primary);
+    color: var(--color-primary);
+    text-decoration: none;
+  }
+
+  @media (max-width: 768px) {
+    .strategy-grid { grid-template-columns: 1fr; }
+    .upsc-table th, .upsc-table td { padding: var(--space-2) var(--space-3); }
+  }
+</style>
