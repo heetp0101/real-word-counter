@@ -1,0 +1,309 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const faqSchema = [
+  {
+    q: 'What is Title Case and when should I use it?',
+    a: 'Title Case capitalises the first letter of every word: "The Quick Brown Fox". Use it for article headings, book titles, product names, and page titles. It gives text a formal, published appearance.',
+  },
+  {
+    q: 'What is Sentence case?',
+    a: 'Sentence case capitalises only the first letter of each sentence and leaves everything else lowercase: "The quick brown fox jumps over the lazy dog. It is a pangram." This is the standard case for body text, blog posts, and everyday writing.',
+  },
+  {
+    q: 'How do I convert text from UPPERCASE to lowercase online?',
+    a: 'Paste your text into this tool and click the "lowercase" button. Your entire text is converted to lowercase instantly. You can then copy it or download it. No signup required.',
+  },
+  {
+    q: 'What does alternating case mean?',
+    a: 'Alternating case alternates between uppercase and lowercase for each character: "tHe QuIcK bRoWn FoX". It is mostly used for humorous or mocking effect in informal communication. This tool applies it with even characters in lowercase and odd in uppercase.',
+  },
+  {
+    q: 'Can I undo a text transformation?',
+    a: 'Yes. This tool keeps a history of up to 10 transformations. Click the Undo button to revert to the previous state. You can undo multiple steps all the way back to your original text.',
+  },
+];
+---
+
+<BaseLayout
+  title="Text Case Converter Online Free — UPPERCASE, lowercase, Title Case and More"
+  description="Free online text case converter. Convert text to UPPERCASE, lowercase, Title Case, Sentence case, or alternating case instantly. Copy with one click. No signup needed."
+  canonical="https://realwordcounter.com/text-case-converter"
+  schemaType="WebApplication"
+  faqSchema={faqSchema}
+>
+
+  <div class="container" style="padding-top:var(--space-8);padding-bottom:var(--space-4)">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Text Case Converter</span>
+    </nav>
+    <div class="page-header">
+      <h1>Text Case Converter</h1>
+      <p class="page-sub">Instantly convert text to any case — UPPERCASE, lowercase, Title Case, Sentence case, and more. Undo any transformation. <strong>100% private</strong> — nothing leaves your browser.</p>
+      <span class="tool-privacy-badge">🔒 100% Private — Runs in your browser</span>
+    </div>
+  </div>
+
+  <div class="container tool-wrap">
+
+    <!-- Textarea -->
+    <div class="card editor-card">
+      <textarea id="tc-editor" class="tc-textarea" placeholder="Paste your text here, then click a transformation button below..."></textarea>
+    </div>
+
+    <!-- Action row -->
+    <div class="tc-action-row">
+      <button id="tc-copy" class="btn btn-primary">📋 Copy Result</button>
+      <button id="tc-undo" class="btn btn-secondary" disabled>↩ Undo</button>
+      <span id="tc-undo-info" class="tc-undo-info"></span>
+    </div>
+
+    <!-- Transformation buttons -->
+    <div class="card card-body transforms-card">
+      <div class="card-title">Choose a transformation</div>
+      <div class="transform-grid">
+        <button class="tc-btn" data-op="upper">
+          <span class="tc-btn-title">UPPERCASE</span>
+          <span class="tc-btn-sub">ALL LETTERS CAPITALISED</span>
+        </button>
+        <button class="tc-btn" data-op="lower">
+          <span class="tc-btn-title">lowercase</span>
+          <span class="tc-btn-sub">all letters small</span>
+        </button>
+        <button class="tc-btn" data-op="title">
+          <span class="tc-btn-title">Title Case</span>
+          <span class="tc-btn-sub">First Letter Of Every Word</span>
+        </button>
+        <button class="tc-btn" data-op="sentence">
+          <span class="tc-btn-title">Sentence case</span>
+          <span class="tc-btn-sub">Only first letter of sentence</span>
+        </button>
+        <button class="tc-btn" data-op="alt">
+          <span class="tc-btn-title">aLtErNaTiNg</span>
+          <span class="tc-btn-sub">aLtErNaTeS eVeRy LeItTeR</span>
+        </button>
+        <button class="tc-btn" data-op="spaces">
+          <span class="tc-btn-title">Remove Extra Spaces</span>
+          <span class="tc-btn-sub">Collapse multiple spaces</span>
+        </button>
+        <button class="tc-btn" data-op="reverse">
+          <span class="tc-btn-title">Reverse Text</span>
+          <span class="tc-btn-sub">.txet esreveR</span>
+        </button>
+        <button class="tc-btn" data-op="reversewords">
+          <span class="tc-btn-title">Reverse Word Order</span>
+          <span class="tc-btn-sub">order Word Reverse</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Ad zone -->
+    <div class="ad-zone" style="margin-top:var(--space-4)"><!-- Google AdSense — text-case-converter --><span>Advertisement</span></div>
+
+    <!-- Stats row -->
+    <div class="tc-stats-row" style="margin-top:var(--space-4)">
+      <div class="tc-stat card card-body-sm">
+        <div class="tc-stat-val" id="tc-words">0</div>
+        <div class="tc-stat-lbl">Words</div>
+      </div>
+      <div class="tc-stat card card-body-sm">
+        <div class="tc-stat-val" id="tc-chars">0</div>
+        <div class="tc-stat-lbl">Characters</div>
+      </div>
+      <div class="tc-stat card card-body-sm">
+        <div class="tc-stat-val" id="tc-sentences">0</div>
+        <div class="tc-stat-lbl">Sentences</div>
+      </div>
+    </div>
+
+    <!-- Before / After comparison -->
+    <div id="compare-panel" class="card card-body compare-panel" style="display:none">
+      <div class="card-title">🔄 Before / After Comparison</div>
+      <div class="compare-grid">
+        <div class="compare-col">
+          <div class="compare-label">Before</div>
+          <div id="compare-before" class="compare-text"></div>
+        </div>
+        <div class="compare-col">
+          <div class="compare-label">After</div>
+          <div id="compare-after" class="compare-text"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO content -->
+    <div class="seo-section">
+      <h2>How to Use This Text Case Converter</h2>
+      <p>Paste your text into the editor, then click any transformation button. The text is converted instantly and a Before/After comparison appears below so you can see exactly what changed. Use the Undo button to revert any transformation — the tool keeps a history of up to 10 steps.</p>
+
+      <h2>When to Use Each Case</h2>
+      <ul class="how-to-list">
+        <li><strong>UPPERCASE:</strong> Headlines for maximum impact, legal text, warning labels, acronyms, and emphasis. Avoid using all caps for long passages — it reduces readability significantly.</li>
+        <li><strong>lowercase:</strong> Brand names that stylistically use all lowercase (like instagram, adidas), code variable names, or informal digital communication.</li>
+        <li><strong>Title Case:</strong> Blog post titles, book titles, movie names, product names, and page headings. Adds formality and improves visual scannability.</li>
+        <li><strong>Sentence case:</strong> Body text, email subject lines, social media posts, and everyday writing. Most natural and easiest to read.</li>
+        <li><strong>Remove Extra Spaces:</strong> Useful for cleaning up text copied from PDFs, Word documents, or web pages that contain extra whitespace artifacts.</li>
+        <li><strong>Reverse Word Order:</strong> A quick tool for rearranging word sequences, useful in word games or creative writing exercises.</li>
+      </ul>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        {faqSchema.map(({ q, a }) => (
+          <details><summary>{q}</summary><div class="details-body">{a}</div></details>
+        ))}
+      </div>
+
+      <h2>More Free Writing Tools</h2>
+      <div class="more-tools-grid">
+        <a href="/word-counter" class="more-tool-link">📝 Word Counter</a>
+        <a href="/character-counter" class="more-tool-link">🔢 Character Counter</a>
+        <a href="/readability-checker" class="more-tool-link">📖 Readability</a>
+        <a href="/twitter-character-counter" class="more-tool-link">🐦 Twitter Counter</a>
+        <a href="/instagram-caption-checker" class="more-tool-link">📸 Instagram</a>
+        <a href="/meta-description-checker" class="more-tool-link">🔍 Meta Description</a>
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<script>
+(function(){
+  const editor = document.getElementById('tc-editor') as HTMLTextAreaElement;
+  if(!editor) return;
+
+  const history: string[] = [];
+  const MAX_HISTORY = 10;
+
+  const ops: Record<string, (t: string) => string> = {
+    upper:        t => t.toUpperCase(),
+    lower:        t => t.toLowerCase(),
+    title:        t => t.replace(/\w\S*/g, w => w[0].toUpperCase() + w.slice(1).toLowerCase()),
+    sentence:     t => t.toLowerCase().replace(/(?:^|\.\s+|!\s+|\?\s+)\w/g, c => c.toUpperCase()),
+    alt:          t => [...t].map((c,i) => i%2===0 ? c.toLowerCase() : c.toUpperCase()).join(''),
+    spaces:       t => t.replace(/[ \t]+/g, ' ').replace(/\n{3,}/g, '\n\n').trim(),
+    reverse:      t => [...t].reverse().join(''),
+    reversewords: t => t.split(' ').reverse().join(' '),
+  };
+
+  function updateStats(text: string){
+    const words = text.trim() ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+    const chars = text.length;
+    const sents = text.trim() ? Math.max(text.split(/[.!?]+/).filter(s=>s.trim().length>2).length,1) : 0;
+    const s=(id:string,v:number)=>{const el=document.getElementById(id);if(el)el.textContent=String(v);};
+    s('tc-words',words); s('tc-chars',chars); s('tc-sentences',sents);
+  }
+
+  function updateUndo(){
+    const btn = document.getElementById('tc-undo') as HTMLButtonElement;
+    const info = document.getElementById('tc-undo-info');
+    if(btn) btn.disabled = history.length === 0;
+    if(info) info.textContent = history.length > 0 ? `${history.length} step${history.length>1?'s':''} in history` : '';
+  }
+
+  function toast(msg: string){
+    const c=document.getElementById('toast-container');if(!c)return;
+    const el=document.createElement('div');el.className='toast toast-success';el.textContent=msg;c.appendChild(el);
+    requestAnimationFrame(()=>el.classList.add('toast-visible'));
+    setTimeout(()=>{el.classList.remove('toast-visible');el.classList.add('toast-hiding');setTimeout(()=>el.remove(),350);},2000);
+  }
+
+  function applyOp(op: string){
+    if(!ops[op]) return;
+    const before = editor.value;
+    const after  = ops[op](before);
+    if(before === after) return;
+
+    // Save before to history
+    if(history.length >= MAX_HISTORY) history.shift();
+    history.push(before);
+
+    editor.value = after;
+    updateStats(after);
+    updateUndo();
+
+    // Before/After panel
+    const panel  = document.getElementById('compare-panel');
+    const bEl    = document.getElementById('compare-before');
+    const aEl    = document.getElementById('compare-after');
+    if(panel) panel.style.display = 'block';
+    if(bEl)  bEl.textContent  = before.slice(0, 300) + (before.length > 300 ? '…' : '');
+    if(aEl)  aEl.textContent  = after.slice(0,  300) + (after.length  > 300 ? '…' : '');
+
+    toast(`Applied: ${op}`);
+  }
+
+  // Bind transformation buttons
+  document.querySelectorAll<HTMLElement>('[data-op]').forEach(btn => {
+    btn.addEventListener('click', () => applyOp(btn.dataset.op || ''));
+  });
+
+  // Undo
+  document.getElementById('tc-undo')?.addEventListener('click', () => {
+    if(history.length === 0) return;
+    const prev = history.pop()!;
+    editor.value = prev;
+    updateStats(prev);
+    updateUndo();
+    const panel = document.getElementById('compare-panel');
+    if(panel && history.length === 0) panel.style.display = 'none';
+    toast('Undone');
+  });
+
+  // Copy
+  document.getElementById('tc-copy')?.addEventListener('click', () => {
+    navigator.clipboard.writeText(editor.value)
+      .then(() => toast('Copied to clipboard!'))
+      .catch(() => toast('Copy failed', ));
+  });
+
+  editor.addEventListener('input', () => updateStats(editor.value));
+  updateStats(editor.value);
+  updateUndo();
+})();
+</script>
+
+<style>
+  .page-header{margin-bottom:var(--space-6);}
+  .page-header h1{font-size:clamp(1.75rem,3vw,2.5rem);margin-bottom:var(--space-3);}
+  .page-sub{font-size:17px;color:var(--color-body);line-height:1.6;max-width:700px;margin-bottom:var(--space-4);}
+  .tool-wrap{padding-bottom:var(--space-16);}
+  .editor-card{padding:0;overflow:hidden;}
+  .tc-textarea{display:block;width:100%;min-height:180px;padding:var(--space-4);font-family:var(--font-sans);font-size:15px;line-height:1.7;color:var(--color-ink);background:var(--color-canvas);border:none;border-radius:var(--radius-md);resize:vertical;}
+  .tc-textarea:focus{outline:none;box-shadow:inset 0 0 0 2px var(--color-primary);}
+  .tc-action-row{display:flex;align-items:center;gap:var(--space-3);margin-top:var(--space-3);}
+  .tc-undo-info{font-size:13px;color:var(--color-mute);}
+  /* Transform grid */
+  .transforms-card{margin-top:var(--space-4);}
+  .transform-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-3);margin-top:var(--space-3);}
+  .tc-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:var(--space-4) var(--space-3);background:var(--color-canvas-soft);border:1px solid var(--color-hairline);border-radius:var(--radius-md);cursor:pointer;transition:all var(--transition-fast);text-align:center;}
+  .tc-btn:hover{background:var(--color-primary-soft);border-color:var(--color-primary);transform:translateY(-1px);box-shadow:var(--shadow-sm);}
+  .tc-btn-title{font-size:13px;font-weight:700;color:var(--color-ink);letter-spacing:-0.01em;}
+  .tc-btn-sub{font-size:11px;color:var(--color-mute);line-height:1.3;}
+  /* Stats */
+  .tc-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-3);}
+  .tc-stat{text-align:center;}
+  .tc-stat-val{font-size:24px;font-weight:700;color:var(--color-ink);letter-spacing:-0.02em;line-height:1;margin-bottom:4px;}
+  .tc-stat-lbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:var(--color-mute);}
+  /* Compare panel */
+  .compare-panel{margin-top:var(--space-4);}
+  .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:var(--space-4);margin-top:var(--space-3);}
+  .compare-col{}
+  .compare-label{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-mute);margin-bottom:var(--space-2);}
+  .compare-text{background:var(--color-canvas-soft);border:1px solid var(--color-hairline);border-radius:var(--radius-sm);padding:var(--space-3);font-size:13px;color:var(--color-body);line-height:1.6;min-height:60px;white-space:pre-wrap;word-break:break-word;}
+  /* SEO */
+  .seo-section{margin-top:var(--space-12);}
+  .seo-section h2{font-size:var(--text-2xl);margin-bottom:var(--space-4);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-hairline);margin-top:var(--space-8);}
+  .seo-section p{max-width:800px;margin-bottom:var(--space-4);}
+  .how-to-list{padding-left:var(--space-5);margin-bottom:var(--space-4);}
+  .how-to-list li{margin-bottom:var(--space-3);color:var(--color-body);line-height:1.7;}
+  .faq-list{max-width:800px;margin-top:var(--space-4);}
+  .more-tools-grid{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-4);}
+  .more-tool-link{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-4);background:var(--color-canvas);border:1px solid var(--color-hairline);border-radius:var(--radius-md);font-size:14px;font-weight:500;color:var(--color-ink);text-decoration:none;box-shadow:var(--shadow-xs);transition:all var(--transition-fast);}
+  .more-tool-link:hover{border-color:var(--color-primary);color:var(--color-primary);text-decoration:none;}
+  @media(max-width:1024px){.transform-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:768px){.transform-grid{grid-template-columns:repeat(2,1fr);}.compare-grid{grid-template-columns:1fr;}}
+  @media(max-width:480px){.transform-grid{grid-template-columns:1fr 1fr;}}
+</style>

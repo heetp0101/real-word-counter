@@ -1,0 +1,291 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const faqSchema = [
+  {
+    q: 'What is the Twitter character limit in 2025?',
+    a: 'Twitter (X) allows up to 280 characters per tweet for all users. Twitter Blue (X Premium) subscribers can post longer content, but the standard limit remains 280 characters.',
+  },
+  {
+    q: 'Do spaces count as characters on Twitter?',
+    a: 'Yes, every space counts as one character on Twitter. This is included in the 280-character limit. Line breaks also count as characters.',
+  },
+  {
+    q: 'How does Twitter count URLs in tweets?',
+    a: 'Twitter automatically shortens all URLs to exactly 23 characters regardless of the original URL length using its t.co shortener. A long URL like https://www.example.com/some/very/long/path still only counts as 23 characters.',
+  },
+  {
+    q: 'What happens if my tweet is over 280 characters?',
+    a: 'Twitter will not allow you to post a tweet that exceeds 280 characters. The tweet button becomes disabled and a red indicator shows how many characters over the limit you are. You must shorten your text before posting.',
+  },
+  {
+    q: 'Does Twitter count emojis as one or two characters?',
+    a: 'Most standard emoji count as 2 characters on Twitter because of how Unicode handles them in the UTF-16 encoding that JavaScript uses. Some newer compound emoji (using Zero Width Joiners) count as even more. This tool reflects the standard count.',
+  },
+];
+
+const LIMIT = 280;
+---
+
+<BaseLayout
+  title="Twitter Character Counter — Check Tweet Length Before Posting Free"
+  description="Free Twitter and X character counter. See exactly how many of the 280 characters your tweet uses with a live counter and visual tweet preview. No signup needed."
+  canonical="https://realwordcounter.com/twitter-character-counter"
+  schemaType="WebApplication"
+  faqSchema={faqSchema}
+>
+
+  <div class="container" style="padding-top:var(--space-8);padding-bottom:var(--space-4)">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Twitter Character Counter</span>
+    </nav>
+    <div class="page-header">
+      <h1>Twitter / X Character Counter</h1>
+      <p class="page-sub">Count your tweet characters live. See a visual preview of exactly how your tweet will look, with overflow highlighted in red. <strong>100% private</strong> — nothing is sent to any server.</p>
+      <span class="tool-privacy-badge">🔒 100% Private — Runs in your browser</span>
+    </div>
+  </div>
+
+  <div class="container tool-wrap">
+
+    <!-- Main counter -->
+    <div class="tw-tool-grid">
+      <div class="tw-left">
+        <!-- Textarea -->
+        <div class="card editor-card">
+          <textarea id="tw-editor" class="tw-textarea" placeholder="What's happening?"></textarea>
+        </div>
+
+        <!-- Counter display -->
+        <div class="tw-counter-row">
+          <div class="tw-fraction" id="tw-fraction">
+            <span id="tw-count" class="tw-count-num">0</span>
+            <span class="tw-sep"> / </span>
+            <span class="tw-limit">{LIMIT}</span>
+          </div>
+          <div id="tw-remaining-msg" class="tw-remaining">280 characters remaining</div>
+        </div>
+
+        <!-- Breakdown -->
+        <div class="card card-body breakdown-card">
+          <div class="breakdown-grid">
+            <div class="bd-item">
+              <span class="bd-val" id="bd-total">0</span>
+              <span class="bd-lbl">Total characters</span>
+            </div>
+            <div class="bd-item">
+              <span class="bd-val" id="bd-remaining">280</span>
+              <span class="bd-lbl">Remaining</span>
+            </div>
+            <div class="bd-item">
+              <span class="bd-val" id="bd-words">0</span>
+              <span class="bd-lbl">Words</span>
+            </div>
+          </div>
+          <p class="url-note">💡 Twitter counts all URLs as exactly <strong>23 characters</strong> regardless of length.</p>
+        </div>
+
+        <!-- Tips -->
+        <div class="card card-body tips-card">
+          <div class="card-title">💡 5 Twitter Writing Tips</div>
+          <ol class="tips-list">
+            <li>Use <strong>line breaks</strong> to create visual breathing room — they cost only 1 character each.</li>
+            <li><strong>Numbers beat words</strong>: "7x" instead of "seven times" saves 8 characters.</li>
+            <li>Cut filler: "I think that" (13 chars) vs nothing (0 chars). Lead with the point.</li>
+            <li>Use ampersand <strong>&amp;</strong> instead of "and" to save 2 characters per use.</li>
+            <li>Twitter shortens all URLs to 23 chars — paste your full URL without fear.</li>
+          </ol>
+        </div>
+      </div>
+
+      <div class="tw-right">
+        <!-- Tweet preview -->
+        <div class="card card-body preview-card">
+          <div class="card-title">🐦 Live Tweet Preview</div>
+          <div class="tweet-card">
+            <div class="tweet-header">
+              <div class="tweet-avatar"><span>U</span></div>
+              <div class="tweet-user-info">
+                <span class="tweet-name">Your Name</span>
+                <span class="tweet-handle">@yourhandle</span>
+              </div>
+              <span class="tweet-more">···</span>
+            </div>
+            <div class="tweet-body" id="tweet-preview">
+              <span class="tweet-placeholder">Your tweet will appear here...</span>
+            </div>
+            <div class="tweet-footer">
+              <span>💬 0</span>
+              <span>🔁 0</span>
+              <span>❤️ 0</span>
+              <span>📤</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ad zone -->
+        <div class="ad-zone"><!-- Google AdSense — twitter-counter below-preview --><span>Advertisement</span></div>
+      </div>
+    </div>
+
+    <!-- SEO content -->
+    <div class="seo-section">
+      <h2>How to Use This Twitter Character Counter</h2>
+      <p>Type or paste your tweet text in the editor. The character count updates live with every keystroke. The large fraction display shows your count against the 280-character limit and changes colour as you approach it:</p>
+      <ul class="how-to-list">
+        <li><strong>Blue (0–239):</strong> You have plenty of room. Keep writing.</li>
+        <li><strong>Amber (240–279):</strong> Getting close. Start wrapping up your thought.</li>
+        <li><strong>Green (280):</strong> Exactly at the limit — perfect use of space.</li>
+        <li><strong>Red (over 280):</strong> You have exceeded the limit. The preview highlights the overflow text in red to show what Twitter would cut off.</li>
+      </ul>
+      <p>The live preview card shows exactly how your tweet will look when posted. When text exceeds 280 characters, the first 280 are shown normally and the remainder is highlighted in red. This helps you see exactly what needs to be cut.</p>
+
+      <h2>Understanding Twitter's Character Counting Rules</h2>
+      <p>Twitter has a few unique rules for how characters are counted that differ from a simple string length measurement. Every standard letter, digit, space, punctuation mark, and line break counts as one character. Emoji count as two characters due to Unicode encoding. URLs, regardless of how long they are, are always shortened by Twitter's t.co service and counted as exactly 23 characters. This means a long URL to a blog post counts the same as a short URL. Usernames mentioned with @ and hashtags with # count normally — each character including the @ or # symbol counts as one character.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        {faqSchema.map(({ q, a }) => (
+          <details><summary>{q}</summary><div class="details-body">{a}</div></details>
+        ))}
+      </div>
+
+      <h2>More Free Writing Tools</h2>
+      <div class="more-tools-grid">
+        <a href="/character-counter" class="more-tool-link">🔢 Character Counter</a>
+        <a href="/instagram-caption-checker" class="more-tool-link">📸 Instagram Checker</a>
+        <a href="/meta-description-checker" class="more-tool-link">🔍 Meta Description</a>
+        <a href="/word-counter" class="more-tool-link">📝 Word Counter</a>
+        <a href="/text-case-converter" class="more-tool-link">✏️ Case Converter</a>
+        <a href="/readability-checker" class="more-tool-link">📖 Readability Checker</a>
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<script>
+(function(){
+  const editor = document.getElementById('tw-editor') as HTMLTextAreaElement;
+  if(!editor) return;
+  const LIMIT = 280;
+
+  function update(){
+    const text = editor.value;
+    const count = text.length;
+    const remaining = LIMIT - count;
+    const words = text.trim() ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+
+    // Fraction display
+    const countEl = document.getElementById('tw-count');
+    const fracEl  = document.getElementById('tw-fraction');
+    const remMsg  = document.getElementById('tw-remaining-msg');
+    if(countEl) countEl.textContent = String(count);
+    if(fracEl){
+      fracEl.className = 'tw-fraction';
+      if(count > LIMIT)      fracEl.classList.add('tw-over');
+      else if(count >= 240)  fracEl.classList.add('tw-warn');
+      else if(count === LIMIT) fracEl.classList.add('tw-exact');
+      else                   fracEl.classList.add('tw-ok');
+    }
+    if(remMsg){
+      if(count > LIMIT) remMsg.textContent = `${count - LIMIT} characters over limit`;
+      else if(count === LIMIT) remMsg.textContent = 'Exactly at limit!';
+      else remMsg.textContent = `${remaining} characters remaining`;
+    }
+
+    // Breakdown
+    const setBd = (id:string,v:string|number) => { const el=document.getElementById(id); if(el) el.textContent=String(v); };
+    setBd('bd-total', count);
+    setBd('bd-remaining', remaining < 0 ? `−${Math.abs(remaining)}` : remaining);
+    setBd('bd-words', words);
+
+    // Tweet preview
+    const preview = document.getElementById('tweet-preview');
+    if(preview){
+      if(!text){
+        preview.innerHTML = '<span class="tweet-placeholder">Your tweet will appear here...</span>';
+      } else if(count <= LIMIT){
+        preview.textContent = text;
+        preview.className = 'tweet-body';
+      } else {
+        const normal = text.slice(0, LIMIT);
+        const overflow = text.slice(LIMIT);
+        preview.innerHTML = '';
+        const normalNode = document.createTextNode(normal);
+        preview.appendChild(normalNode);
+        const overEl = document.createElement('span');
+        overEl.className = 'tweet-overflow';
+        overEl.textContent = overflow;
+        preview.appendChild(overEl);
+      }
+    }
+  }
+
+  editor.addEventListener('input', update);
+  update();
+})();
+</script>
+
+<style>
+  .page-header{margin-bottom:var(--space-6);}
+  .page-header h1{font-size:clamp(1.75rem,3vw,2.5rem);margin-bottom:var(--space-3);}
+  .page-sub{font-size:17px;color:var(--color-body);line-height:1.6;max-width:700px;margin-bottom:var(--space-4);}
+  .tool-wrap{padding-bottom:var(--space-16);}
+  .tw-tool-grid{display:grid;grid-template-columns:1fr 380px;gap:var(--space-6);align-items:start;}
+  .tw-left,.tw-right{display:flex;flex-direction:column;gap:var(--space-4);}
+  .editor-card{padding:0;overflow:hidden;}
+  .tw-textarea{display:block;width:100%;min-height:140px;padding:var(--space-4);font-family:var(--font-sans);font-size:16px;line-height:1.6;color:var(--color-ink);background:var(--color-canvas);border:none;border-radius:var(--radius-md);resize:vertical;}
+  .tw-textarea:focus{outline:none;box-shadow:inset 0 0 0 2px var(--color-primary);}
+  /* Counter */
+  .tw-counter-row{display:flex;align-items:center;justify-content:space-between;padding:var(--space-3) 0;}
+  .tw-fraction{font-size:32px;font-weight:800;letter-spacing:-0.04em;transition:color var(--transition-fast);}
+  .tw-fraction.tw-ok{color:var(--color-primary);}
+  .tw-fraction.tw-warn{color:var(--color-warning);}
+  .tw-fraction.tw-exact{color:var(--color-success);}
+  .tw-fraction.tw-over{color:var(--color-error);}
+  .tw-count-num{font-size:48px;}
+  .tw-sep,.tw-limit{font-size:24px;color:var(--color-mute);}
+  .tw-remaining{font-size:14px;color:var(--color-mute);}
+  /* Breakdown */
+  .breakdown-card{background:var(--color-canvas-soft);}
+  .breakdown-grid{display:flex;gap:var(--space-6);margin-bottom:var(--space-3);}
+  .bd-item{display:flex;flex-direction:column;gap:3px;}
+  .bd-val{font-size:22px;font-weight:700;color:var(--color-ink);letter-spacing:-0.02em;}
+  .bd-lbl{font-size:12px;color:var(--color-mute);font-weight:500;}
+  .url-note{font-size:13px;color:var(--color-body);margin:0;}
+  /* Tips */
+  .tips-list{padding-left:var(--space-5);}
+  .tips-list li{margin-bottom:var(--space-2);color:var(--color-body);line-height:1.6;font-size:14px;}
+  /* Tweet preview */
+  .preview-card{}
+  .tweet-card{background:#fff;border:1px solid #e7e7e7;border-radius:16px;padding:var(--space-4);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+  [data-theme="dark"] .tweet-card{background:#1a1a2e;border-color:#333;}
+  .tweet-header{display:flex;align-items:center;gap:var(--space-2);margin-bottom:var(--space-3);}
+  .tweet-avatar{width:40px;height:40px;border-radius:50%;background:#1d9bf0;display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:16px;flex-shrink:0;}
+  .tweet-user-info{display:flex;flex-direction:column;flex:1;}
+  .tweet-name{font-size:15px;font-weight:700;color:#0f1419;}
+  .tweet-handle{font-size:14px;color:#536471;}
+  [data-theme="dark"] .tweet-name{color:#e7e9ea;}
+  [data-theme="dark"] .tweet-handle{color:#71767b;}
+  .tweet-more{color:#536471;font-size:18px;cursor:pointer;}
+  .tweet-body{font-size:15px;line-height:1.6;color:#0f1419;white-space:pre-wrap;word-break:break-word;min-height:40px;margin-bottom:var(--space-3);}
+  [data-theme="dark"] .tweet-body{color:#e7e9ea;}
+  .tweet-placeholder{color:#536471;font-style:italic;}
+  .tweet-overflow{background:rgba(220,38,38,0.15);color:#DC2626;border-radius:2px;}
+  .tweet-footer{display:flex;gap:var(--space-6);color:#536471;font-size:13px;}
+  /* SEO */
+  .seo-section{margin-top:var(--space-12);}
+  .seo-section h2{font-size:var(--text-2xl);margin-bottom:var(--space-4);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-hairline);margin-top:var(--space-8);}
+  .seo-section p{max-width:800px;margin-bottom:var(--space-4);}
+  .how-to-list{padding-left:var(--space-5);margin-bottom:var(--space-4);}
+  .how-to-list li{margin-bottom:var(--space-3);color:var(--color-body);line-height:1.7;}
+  .faq-list{max-width:800px;margin-top:var(--space-4);}
+  .more-tools-grid{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-4);}
+  .more-tool-link{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-4);background:var(--color-canvas);border:1px solid var(--color-hairline);border-radius:var(--radius-md);font-size:14px;font-weight:500;color:var(--color-ink);text-decoration:none;box-shadow:var(--shadow-xs);transition:all var(--transition-fast);}
+  .more-tool-link:hover{border-color:var(--color-primary);color:var(--color-primary);text-decoration:none;}
+  @media(max-width:900px){.tw-tool-grid{grid-template-columns:1fr;}}
+  @media(max-width:768px){.breakdown-grid{flex-wrap:wrap;gap:var(--space-4);}.tw-count-num{font-size:36px;}.tw-sep,.tw-limit{font-size:18px;}}
+</style>

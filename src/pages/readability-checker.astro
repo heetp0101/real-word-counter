@@ -1,0 +1,401 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const faqSchema = [
+  {
+    q: 'What is the Flesch Reading Ease score?',
+    a: 'The Flesch Reading Ease score is a numeric value from 0 to 100 measuring how easy text is to read. It was developed by Rudolf Flesch in 1948 and is still the most widely used readability formula. Scores above 70 are easy to read (Grade 6 level). Scores below 30 are college-level or professional text.',
+  },
+  {
+    q: 'What readability score should a blog post aim for?',
+    a: 'Most blog posts targeting a general audience should aim for a Flesch score of 60–70 (Grade 7–8 level). This means sentences average 15–18 words and most words have two syllables or fewer. News articles typically score 60–70. Academic papers often score below 30.',
+  },
+  {
+    q: 'What readability score does UPSC expect?',
+    a: 'UPSC Mains answers are evaluated by educated examiners, so a score in the 40–60 range (Fairly Difficult, Grade 9–12) is appropriate. Answers should be formal and precise but not impenetrably dense. Extremely low scores (below 30) suggest overly complex sentences that may obscure your argument.',
+  },
+  {
+    q: 'How can I improve my readability score?',
+    a: 'The two main levers are sentence length and word complexity. Break long sentences into two shorter ones. Replace polysyllabic words with simpler synonyms where possible. Use active voice instead of passive. Avoid technical jargon unless your audience requires it. Each of these changes directly improves the Flesch score.',
+  },
+  {
+    q: 'What grade level should general web content target?',
+    a: 'General web content performs best at Grade 6–8 (Flesch score 60–80). Studies consistently show that even highly educated readers prefer web content at a lower reading level because it is faster to process. This does not mean dumbing down — it means writing clearly and directly.',
+  },
+];
+---
+
+<BaseLayout
+  title="Readability Score Checker Free — Flesch Reading Ease Calculator Online"
+  description="Check your content readability score for free. Flesch Reading Ease calculator with grade level. Get improvement suggestions for blogs, essays, and web content. No signup."
+  canonical="https://realwordcounter.com/readability-checker"
+  schemaType="WebApplication"
+  faqSchema={faqSchema}
+>
+
+  <div class="container" style="padding-top:var(--space-8);padding-bottom:var(--space-4)">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Readability Checker</span>
+    </nav>
+    <div class="page-header">
+      <h1>Readability Score Checker</h1>
+      <p class="page-sub">Flesch Reading Ease score with grade level, score gauge, detailed breakdown, and actionable improvement suggestions. Live analysis as you type. <strong>100% private.</strong></p>
+      <span class="tool-privacy-badge">🔒 100% Private — Runs in your browser</span>
+    </div>
+  </div>
+
+  <div class="container tool-wrap">
+    <div class="rd-grid">
+      <div class="rd-left">
+        <!-- Textarea -->
+        <div class="card editor-card">
+          <textarea id="rd-editor" class="rd-textarea" placeholder="Paste your text here to check its readability. At least 10 words are needed for a score..."></textarea>
+        </div>
+
+        <!-- Score display -->
+        <div id="rd-score-card" class="card card-body rd-score-card" style="display:none">
+          <div class="rd-score-top">
+            <div class="rd-score-number-wrap">
+              <span id="rd-score-num" class="rd-score-number">0</span>
+              <span class="rd-score-max">/100</span>
+            </div>
+            <div class="rd-score-info">
+              <span id="rd-grade-badge" class="badge badge-neutral">—</span>
+              <div id="rd-grade-label" class="rd-grade-label"></div>
+              <div class="rd-score-hint">Flesch Reading Ease</div>
+            </div>
+          </div>
+
+          <!-- Score gauge -->
+          <div class="gauge-wrap" aria-label="Readability score gauge">
+            <div class="gauge-track">
+              <div class="gauge-marker" id="gauge-marker"></div>
+            </div>
+            <div class="gauge-zones">
+              <span class="gz gz-red">Very Difficult<br/>0–29</span>
+              <span class="gz gz-orange">Difficult<br/>30–49</span>
+              <span class="gz gz-amber">Fairly Difficult<br/>50–59</span>
+              <span class="gz gz-blue">Standard<br/>60–69</span>
+              <span class="gz gz-green">Easy<br/>70–89</span>
+              <span class="gz gz-bright">Very Easy<br/>90–100</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ad zone -->
+        <div class="ad-zone"><!-- Google AdSense — readability-checker --><span>Advertisement</span></div>
+
+        <!-- Breakdown stats -->
+        <div id="rd-breakdown" class="rd-breakdown" style="display:none">
+          <div class="breakdown-stat card card-body-sm">
+            <div class="bd-val" id="rd-asl">—</div>
+            <div class="bd-lbl">Avg Sentence Length</div>
+            <div class="bd-sub">(words)</div>
+          </div>
+          <div class="breakdown-stat card card-body-sm">
+            <div class="bd-val" id="rd-awl">—</div>
+            <div class="bd-lbl">Avg Word Length</div>
+            <div class="bd-sub">(characters)</div>
+          </div>
+          <div class="breakdown-stat card card-body-sm">
+            <div class="bd-val" id="rd-syllables">—</div>
+            <div class="bd-lbl">Total Syllables</div>
+            <div class="bd-sub">(counted)</div>
+          </div>
+          <div class="breakdown-stat card card-body-sm">
+            <div class="bd-val" id="rd-spw">—</div>
+            <div class="bd-lbl">Syllables Per Word</div>
+            <div class="bd-sub">(average)</div>
+          </div>
+        </div>
+
+        <!-- Improvement suggestions -->
+        <div id="rd-suggestions" class="card card-body" style="display:none">
+          <div class="card-title">💡 Improvement Suggestions</div>
+          <ul id="rd-suggestion-list" class="suggestion-list"></ul>
+        </div>
+
+        <!-- General stats -->
+        <div id="rd-stats" class="rd-stats-row" style="display:none">
+          <div class="rd-stat card card-body-sm"><div class="rs-val" id="rd-words">0</div><div class="rs-lbl">Words</div></div>
+          <div class="rd-stat card card-body-sm"><div class="rs-val" id="rd-chars">0</div><div class="rs-lbl">Characters</div></div>
+          <div class="rd-stat card card-body-sm"><div class="rs-val" id="rd-sents">0</div><div class="rs-lbl">Sentences</div></div>
+          <div class="rd-stat card card-body-sm"><div class="rs-val" id="rd-paras">0</div><div class="rs-lbl">Paragraphs</div></div>
+          <div class="rd-stat card card-body-sm"><div class="rs-val" id="rd-reading">0 min</div><div class="rs-lbl">Reading Time</div></div>
+          <div class="rd-stat card card-body-sm"><div class="rs-val" id="rd-speaking">0 min</div><div class="rs-lbl">Speaking Time</div></div>
+        </div>
+
+        <!-- Keyword density -->
+        <div id="rd-keywords" class="card card-body" style="display:none">
+          <div class="card-title">🔑 Keyword Density</div>
+          <div id="rd-keyword-list" class="keyword-list"></div>
+        </div>
+      </div>
+
+      <!-- Right: info panel -->
+      <div class="rd-right">
+        <div class="card card-body score-guide">
+          <div class="card-title">📊 Score Guide</div>
+          <div class="score-guide-list">
+            <div class="sg-row"><span class="sg-dot" style="background:#15803D"></span><span class="sg-range">90–100</span><span class="sg-label">Very Easy — Grade 5</span></div>
+            <div class="sg-row"><span class="sg-dot" style="background:#16A34A"></span><span class="sg-range">70–89</span><span class="sg-label">Easy — Grade 6</span></div>
+            <div class="sg-row"><span class="sg-dot" style="background:#2563EB"></span><span class="sg-range">60–69</span><span class="sg-label">Standard — Grade 7–8</span></div>
+            <div class="sg-row"><span class="sg-dot" style="background:#D97706"></span><span class="sg-range">50–59</span><span class="sg-label">Fairly Difficult — Grade 9–10</span></div>
+            <div class="sg-row"><span class="sg-dot" style="background:#EA580C"></span><span class="sg-range">30–49</span><span class="sg-label">Difficult — Grade 11–12</span></div>
+            <div class="sg-row"><span class="sg-dot" style="background:#DC2626"></span><span class="sg-range">0–29</span><span class="sg-label">Very Difficult — College</span></div>
+          </div>
+          <div class="sg-targets" style="margin-top:var(--space-4)">
+            <div class="card-title" style="font-size:13px;margin-bottom:var(--space-3)">Target scores</div>
+            <div class="sgt-row"><span class="sgt-label">Blog / web</span><span class="sgt-val">60–80</span></div>
+            <div class="sgt-row"><span class="sgt-label">News article</span><span class="sgt-val">60–70</span></div>
+            <div class="sgt-row"><span class="sgt-label">UPSC answer</span><span class="sgt-val">40–60</span></div>
+            <div class="sgt-row"><span class="sgt-label">Academic paper</span><span class="sgt-val">0–40</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO content -->
+    <div class="seo-section">
+      <h2>How to Use This Readability Checker</h2>
+      <p>Paste at least 10 words into the editor. The Flesch Reading Ease score, grade level, and all breakdown statistics appear instantly. Here is how to interpret what you see:</p>
+      <ul class="how-to-list">
+        <li><strong>Flesch Score (0–100):</strong> Higher is easier. Score 70 means a Grade 6 student can understand it. Score 30 means college-level reading is needed.</li>
+        <li><strong>Score Gauge:</strong> The visual marker shows where your text falls on the spectrum from Very Difficult (red) to Very Easy (bright green).</li>
+        <li><strong>Average Sentence Length:</strong> The primary driver of readability. Sentences over 25 words are hard to process. Under 15 words is highly readable.</li>
+        <li><strong>Syllables Per Word:</strong> The secondary driver. More syllables = harder words. Using simpler synonyms directly improves your score.</li>
+        <li><strong>Improvement Suggestions:</strong> Specific advice based on your actual text, not generic tips. Follow them to lift your score.</li>
+      </ul>
+
+      <h2>Why Readability Matters</h2>
+      <p>Readable content performs better across every metric that matters. Visitors stay longer on pages they can read quickly. Search engines like Google factor in user engagement signals that are strongly correlated with readable content. UPSC evaluators reading thousands of scripts in limited time respond better to answers that communicate ideas clearly rather than hiding behind complex language. For bloggers, a higher readability score correlates directly with lower bounce rates and higher time-on-page. The goal is not to write simply — it is to write clearly. Complex ideas expressed in simple language demonstrate mastery. The same ideas buried in jargon suggest confusion.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        {faqSchema.map(({ q, a }) => (
+          <details><summary>{q}</summary><div class="details-body">{a}</div></details>
+        ))}
+      </div>
+
+      <h2>More Free Writing Tools</h2>
+      <div class="more-tools-grid">
+        <a href="/word-counter" class="more-tool-link">📝 Word Counter</a>
+        <a href="/character-counter" class="more-tool-link">🔢 Character Counter</a>
+        <a href="/text-case-converter" class="more-tool-link">✏️ Case Converter</a>
+        <a href="/upsc-word-counter" class="more-tool-link">🏛️ UPSC Counter</a>
+        <a href="/twitter-character-counter" class="more-tool-link">🐦 Twitter Counter</a>
+        <a href="/meta-description-checker" class="more-tool-link">🔍 Meta Description</a>
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<script>
+(function(){
+  const editor = document.getElementById('rd-editor') as HTMLTextAreaElement;
+  if(!editor) return;
+
+  const STOP_WORDS = new Set(['a','about','above','after','again','all','am','an','and','any','are','as','at','be','because','been','before','being','below','both','but','by','can','did','do','does','doing','down','during','each','few','for','from','further','had','has','have','having','he','her','here','hers','herself','him','himself','his','how','i','if','in','into','is','it','its','itself','me','more','most','my','myself','no','nor','not','of','off','on','once','only','or','other','our','ours','out','over','own','same','she','should','so','some','such','than','that','the','their','theirs','them','themselves','then','there','these','they','this','those','through','to','too','under','until','up','very','was','we','were','what','when','where','which','while','who','whom','why','will','with','would','you','your','yours','yourself','yourselves']);
+
+  function syllables(word: string): number {
+    word = word.toLowerCase().replace(/[^a-z]/g,'');
+    if(!word) return 0; if(word.length<=3) return 1;
+    word = word.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/,'').replace(/^y/,'');
+    const m = word.match(/[aeiouy]{1,2}/g);
+    return m ? m.length : 1;
+  }
+
+  let kwTimer: number;
+
+  function update(){
+    const text = editor.value.trim();
+    const wordList = text ? text.split(/\s+/).filter(Boolean) : [];
+    const words    = wordList.length;
+    const chars    = editor.value.length;
+    const sentences= text ? Math.max(text.split(/[.!?]+/).filter(s=>s.trim().length>2).length,1) : 0;
+    const paragraphs= text ? (text.split(/\n\n+/).filter(p=>p.trim()).length||1) : 0;
+
+    const scoreCard  = document.getElementById('rd-score-card');
+    const breakdown  = document.getElementById('rd-breakdown');
+    const stats      = document.getElementById('rd-stats');
+    const suggestions= document.getElementById('rd-suggestions');
+    const kwSection  = document.getElementById('rd-keywords');
+
+    const set=(id:string,v:string|number)=>{const el=document.getElementById(id);if(el)el.textContent=String(v);};
+
+    if(words < 10){
+      if(scoreCard) scoreCard.style.display='none';
+      if(breakdown) breakdown.style.display='none';
+      if(stats)     stats.style.display='none';
+      if(suggestions) suggestions.style.display='none';
+      if(kwSection)   kwSection.style.display='none';
+      return;
+    }
+
+    // Stats
+    if(stats){
+      stats.style.display='grid';
+      set('rd-words',    words);
+      set('rd-chars',    chars);
+      set('rd-sents',    sentences);
+      set('rd-paras',    paragraphs);
+      set('rd-reading',  Math.ceil(words/200)+' min');
+      set('rd-speaking', Math.ceil(words/130)+' min');
+    }
+
+    // Flesch
+    const totalSyl = wordList.reduce((n,w)=>n+syllables(w),0);
+    const asl = words / sentences;
+    const asw = totalSyl / words;
+    const raw = 206.835 - 1.015*asl - 84.6*asw;
+    const score = Math.max(0,Math.min(100,Math.round(raw)));
+    const avgWordLen = words > 0 ? Math.round((wordList.join('').length / words)*10)/10 : 0;
+    const spw = words > 0 ? Math.round((totalSyl/words)*10)/10 : 0;
+
+    let grade='', badgeClass='badge-neutral', gradeLabel='';
+    if(score>=90){grade='Very Easy';badgeClass='badge-success';gradeLabel='Grade 5';}
+    else if(score>=70){grade='Easy';badgeClass='badge-success';gradeLabel='Grade 6';}
+    else if(score>=60){grade='Standard';badgeClass='badge-primary';gradeLabel='Grade 7–8';}
+    else if(score>=50){grade='Fairly Difficult';badgeClass='badge-warning';gradeLabel='Grade 9–10';}
+    else if(score>=30){grade='Difficult';badgeClass='badge-warning';gradeLabel='Grade 11–12';}
+    else{grade='Very Difficult';badgeClass='badge-error';gradeLabel='College';}
+
+    if(scoreCard) scoreCard.style.display='block';
+    set('rd-score-num',score);
+    const badge=document.getElementById('rd-grade-badge');
+    if(badge){badge.className='badge '+badgeClass;badge.textContent=grade;}
+    set('rd-grade-label',gradeLabel);
+
+    // Gauge
+    const marker = document.getElementById('gauge-marker') as HTMLElement;
+    if(marker) marker.style.left = score+'%';
+
+    // Breakdown
+    if(breakdown) breakdown.style.display='grid';
+    set('rd-asl',    Math.round(asl*10)/10);
+    set('rd-awl',    avgWordLen);
+    set('rd-syllables', totalSyl);
+    set('rd-spw',    spw);
+
+    // Suggestions
+    const suggList = document.getElementById('rd-suggestion-list');
+    if(suggList && suggestions){
+      const items: string[] = [];
+      if(asl > 20)    items.push('⚠️ Average sentence length is '+Math.round(asl)+' words. Try breaking sentences over 20 words into two shorter ones.');
+      if(avgWordLen>5) items.push('⚠️ Average word length is '+avgWordLen+' characters. Replace complex words with simpler synonyms where possible.');
+      if(score < 60)  items.push('⚠️ Score below 60 — this text may be hard for a general audience. Aim for 60+ for blogs and web content.');
+      if(spw > 2.5)   items.push('💡 Many polysyllabic words found (avg '+spw+' syllables/word). Simpler vocabulary will lift your score significantly.');
+      if(items.length === 0) items.push('✅ Your text reads well. No major improvements needed for the current score.');
+      suggList.innerHTML = items.map(i=>`<li>${i}</li>`).join('');
+      suggestions.style.display = 'block';
+    }
+
+    // Keywords (debounced)
+    clearTimeout(kwTimer);
+    kwTimer = window.setTimeout(()=>updateKeywords(editor.value, words), 300);
+  }
+
+  function updateKeywords(text: string, words: number){
+    const kwSection = document.getElementById('rd-keywords');
+    const kwList    = document.getElementById('rd-keyword-list');
+    if(!kwSection||!kwList||words<20){if(kwSection)kwSection.style.display='none';return;}
+    const freqWords = text.toLowerCase().replace(/[^\w\s]/g,'').split(/\s+/).filter(w=>w.length>2&&!STOP_WORDS.has(w));
+    const freq: Record<string,number>={};
+    freqWords.forEach(w=>{freq[w]=(freq[w]||0)+1;});
+    const sorted=Object.entries(freq).sort((a,b)=>b[1]-a[1]).slice(0,10);
+    if(sorted.length===0){kwSection.style.display='none';return;}
+    const max=sorted[0][1];
+    kwSection.style.display='block';
+    kwList.innerHTML='';
+    sorted.forEach(([word,count])=>{
+      const pct=Math.round((count/max)*100);
+      const el=document.createElement('div');el.className='keyword-item';
+      const meta=document.createElement('div');meta.className='keyword-meta';
+      const wSpan=document.createElement('span');wSpan.className='keyword-word';wSpan.textContent=word;
+      const cSpan=document.createElement('span');cSpan.className='keyword-count';cSpan.textContent=String(count);
+      meta.appendChild(wSpan);meta.appendChild(cSpan);
+      const bar=document.createElement('div');bar.className='keyword-bar';
+      const fill=document.createElement('div');fill.className='keyword-bar-fill';fill.style.width=pct+'%';
+      bar.appendChild(fill);el.appendChild(meta);el.appendChild(bar);kwList.appendChild(el);
+    });
+  }
+
+  editor.addEventListener('input', update);
+  update();
+})();
+</script>
+
+<style>
+  .page-header{margin-bottom:var(--space-6);}
+  .page-header h1{font-size:clamp(1.75rem,3vw,2.5rem);margin-bottom:var(--space-3);}
+  .page-sub{font-size:17px;color:var(--color-body);line-height:1.6;max-width:700px;margin-bottom:var(--space-4);}
+  .tool-wrap{padding-bottom:var(--space-16);}
+  /* Grid */
+  .rd-grid{display:grid;grid-template-columns:1fr 280px;gap:var(--space-6);align-items:start;}
+  .rd-left,.rd-right{display:flex;flex-direction:column;gap:var(--space-4);}
+  /* Editor */
+  .editor-card{padding:0;overflow:hidden;}
+  .rd-textarea{display:block;width:100%;min-height:200px;padding:var(--space-4);font-family:var(--font-sans);font-size:15px;line-height:1.7;color:var(--color-ink);background:var(--color-canvas);border:none;border-radius:var(--radius-md);resize:vertical;}
+  .rd-textarea:focus{outline:none;box-shadow:inset 0 0 0 2px var(--color-primary);}
+  /* Score card */
+  .rd-score-card{background:linear-gradient(135deg,var(--color-canvas) 0%,var(--color-canvas-soft) 100%);}
+  .rd-score-top{display:flex;align-items:center;gap:var(--space-6);margin-bottom:var(--space-5);}
+  .rd-score-number-wrap{display:flex;align-items:baseline;gap:4px;}
+  .rd-score-number{font-size:72px;font-weight:800;letter-spacing:-0.04em;color:var(--color-ink);line-height:1;}
+  .rd-score-max{font-size:24px;color:var(--color-mute);}
+  .rd-grade-label{font-size:13px;color:var(--color-body);margin-top:4px;}
+  .rd-score-hint{font-size:11px;color:var(--color-mute);margin-top:3px;}
+  /* Gauge */
+  .gauge-wrap{}
+  .gauge-track{position:relative;height:14px;border-radius:var(--radius-full);background:linear-gradient(to right,#DC2626 0% 30%,#EA580C 30% 50%,#D97706 50% 60%,#2563EB 60% 70%,#16A34A 70% 90%,#15803D 90% 100%);margin-bottom:var(--space-2);}
+  .gauge-marker{position:absolute;top:50%;width:18px;height:18px;background:white;border:3px solid #111827;border-radius:50%;transform:translate(-50%,-50%);transition:left 200ms ease;pointer-events:none;}
+  [data-theme="dark"] .gauge-marker{background:#1F2937;border-color:#F9FAFB;}
+  .gauge-zones{display:flex;justify-content:space-between;}
+  .gz{font-size:9px;text-align:center;line-height:1.2;flex:1;color:var(--color-mute);}
+  /* Breakdown */
+  .rd-breakdown{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-3);}
+  .breakdown-stat{text-align:center;}
+  .bd-val{font-size:24px;font-weight:700;color:var(--color-ink);letter-spacing:-0.02em;line-height:1;margin-bottom:3px;}
+  .bd-lbl{font-size:11px;font-weight:600;color:var(--color-body);text-transform:uppercase;letter-spacing:0.03em;}
+  .bd-sub{font-size:10px;color:var(--color-mute);margin-top:2px;}
+  /* Suggestions */
+  .suggestion-list{list-style:none;display:flex;flex-direction:column;gap:var(--space-3);}
+  .suggestion-list li{font-size:14px;color:var(--color-body);line-height:1.6;padding:var(--space-3);background:var(--color-canvas-soft);border-radius:var(--radius-sm);border:1px solid var(--color-hairline);}
+  /* Stats */
+  .rd-stats-row{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-3);}
+  .rd-stat{text-align:center;}
+  .rs-val{font-size:22px;font-weight:700;color:var(--color-ink);letter-spacing:-0.02em;line-height:1;margin-bottom:4px;}
+  .rs-lbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:var(--color-mute);}
+  /* Keyword */
+  .keyword-list{display:flex;flex-direction:column;gap:var(--space-2);}
+  .keyword-item{display:flex;flex-direction:column;gap:3px;}
+  .keyword-meta{display:flex;justify-content:space-between;font-size:13px;}
+  .keyword-word{color:var(--color-ink);font-weight:500;}
+  .keyword-count{color:var(--color-mute);}
+  .keyword-bar{height:4px;background:var(--color-canvas-soft-2);border-radius:var(--radius-full);overflow:hidden;}
+  .keyword-bar-fill{height:100%;background:var(--color-primary);border-radius:var(--radius-full);transition:width 200ms ease;}
+  /* Score guide */
+  .score-guide-list{display:flex;flex-direction:column;gap:var(--space-2);}
+  .sg-row{display:flex;align-items:center;gap:var(--space-2);}
+  .sg-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+  .sg-range{font-size:12px;font-weight:600;color:var(--color-ink);min-width:45px;}
+  .sg-label{font-size:12px;color:var(--color-body);}
+  .sgt-row{display:flex;justify-content:space-between;padding:var(--space-1) 0;border-bottom:1px solid var(--color-hairline);font-size:13px;}
+  .sgt-label{color:var(--color-body);}
+  .sgt-val{font-weight:600;color:var(--color-ink);}
+  /* SEO */
+  .seo-section{margin-top:var(--space-12);}
+  .seo-section h2{font-size:var(--text-2xl);margin-bottom:var(--space-4);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-hairline);margin-top:var(--space-8);}
+  .seo-section p{max-width:800px;margin-bottom:var(--space-4);}
+  .how-to-list{padding-left:var(--space-5);margin-bottom:var(--space-4);}
+  .how-to-list li{margin-bottom:var(--space-3);color:var(--color-body);line-height:1.7;}
+  .faq-list{max-width:800px;margin-top:var(--space-4);}
+  .more-tools-grid{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-4);}
+  .more-tool-link{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-4);background:var(--color-canvas);border:1px solid var(--color-hairline);border-radius:var(--radius-md);font-size:14px;font-weight:500;color:var(--color-ink);text-decoration:none;box-shadow:var(--shadow-xs);transition:all var(--transition-fast);}
+  .more-tool-link:hover{border-color:var(--color-primary);color:var(--color-primary);text-decoration:none;}
+  @media(max-width:1024px){.rd-grid{grid-template-columns:1fr;}.rd-breakdown{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:768px){.rd-stats-row{grid-template-columns:repeat(2,1fr);}.rd-breakdown{grid-template-columns:repeat(2,1fr);}.rd-score-number{font-size:56px;}}
+</style>

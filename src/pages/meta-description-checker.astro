@@ -1,0 +1,280 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const faqSchema = [
+  {
+    q: 'What is the ideal meta description length for SEO?',
+    a: 'Google typically displays meta descriptions between 120 and 155 characters. Descriptions shorter than 120 characters may leave valuable context out. Descriptions longer than 155 characters get truncated with an ellipsis. Aim for 130–155 characters for best results.',
+  },
+  {
+    q: 'Does Google always show my meta description?',
+    a: 'No. Google often rewrites meta descriptions if it finds a passage in the page that it considers more relevant to the search query. However, a well-written meta description matching the page content is shown more consistently and encourages higher click-through rates.',
+  },
+  {
+    q: 'What makes a good meta description?',
+    a: 'A good meta description is 130–155 characters, includes the primary keyword naturally, describes what the user will find on the page, and ends with a clear call to action or benefit. It should read like a mini advertisement for the page.',
+  },
+  {
+    q: 'What is the ideal page title length for Google?',
+    a: 'Google typically displays page titles up to 60 characters. Titles longer than 60 characters are truncated with an ellipsis in search results. Aim for 50–60 characters to ensure the full title is visible. Front-load your primary keyword in the title.',
+  },
+  {
+    q: 'Does meta description affect Google ranking directly?',
+    a: 'No, meta descriptions are not a direct ranking factor in Google\'s algorithm. However, a compelling meta description improves click-through rate (CTR), which is an indirect signal. Higher CTR can lead to better rankings over time.',
+  },
+];
+---
+
+<BaseLayout
+  title="Meta Description Length Checker — SEO Character Counter with Google Preview"
+  description="Check your meta description length with a live Google search result preview. Stay within 155 characters. Free SEO tool for bloggers, marketers, and website owners. No signup."
+  canonical="https://realwordcounter.com/meta-description-checker"
+  schemaType="WebApplication"
+  faqSchema={faqSchema}
+>
+
+  <div class="container" style="padding-top:var(--space-8);padding-bottom:var(--space-4)">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Meta Description Checker</span>
+    </nav>
+    <div class="page-header">
+      <h1>Meta Description Checker</h1>
+      <p class="page-sub">Type your page title and meta description to see a live Google search result preview. Check length, get SEO tips, and optimise your snippet before publishing. <strong>100% private.</strong></p>
+      <span class="tool-privacy-badge">🔒 100% Private — Runs in your browser</span>
+    </div>
+  </div>
+
+  <div class="container tool-wrap">
+    <div class="meta-tool-grid">
+      <div class="meta-left">
+
+        <!-- Title input -->
+        <div class="card card-body input-card">
+          <div class="input-row">
+            <label for="meta-title" class="input-label">
+              Page Title
+              <span id="title-badge" class="badge badge-neutral">0 / 60</span>
+            </label>
+            <button id="copy-title" class="btn btn-secondary btn-sm">📋 Copy</button>
+          </div>
+          <input type="text" id="meta-title" class="meta-input" placeholder="Your page title here — keep it under 60 characters" maxlength="200" />
+          <div class="input-bar">
+            <div id="title-bar-fill" class="meta-bar-fill"></div>
+          </div>
+          <p id="title-hint" class="input-hint">0 characters — aim for 50–60</p>
+        </div>
+
+        <!-- Description input -->
+        <div class="card card-body input-card">
+          <div class="input-row">
+            <label for="meta-desc" class="input-label">
+              Meta Description
+              <span id="desc-badge" class="badge badge-neutral">0 / 155</span>
+            </label>
+            <button id="copy-desc" class="btn btn-secondary btn-sm">📋 Copy</button>
+          </div>
+          <textarea id="meta-desc" class="meta-textarea" placeholder="Your meta description — describe the page and include a call to action. Aim for 130–155 characters." rows="3"></textarea>
+          <div class="input-bar">
+            <div id="desc-bar-fill" class="meta-bar-fill"></div>
+          </div>
+          <p id="desc-hint" class="input-hint">0 characters — aim for 130–155</p>
+        </div>
+
+        <!-- SEO checklist -->
+        <div class="card card-body">
+          <div class="card-title">✅ SEO Best Practices</div>
+          <ul class="seo-checklist" id="seo-checklist">
+            <li id="check-title-min"  class="check-item check-neutral">Title is at least 50 characters</li>
+            <li id="check-title-max"  class="check-item check-neutral">Title is 60 characters or under</li>
+            <li id="check-desc-min"   class="check-item check-neutral">Description is at least 120 characters</li>
+            <li id="check-desc-max"   class="check-item check-neutral">Description is 155 characters or under</li>
+            <li id="check-desc-cta"   class="check-item check-neutral">Description ends with a call to action</li>
+            <li class="check-item check-tip">💡 Tip: Include your primary keyword in both the title and description</li>
+          </ul>
+        </div>
+
+      </div>
+
+      <!-- Right: SERP preview -->
+      <div class="meta-right">
+        <div class="card card-body">
+          <div class="card-title">🔍 Google Search Preview</div>
+          <div class="serp-preview">
+            <div class="serp-url">https://yourwebsite.com › page</div>
+            <div class="serp-title" id="serp-title-display">Your Page Title — Website Name</div>
+            <div class="serp-desc" id="serp-desc-display">Your meta description will appear here as Google would display it in search results. Aim for 130–155 characters.</div>
+          </div>
+          <p class="serp-note">Preview updates live as you type.</p>
+        </div>
+
+        <!-- Ad zone -->
+        <div class="ad-zone"><!-- Google AdSense — meta-description-checker --><span>Advertisement</span></div>
+      </div>
+    </div>
+
+    <!-- SEO content -->
+    <div class="seo-section">
+      <h2>How to Use This Meta Description Checker</h2>
+      <p>Enter your page title in the first field and your meta description in the second. The Google search result preview on the right updates live as you type. Here is what to aim for:</p>
+      <ul class="how-to-list">
+        <li><strong>Page Title (50–60 characters):</strong> The blue clickable headline in Google results. Front-load your primary keyword. Keep it under 60 characters to avoid truncation. Titles over 60 characters are cut off with an ellipsis.</li>
+        <li><strong>Meta Description (130–155 characters):</strong> The grey text snippet below the title. Describe what the user will find and end with a call to action like "Read more", "Learn how", or "Try free".</li>
+        <li><strong>SEO Checklist:</strong> The checklist shows green ticks for passing criteria and red crosses for issues. All four length criteria must be green before your snippet is optimised.</li>
+        <li><strong>Copy buttons:</strong> Each input has a dedicated copy button so you can paste the text directly into your CMS or HTML.</li>
+      </ul>
+      <p>This tool is designed for bloggers, content marketers, and SEO professionals who want to write compelling search snippets quickly. The live preview eliminates guesswork about how your metadata will appear in Google.</p>
+
+      <h2>Writing Meta Descriptions That Get Clicked</h2>
+      <p>A meta description is essentially a micro-advertisement for your page. Even though Google sometimes rewrites descriptions, a well-crafted description that matches the page content is shown more often and earns higher click-through rates. Include the primary keyword once, naturally. Tell the user exactly what they will get if they click — use specifics over generics. "Learn 7 proven techniques for writing faster" outperforms "Learn about writing". End with a light call to action. Avoid writing descriptions that are just a list of keywords — Google often ignores these in favour of pulling relevant sentences from the page itself.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        {faqSchema.map(({ q, a }) => (
+          <details><summary>{q}</summary><div class="details-body">{a}</div></details>
+        ))}
+      </div>
+
+      <h2>More Free Writing Tools</h2>
+      <div class="more-tools-grid">
+        <a href="/character-counter" class="more-tool-link">🔢 Character Counter</a>
+        <a href="/twitter-character-counter" class="more-tool-link">🐦 Twitter Counter</a>
+        <a href="/instagram-caption-checker" class="more-tool-link">📸 Instagram Checker</a>
+        <a href="/word-counter" class="more-tool-link">📝 Word Counter</a>
+        <a href="/text-case-converter" class="more-tool-link">✏️ Case Converter</a>
+        <a href="/readability-checker" class="more-tool-link">📖 Readability</a>
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<script>
+(function(){
+  const titleEl = document.getElementById('meta-title') as HTMLInputElement;
+  const descEl  = document.getElementById('meta-desc') as HTMLTextAreaElement;
+  if(!titleEl || !descEl) return;
+
+  const TITLE_MAX = 60, TITLE_MIN = 50;
+  const DESC_MAX  = 155, DESC_MIN = 120;
+
+  const CTA_WORDS = ['read','learn','discover','find','get','try','start','explore','see','click','visit','download','sign','register','join','buy','shop','view'];
+
+  function setCheck(id: string, pass: boolean | null){
+    const el = document.getElementById(id);
+    if(!el) return;
+    el.className = 'check-item';
+    if(pass === null) el.classList.add('check-neutral');
+    else if(pass)     el.classList.add('check-pass');
+    else              el.classList.add('check-fail');
+    const icon = el.querySelector('.check-icon');
+    if(!icon){ const i=document.createElement('span');i.className='check-icon';el.prepend(i); }
+    el.querySelector('.check-icon')!.textContent = pass === null ? '○ ' : pass ? '✓ ' : '✗ ';
+  }
+
+  function update(){
+    const title = titleEl.value;
+    const desc  = descEl.value;
+    const tLen  = title.length;
+    const dLen  = desc.length;
+
+    // Title badge + bar
+    const tBadge = document.getElementById('title-badge');
+    const tBar   = document.getElementById('title-bar-fill') as HTMLElement;
+    const tHint  = document.getElementById('title-hint');
+    if(tBadge){ tBadge.textContent=`${tLen} / ${TITLE_MAX}`; tBadge.className='badge '+(tLen>TITLE_MAX?'badge-error':tLen>=TITLE_MIN?'badge-success':'badge-primary'); }
+    if(tBar){ tBar.style.width=Math.min((tLen/TITLE_MAX)*100,100)+'%'; tBar.className='meta-bar-fill '+(tLen>TITLE_MAX?'bar-red':tLen>=TITLE_MIN?'bar-green':'bar-blue'); }
+    if(tHint) tHint.textContent=`${tLen} characters — aim for ${TITLE_MIN}–${TITLE_MAX}`;
+
+    // Desc badge + bar
+    const dBadge = document.getElementById('desc-badge');
+    const dBar   = document.getElementById('desc-bar-fill') as HTMLElement;
+    const dHint  = document.getElementById('desc-hint');
+    if(dBadge){ dBadge.textContent=`${dLen} / ${DESC_MAX}`; dBadge.className='badge '+(dLen>DESC_MAX?'badge-error':dLen>=DESC_MIN?'badge-success':'badge-primary'); }
+    if(dBar){ dBar.style.width=Math.min((dLen/DESC_MAX)*100,100)+'%'; dBar.className='meta-bar-fill '+(dLen>DESC_MAX?'bar-red':dLen>=DESC_MIN?'bar-green':'bar-blue'); }
+    if(dHint) dHint.textContent=`${dLen} characters — aim for ${DESC_MIN}–${DESC_MAX}`;
+
+    // SERP preview
+    const serpTitle = document.getElementById('serp-title-display');
+    const serpDesc  = document.getElementById('serp-desc-display');
+    if(serpTitle) serpTitle.textContent = title ? (tLen > TITLE_MAX ? title.slice(0,TITLE_MAX)+'…' : title) : 'Your Page Title — Website Name';
+    if(serpDesc)  serpDesc.textContent  = desc  ? (dLen > DESC_MAX  ? desc.slice(0,DESC_MAX)+'…'  : desc)  : 'Your meta description will appear here. Aim for 130–155 characters.';
+
+    // Checklist
+    setCheck('check-title-min', tLen===0 ? null : tLen >= TITLE_MIN);
+    setCheck('check-title-max', tLen===0 ? null : tLen <= TITLE_MAX);
+    setCheck('check-desc-min',  dLen===0 ? null : dLen >= DESC_MIN);
+    setCheck('check-desc-max',  dLen===0 ? null : dLen <= DESC_MAX);
+
+    const lastWord = desc.trim().split(/\s+/).pop()?.toLowerCase().replace(/[^a-z]/g,'') || '';
+    const hasCta = CTA_WORDS.some(w => desc.toLowerCase().includes(w));
+    setCheck('check-desc-cta', dLen===0 ? null : hasCta);
+  }
+
+  function toast(msg:string){
+    const c=document.getElementById('toast-container');if(!c)return;
+    const el=document.createElement('div');el.className='toast toast-success';el.textContent=msg;c.appendChild(el);
+    requestAnimationFrame(()=>el.classList.add('toast-visible'));
+    setTimeout(()=>{el.classList.remove('toast-visible');el.classList.add('toast-hiding');setTimeout(()=>el.remove(),350);},2000);
+  }
+
+  document.getElementById('copy-title')?.addEventListener('click',()=>navigator.clipboard.writeText(titleEl.value).then(()=>toast('Title copied!')));
+  document.getElementById('copy-desc')?.addEventListener('click',()=>navigator.clipboard.writeText(descEl.value).then(()=>toast('Description copied!')));
+
+  titleEl.addEventListener('input', update);
+  descEl.addEventListener('input', update);
+  update();
+})();
+</script>
+
+<style>
+  .page-header{margin-bottom:var(--space-6);}
+  .page-header h1{font-size:clamp(1.75rem,3vw,2.5rem);margin-bottom:var(--space-3);}
+  .page-sub{font-size:17px;color:var(--color-body);line-height:1.6;max-width:700px;margin-bottom:var(--space-4);}
+  .tool-wrap{padding-bottom:var(--space-16);}
+  /* Grid */
+  .meta-tool-grid{display:grid;grid-template-columns:1fr 360px;gap:var(--space-6);align-items:start;}
+  .meta-left,.meta-right{display:flex;flex-direction:column;gap:var(--space-4);}
+  /* Input cards */
+  .input-card{}
+  .input-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-3);}
+  .input-label{font-size:14px;font-weight:600;color:var(--color-ink);display:flex;align-items:center;gap:var(--space-2);}
+  .meta-input{width:100%;height:44px;font-size:15px;margin-bottom:var(--space-2);}
+  .meta-textarea{width:100%;min-height:80px;font-family:var(--font-sans);font-size:15px;line-height:1.6;resize:vertical;margin-bottom:var(--space-2);}
+  .input-bar{height:4px;background:var(--color-canvas-soft-2);border-radius:var(--radius-full);overflow:hidden;margin-bottom:var(--space-2);}
+  .meta-bar-fill{height:100%;border-radius:var(--radius-full);transition:width 150ms ease,background 150ms ease;}
+  .bar-blue{background:var(--color-primary);}
+  .bar-green{background:var(--color-success);}
+  .bar-red{background:var(--color-error);}
+  .input-hint{font-size:12px;color:var(--color-mute);margin:0;}
+  /* SEO checklist */
+  .seo-checklist{list-style:none;display:flex;flex-direction:column;gap:var(--space-2);}
+  .check-item{font-size:14px;padding:var(--space-2) var(--space-3);border-radius:var(--radius-sm);transition:all var(--transition-fast);}
+  .check-neutral{background:var(--color-canvas-soft);color:var(--color-body);}
+  .check-pass{background:var(--color-success-soft);color:var(--color-success);font-weight:500;}
+  .check-fail{background:var(--color-error-soft);color:var(--color-error);font-weight:500;}
+  .check-tip{background:var(--color-primary-soft);color:var(--color-primary);}
+  /* SERP preview */
+  .serp-preview{background:#fff;border:1px solid #dfe1e5;border-radius:8px;padding:var(--space-5);font-family:Arial,sans-serif;margin-bottom:var(--space-3);}
+  [data-theme="dark"] .serp-preview{background:#202124;border-color:#3c4043;}
+  .serp-url{font-size:13px;color:#0d652d;margin-bottom:3px;line-height:1.3;}
+  [data-theme="dark"] .serp-url{color:#8ab4f8;}
+  .serp-title{font-size:20px;color:#1a0dab;line-height:1.3;margin-bottom:4px;cursor:pointer;font-weight:400;}
+  .serp-title:hover{text-decoration:underline;}
+  [data-theme="dark"] .serp-title{color:#8ab4f8;}
+  .serp-desc{font-size:14px;color:#545454;line-height:1.58;}
+  [data-theme="dark"] .serp-desc{color:#bdc1c6;}
+  .serp-note{font-size:12px;color:var(--color-mute);margin:0;}
+  /* SEO section */
+  .seo-section{margin-top:var(--space-12);}
+  .seo-section h2{font-size:var(--text-2xl);margin-bottom:var(--space-4);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-hairline);margin-top:var(--space-8);}
+  .seo-section p{max-width:800px;margin-bottom:var(--space-4);}
+  .how-to-list{padding-left:var(--space-5);margin-bottom:var(--space-4);}
+  .how-to-list li{margin-bottom:var(--space-3);color:var(--color-body);line-height:1.7;}
+  .faq-list{max-width:800px;margin-top:var(--space-4);}
+  .more-tools-grid{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-4);}
+  .more-tool-link{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-4);background:var(--color-canvas);border:1px solid var(--color-hairline);border-radius:var(--radius-md);font-size:14px;font-weight:500;color:var(--color-ink);text-decoration:none;box-shadow:var(--shadow-xs);transition:all var(--transition-fast);}
+  .more-tool-link:hover{border-color:var(--color-primary);color:var(--color-primary);text-decoration:none;}
+  @media(max-width:900px){.meta-tool-grid{grid-template-columns:1fr;}}
+</style>

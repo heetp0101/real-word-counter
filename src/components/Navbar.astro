@@ -1,11 +1,22 @@
 ---
 const path = Astro.url.pathname;
 
-const links = [
+const mainLinks = [
   { href: '/', label: 'Home' },
   { href: '/word-counter', label: 'Word Counter' },
   { href: '/upsc-word-counter', label: 'UPSC Counter' },
 ];
+
+const toolsLinks = [
+  { href: '/character-counter',       label: 'Character Counter',     emoji: '🔢' },
+  { href: '/twitter-character-counter', label: 'Twitter Counter',      emoji: '🐦' },
+  { href: '/instagram-caption-checker', label: 'Instagram Checker',    emoji: '📸' },
+  { href: '/meta-description-checker', label: 'Meta Description',      emoji: '🔍' },
+  { href: '/text-case-converter',      label: 'Case Converter',        emoji: '✏️' },
+  { href: '/readability-checker',      label: 'Readability Checker',   emoji: '📖' },
+];
+
+const isToolActive = toolsLinks.some(t => path === t.href || path.startsWith(t.href));
 ---
 
 <header class="navbar" role="banner">
@@ -18,7 +29,7 @@ const links = [
     <!-- Desktop nav -->
     <nav aria-label="Main navigation">
       <ul class="navbar-links">
-        {links.map(({ href, label }) => (
+        {mainLinks.map(({ href, label }) => (
           <li>
             <a
               href={href}
@@ -29,24 +40,39 @@ const links = [
             </a>
           </li>
         ))}
+
+        <!-- Tools dropdown -->
+        <li class="has-dropdown">
+          <button class={`nav-tools-btn${isToolActive ? ' active' : ''}`} aria-haspopup="true" aria-expanded="false" id="tools-menu-btn">
+            Tools <span class="dropdown-arrow">▾</span>
+          </button>
+          <div class="dropdown" role="menu" id="tools-dropdown">
+            {toolsLinks.map(({ href, label, emoji }) => (
+              <a
+                href={href}
+                class={`dropdown-item${path === href ? ' active' : ''}`}
+                role="menuitem"
+              >
+                <span class="dropdown-emoji">{emoji}</span>
+                {label}
+              </a>
+            ))}
+          </div>
+        </li>
       </ul>
     </nav>
 
     <!-- Right side -->
     <div class="navbar-right">
-      <span class="privacy-pill" aria-label="Privacy: 100% private">100% Private</span>
+      <span class="privacy-pill" aria-label="100% Private">100% Private</span>
 
       <button
         id="theme-toggle-btn"
         class="theme-toggle"
         onclick="toggleTheme()"
         aria-label="Toggle dark mode"
-        title="Toggle dark mode"
-      >
-        🌙
-      </button>
+      >🌙</button>
 
-      <!-- Hamburger (mobile) -->
       <button
         id="hamburger-btn"
         class="hamburger"
@@ -54,25 +80,130 @@ const links = [
         aria-expanded="false"
         aria-controls="mobile-menu"
       >
-        <span></span>
-        <span></span>
-        <span></span>
+        <span></span><span></span><span></span>
       </button>
     </div>
   </div>
 
   <!-- Mobile menu -->
   <nav id="mobile-menu" class="mobile-menu" aria-label="Mobile navigation">
-    {links.map(({ href, label }) => (
-      <a
-        href={href}
-        class={path === href || (href !== '/' && path.startsWith(href)) ? 'active' : ''}
-      >
-        {label}
-      </a>
+    {mainLinks.map(({ href, label }) => (
+      <a href={href} class={path === href || (href !== '/' && path.startsWith(href)) ? 'active' : ''}>{label}</a>
     ))}
-    <div style="margin-top: 8px; padding: 8px 12px;">
+    <div class="mobile-tools-section">
+      <div class="mobile-section-label">More Tools</div>
+      {toolsLinks.map(({ href, label, emoji }) => (
+        <a href={href} class={`mobile-tool-link${path === href ? ' active' : ''}`}>
+          {emoji} {label}
+        </a>
+      ))}
+    </div>
+    <div style="margin-top:8px;padding:8px 12px;">
       <span class="privacy-pill">100% Private</span>
     </div>
   </nav>
 </header>
+
+<style>
+  /* Dropdown */
+  .has-dropdown { position: relative; }
+
+  .nav-tools-btn {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-body);
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: background var(--transition-fast), color var(--transition-fast);
+  }
+  .nav-tools-btn:hover,
+  .nav-tools-btn.active {
+    background: var(--color-canvas-soft-2);
+    color: var(--color-ink);
+  }
+  .nav-tools-btn.active { font-weight: 600; }
+  .dropdown-arrow { font-size: 10px; transition: transform var(--transition-fast); }
+  .has-dropdown:hover .dropdown-arrow { transform: rotate(180deg); }
+
+  .dropdown {
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    padding: var(--space-2);
+    min-width: 220px;
+    z-index: 200;
+  }
+
+  .has-dropdown:hover .dropdown,
+  .has-dropdown:focus-within .dropdown {
+    display: block;
+  }
+
+  .dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    color: var(--color-body);
+    text-decoration: none;
+    transition: background var(--transition-fast), color var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .dropdown-item:hover,
+  .dropdown-item.active {
+    background: var(--color-canvas-soft-2);
+    color: var(--color-ink);
+    text-decoration: none;
+  }
+
+  .dropdown-emoji { font-size: 15px; }
+
+  /* Mobile tools section */
+  .mobile-tools-section {
+    border-top: 1px solid var(--color-hairline);
+    margin-top: var(--space-2);
+    padding-top: var(--space-2);
+  }
+
+  .mobile-section-label {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-mute);
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .mobile-tool-link {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    border-radius: var(--radius-sm);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-body);
+    text-decoration: none;
+  }
+
+  .mobile-tool-link:hover,
+  .mobile-tool-link.active {
+    background: var(--color-canvas-soft-2);
+    color: var(--color-ink);
+  }
+</style>

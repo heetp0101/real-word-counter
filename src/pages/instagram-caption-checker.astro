@@ -1,0 +1,340 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const faqSchema = [
+  {
+    q: 'What is the Instagram caption character limit?',
+    a: 'Instagram captions can be up to 2,200 characters long. However, only the first 125 characters are visible in the feed before Instagram truncates with a "more" link. A strong first line is crucial for engagement.',
+  },
+  {
+    q: 'What is the Instagram bio character limit?',
+    a: 'Instagram bios are limited to 150 characters. This includes spaces, line breaks, and emoji. Use Bio mode in this tool to check your bio length before updating it.',
+  },
+  {
+    q: 'How many hashtags can I use on Instagram?',
+    a: 'Instagram allows a maximum of 30 hashtags per post. Using more than 30 will prevent your post from being submitted. This tool counts your hashtags live and warns you if you exceed 30.',
+  },
+  {
+    q: 'Do emojis count as characters on Instagram?',
+    a: 'Yes, emoji count as characters on Instagram. Most standard emoji count as 2 characters due to Unicode encoding (UTF-16 code units). This tool counts emojis separately to help you track them.',
+  },
+  {
+    q: 'Why should I write a strong first line for my Instagram caption?',
+    a: 'Instagram only shows the first 125 characters in the feed before showing a "more" link. Your first line is your hook — it determines whether users will tap to read the rest. This tool shows a preview of exactly how your caption looks truncated in the feed.',
+  },
+];
+---
+
+<BaseLayout
+  title="Instagram Caption Length Checker — Character Counter for Captions and Bio"
+  description="Check your Instagram caption length before posting. Live character counter for captions (2200 chars) and bio (150 chars). Count hashtags and emojis. Free, no login required."
+  canonical="https://realwordcounter.com/instagram-caption-checker"
+  schemaType="WebApplication"
+  faqSchema={faqSchema}
+>
+
+  <div class="container" style="padding-top:var(--space-8);padding-bottom:var(--space-4)">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Instagram Caption Checker</span>
+    </nav>
+    <div class="page-header">
+      <h1>Instagram Caption Checker</h1>
+      <p class="page-sub">Check caption length (2200 chars), bio length (150 chars), hashtag count, and emoji count live. See a preview of how your caption looks in the Instagram feed. <strong>100% private.</strong></p>
+      <span class="tool-privacy-badge">🔒 100% Private — Runs in your browser</span>
+    </div>
+  </div>
+
+  <div class="container tool-wrap">
+
+    <!-- Mode toggle -->
+    <div class="mode-tabs" role="tablist" aria-label="Instagram mode">
+      <button id="tab-caption" class="mode-tab active" role="tab" aria-selected="true" data-limit="2200" data-mode="caption">
+        📝 Caption Mode <span class="mode-limit">2,200 chars</span>
+      </button>
+      <button id="tab-bio" class="mode-tab" role="tab" aria-selected="false" data-limit="150" data-mode="bio">
+        👤 Bio Mode <span class="mode-limit">150 chars</span>
+      </button>
+    </div>
+
+    <!-- Tool grid -->
+    <div class="ig-tool-grid">
+      <div class="ig-left">
+        <!-- Textarea -->
+        <div class="card editor-card">
+          <textarea id="ig-editor" class="ig-textarea" placeholder="Paste your Instagram caption or bio here..."></textarea>
+        </div>
+
+        <!-- Main counter -->
+        <div class="ig-counter-card card card-body">
+          <div class="ig-count-wrap">
+            <span id="ig-count" class="ig-count-num">0</span>
+            <span class="ig-sep"> / </span>
+            <span id="ig-limit-display" class="ig-limit-num">2200</span>
+          </div>
+          <div class="ig-bar">
+            <div id="ig-bar-fill" class="ig-bar-fill"></div>
+          </div>
+          <p id="ig-status" class="ig-status-msg">Start typing your caption...</p>
+        </div>
+
+        <!-- Hashtag counter -->
+        <div class="card card-body ig-feature-card">
+          <div class="ig-feature-header">
+            <span class="ig-feature-icon">#</span>
+            <div>
+              <div class="card-title" style="margin-bottom:4px">Hashtag Counter</div>
+              <div class="ig-feature-sub">Instagram allows maximum 30 hashtags</div>
+            </div>
+            <div class="ig-feature-val">
+              <span id="hashtag-count" class="ig-big-val">0</span>
+              <span class="ig-val-sep"> / 30</span>
+            </div>
+          </div>
+          <div id="hashtag-warning" class="ig-warning" style="display:none">⚠️ You've used more than 30 hashtags — Instagram will block posting.</div>
+        </div>
+
+        <!-- Emoji counter -->
+        <div class="card card-body ig-feature-card">
+          <div class="ig-feature-header">
+            <span class="ig-feature-icon">😊</span>
+            <div>
+              <div class="card-title" style="margin-bottom:4px">Emoji Counter</div>
+              <div class="ig-feature-sub">Instagram counts emoji as 2 characters each</div>
+            </div>
+            <div class="ig-feature-val">
+              <span id="emoji-count" class="ig-big-val">0</span>
+              <span class="ig-val-sep"> emoji</span>
+            </div>
+          </div>
+          <p id="emoji-note" class="ig-emoji-note" style="display:none"></p>
+        </div>
+
+        <!-- Ad zone -->
+        <div class="ad-zone"><!-- Google AdSense — instagram-checker --><span>Advertisement</span></div>
+      </div>
+
+      <!-- Right: preview -->
+      <div class="ig-right">
+        <div class="card card-body">
+          <div class="card-title">📱 Instagram Feed Preview</div>
+          <div class="ig-post-preview">
+            <div class="ig-post-header">
+              <div class="ig-post-avatar">U</div>
+              <div class="ig-post-username">your_username</div>
+            </div>
+            <div class="ig-post-image" aria-hidden="true">
+              <span>📷</span>
+            </div>
+            <div class="ig-post-caption">
+              <span class="ig-caption-username">your_username</span>
+              <span id="ig-preview-text" class="ig-preview-body">Your caption will appear here...</span>
+              <span id="ig-preview-more" class="ig-more-link" style="display:none">... more</span>
+            </div>
+          </div>
+          <p class="ig-preview-note">Preview shows first 125 characters as Instagram truncates in feed.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SEO content -->
+    <div class="seo-section">
+      <h2>How to Use This Instagram Caption Checker</h2>
+      <p>Toggle between Caption Mode (2200 character limit) and Bio Mode (150 character limit) using the tabs above the editor. Paste or type your text and all counts update instantly:</p>
+      <ul class="how-to-list">
+        <li><strong>Caption Mode:</strong> Check your caption stays within 2200 characters. The feed preview shows how your text looks truncated at 125 characters — the length Instagram shows before the "more" button.</li>
+        <li><strong>Bio Mode:</strong> Switch to bio mode to check your 150-character Instagram bio. Every space, line break, and emoji counts.</li>
+        <li><strong>Hashtag Counter:</strong> Every word starting with # is counted. Stay under 30 hashtags to avoid Instagram's posting restriction.</li>
+        <li><strong>Emoji Counter:</strong> See exactly how many emoji you have used. Remember that Instagram counts each emoji as 2 characters.</li>
+      </ul>
+
+      <h2>Writing Better Instagram Captions</h2>
+      <p>Instagram shows only the first 125 characters of a caption in the feed. Everything after that is hidden behind a "more" link. This makes your first sentence the most important part of your caption. Lead with a hook — a question, a bold statement, or a number. Save hashtags and tagging for the end of the caption or even the first comment. A caption that starts with 15 hashtags will lose readers immediately. Write the story first, add the hashtags last. For bio writing, every character counts — use a line break to separate your role, your offer, and your call to action across three short lines rather than squeezing everything into one run-on sentence.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        {faqSchema.map(({ q, a }) => (
+          <details><summary>{q}</summary><div class="details-body">{a}</div></details>
+        ))}
+      </div>
+
+      <h2>More Free Writing Tools</h2>
+      <div class="more-tools-grid">
+        <a href="/character-counter" class="more-tool-link">🔢 Character Counter</a>
+        <a href="/twitter-character-counter" class="more-tool-link">🐦 Twitter Counter</a>
+        <a href="/meta-description-checker" class="more-tool-link">🔍 Meta Description</a>
+        <a href="/word-counter" class="more-tool-link">📝 Word Counter</a>
+        <a href="/text-case-converter" class="more-tool-link">✏️ Case Converter</a>
+        <a href="/readability-checker" class="more-tool-link">📖 Readability</a>
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<script>
+(function(){
+  const editor = document.getElementById('ig-editor') as HTMLTextAreaElement;
+  if(!editor) return;
+
+  let currentLimit = 2200;
+  let currentMode  = 'caption';
+
+  function countEmoji(text: string): number {
+    const r = /\p{Emoji_Presentation}|\p{Extended_Pictographic}/gu;
+    return (text.match(r) || []).length;
+  }
+
+  function countHashtags(text: string): number {
+    return (text.match(/#\w+/g) || []).length;
+  }
+
+  function update(){
+    const text  = editor.value;
+    const count = text.length;
+    const remaining = currentLimit - count;
+    const pct = Math.min((count / currentLimit) * 100, 100);
+    const hashtags = countHashtags(text);
+    const emojis   = countEmoji(text);
+
+    const $=(id:string)=>document.getElementById(id);
+    const set=(id:string,v:string|number)=>{const el=$(id);if(el)el.textContent=String(v);};
+
+    set('ig-count', count.toLocaleString());
+
+    const fill = $('ig-bar-fill') as HTMLElement;
+    if(fill){
+      fill.style.width = pct+'%';
+      fill.className = 'ig-bar-fill';
+      if(count > currentLimit) fill.classList.add('bar-red');
+      else if(pct >= 90) fill.classList.add('bar-amber');
+      else fill.classList.add('bar-blue');
+    }
+
+    const status = $('ig-status');
+    if(status){
+      if(count === 0) status.textContent = `Start typing your ${currentMode}...`;
+      else if(count > currentLimit) status.textContent = `⚠️ ${count - currentLimit} characters over limit`;
+      else if(pct >= 90) status.textContent = `Almost at limit — ${remaining} left`;
+      else status.textContent = `${remaining} characters remaining`;
+    }
+
+    // Hashtags
+    set('hashtag-count', hashtags);
+    const hwarn = $('hashtag-warning');
+    if(hwarn) hwarn.style.display = hashtags > 30 ? 'block' : 'none';
+
+    // Emoji
+    set('emoji-count', emojis);
+    const enote = $('emoji-note');
+    if(enote){
+      if(emojis > 0){
+        enote.textContent = `${emojis} emoji × 2 = ${emojis*2} extra characters counted by Instagram`;
+        enote.style.display = 'block';
+      } else { enote.style.display = 'none'; }
+    }
+
+    // Preview
+    const previewEl = $('ig-preview-text');
+    const moreEl    = $('ig-preview-more');
+    if(previewEl){
+      if(!text){ previewEl.textContent = 'Your caption will appear here...'; if(moreEl) moreEl.style.display='none'; }
+      else if(currentMode === 'bio'){
+        previewEl.textContent = text.slice(0, 150);
+        if(moreEl) moreEl.style.display = 'none';
+      } else {
+        previewEl.textContent = text.slice(0, 125);
+        if(moreEl) moreEl.style.display = text.length > 125 ? 'inline' : 'none';
+      }
+    }
+  }
+
+  // Mode tabs
+  document.querySelectorAll('.mode-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.mode-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected','false'); });
+      tab.classList.add('active');
+      tab.setAttribute('aria-selected','true');
+      const limit = parseInt((tab as HTMLElement).dataset.limit || '2200');
+      const mode  = (tab as HTMLElement).dataset.mode || 'caption';
+      currentLimit = limit;
+      currentMode  = mode;
+      const dispEl = document.getElementById('ig-limit-display');
+      if(dispEl) dispEl.textContent = limit.toLocaleString();
+      editor.placeholder = mode === 'bio' ? 'Type your Instagram bio here (max 150 chars)...' : 'Paste your Instagram caption here...';
+      update();
+    });
+  });
+
+  editor.addEventListener('input', update);
+  update();
+})();
+</script>
+
+<style>
+  .page-header{margin-bottom:var(--space-6);}
+  .page-header h1{font-size:clamp(1.75rem,3vw,2.5rem);margin-bottom:var(--space-3);}
+  .page-sub{font-size:17px;color:var(--color-body);line-height:1.6;max-width:700px;margin-bottom:var(--space-4);}
+  .tool-wrap{padding-bottom:var(--space-16);}
+  /* Mode tabs */
+  .mode-tabs{display:flex;gap:var(--space-2);margin-bottom:var(--space-4);}
+  .mode-tab{display:flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-5);background:var(--color-canvas);border:1px solid var(--color-hairline);border-radius:var(--radius-pill);font-size:14px;font-weight:500;color:var(--color-body);cursor:pointer;transition:all var(--transition-fast);}
+  .mode-tab:hover{border-color:var(--color-primary);color:var(--color-ink);}
+  .mode-tab.active{background:var(--color-primary);color:white;border-color:var(--color-primary);}
+  .mode-limit{font-size:12px;opacity:0.8;}
+  /* Grid */
+  .ig-tool-grid{display:grid;grid-template-columns:1fr 320px;gap:var(--space-6);align-items:start;}
+  .ig-left,.ig-right{display:flex;flex-direction:column;gap:var(--space-4);}
+  .editor-card{padding:0;overflow:hidden;}
+  .ig-textarea{display:block;width:100%;min-height:180px;padding:var(--space-4);font-family:var(--font-sans);font-size:15px;line-height:1.7;color:var(--color-ink);background:var(--color-canvas);border:none;border-radius:var(--radius-md);resize:vertical;}
+  .ig-textarea:focus{outline:none;box-shadow:inset 0 0 0 2px var(--color-primary);}
+  /* Counter card */
+  .ig-count-wrap{display:flex;align-items:baseline;gap:4px;margin-bottom:var(--space-3);}
+  .ig-count-num{font-size:48px;font-weight:800;letter-spacing:-0.04em;color:var(--color-ink);}
+  .ig-sep{font-size:24px;color:var(--color-mute);}
+  .ig-limit-num{font-size:24px;color:var(--color-mute);}
+  .ig-bar{height:8px;background:var(--color-canvas-soft-2);border-radius:var(--radius-full);overflow:hidden;margin-bottom:var(--space-3);}
+  .ig-bar-fill{height:100%;border-radius:var(--radius-full);transition:width 150ms ease,background 150ms ease;}
+  .bar-blue{background:var(--color-primary);}
+  .bar-amber{background:var(--color-warning);}
+  .bar-red{background:var(--color-error);}
+  .ig-status-msg{font-size:13px;color:var(--color-mute);margin:0;}
+  /* Feature cards */
+  .ig-feature-card{}
+  .ig-feature-header{display:flex;align-items:center;gap:var(--space-3);}
+  .ig-feature-icon{font-size:24px;width:40px;height:40px;display:flex;align-items:center;justify-content:center;background:var(--color-canvas-soft-2);border-radius:var(--radius-md);flex-shrink:0;}
+  .ig-feature-sub{font-size:12px;color:var(--color-mute);}
+  .ig-feature-val{margin-left:auto;display:flex;align-items:baseline;gap:3px;}
+  .ig-big-val{font-size:28px;font-weight:700;color:var(--color-ink);letter-spacing:-0.02em;}
+  .ig-val-sep{font-size:14px;color:var(--color-mute);}
+  .ig-warning{margin-top:var(--space-2);padding:var(--space-2) var(--space-3);background:var(--color-error-soft);color:var(--color-error);border-radius:var(--radius-sm);font-size:13px;font-weight:500;}
+  .ig-emoji-note{font-size:12px;color:var(--color-body);margin-top:var(--space-2);margin-bottom:0;}
+  /* IG post preview */
+  .ig-post-preview{background:#fff;border:1px solid #dbdbdb;border-radius:8px;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;}
+  [data-theme="dark"] .ig-post-preview{background:#1a1a2e;border-color:#333;}
+  .ig-post-header{display:flex;align-items:center;gap:var(--space-2);padding:var(--space-3);}
+  .ig-post-avatar{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#fd5949,#d6249f,#285AEB);display:flex;align-items:center;justify-content:center;color:white;font-weight:700;font-size:13px;}
+  .ig-post-username{font-size:14px;font-weight:600;color:#262626;}
+  [data-theme="dark"] .ig-post-username{color:#fafafa;}
+  .ig-post-image{height:100px;background:var(--color-canvas-soft-2);display:flex;align-items:center;justify-content:center;font-size:32px;}
+  .ig-post-caption{padding:var(--space-3);font-size:14px;line-height:1.5;}
+  .ig-caption-username{font-weight:700;color:#262626;margin-right:5px;}
+  [data-theme="dark"] .ig-caption-username{color:#fafafa;}
+  .ig-preview-body{color:#262626;word-break:break-word;}
+  [data-theme="dark"] .ig-preview-body{color:#fafafa;}
+  .ig-more-link{color:#8e8e8e;cursor:pointer;}
+  .ig-preview-note{font-size:12px;color:var(--color-mute);margin-top:var(--space-2);margin-bottom:0;}
+  /* SEO */
+  .seo-section{margin-top:var(--space-12);}
+  .seo-section h2{font-size:var(--text-2xl);margin-bottom:var(--space-4);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-hairline);margin-top:var(--space-8);}
+  .seo-section p{max-width:800px;margin-bottom:var(--space-4);}
+  .how-to-list{padding-left:var(--space-5);margin-bottom:var(--space-4);}
+  .how-to-list li{margin-bottom:var(--space-3);color:var(--color-body);line-height:1.7;}
+  .faq-list{max-width:800px;margin-top:var(--space-4);}
+  .more-tools-grid{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-4);}
+  .more-tool-link{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-4);background:var(--color-canvas);border:1px solid var(--color-hairline);border-radius:var(--radius-md);font-size:14px;font-weight:500;color:var(--color-ink);text-decoration:none;box-shadow:var(--shadow-xs);transition:all var(--transition-fast);}
+  .more-tool-link:hover{border-color:var(--color-primary);color:var(--color-primary);text-decoration:none;}
+  @media(max-width:900px){.ig-tool-grid{grid-template-columns:1fr;}}
+  @media(max-width:480px){.mode-tabs{flex-direction:column;}.ig-count-num{font-size:36px;}.ig-sep,.ig-limit-num{font-size:18px;}}
+</style>

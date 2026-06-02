@@ -99,13 +99,8 @@ const faqSchema = [
           <div class="tool-card-icon">📝</div>
           <div class="tool-card-body">
             <h3>Word Counter</h3>
-            <p>Live word, character, sentence &amp; paragraph count. Goal tracker, readability score, file upload, case converter, keyword density, and export — all in one page.</p>
-            <div class="tool-card-features">
-              <span>Goal Tracker</span>
-              <span>Platform Limits</span>
-              <span>File Upload</span>
-              <span>Export</span>
-            </div>
+            <p>Live word count, character count, goal tracker, readability score, platform limits, file upload, case converter, keyword density, and export.</p>
+            <div class="tool-card-features"><span>Goal Tracker</span><span>Platform Limits</span><span>File Upload</span></div>
           </div>
           <span class="tool-card-cta">Open tool →</span>
         </a>
@@ -114,31 +109,71 @@ const faqSchema = [
           <div class="tool-card-icon">🏛️</div>
           <div class="tool-card-body">
             <h3>UPSC Word Counter</h3>
-            <p>Specifically designed for UPSC Mains answer writing practice. Pre-loaded with GS 150-word and 250-word limits, essay presets, and a UPSC reference table.</p>
-            <div class="tool-card-features">
-              <span>UPSC Presets</span>
-              <span>GS Reference</span>
-              <span>Essay Mode</span>
-            </div>
+            <p>Pre-loaded with GS 150 and 250-word limits, essay presets, and a full UPSC reference table with Set Goal buttons.</p>
+            <div class="tool-card-features"><span>UPSC Presets</span><span>GS Reference</span><span>Essay Mode</span></div>
           </div>
           <span class="tool-card-cta">Open tool →</span>
         </a>
 
-        <div class="tool-card tool-card-coming">
-          <div class="tool-card-icon">🔡</div>
+        <a href="/character-counter" class="tool-card">
+          <div class="tool-card-icon">🔢</div>
           <div class="tool-card-body">
-            <h3>Grammar Checker <span class="badge badge-neutral" style="font-size:10px; vertical-align:middle">Soon</span></h3>
-            <p>Catch grammar mistakes, punctuation errors, and suggest improvements for formal Indian English.</p>
+            <h3>Character Counter</h3>
+            <p>Character-focused counter with all 10 platform limits as the hero feature. File upload, export, and autosave included.</p>
+            <div class="tool-card-features"><span>Platform Limits</span><span>File Upload</span><span>Export</span></div>
           </div>
-        </div>
+          <span class="tool-card-cta">Open tool →</span>
+        </a>
 
-        <div class="tool-card tool-card-coming">
-          <div class="tool-card-icon">📱</div>
+        <a href="/twitter-character-counter" class="tool-card">
+          <div class="tool-card-icon">🐦</div>
           <div class="tool-card-body">
-            <h3>Social Media Toolkit <span class="badge badge-neutral" style="font-size:10px; vertical-align:middle">Soon</span></h3>
-            <p>Optimize posts for Instagram, Twitter, LinkedIn, and WhatsApp with live character limits and hashtag counting.</p>
+            <h3>Twitter Counter</h3>
+            <p>Live tweet preview with overflow highlighted in red. Color-coded counter turns amber at 240 and red over 280 characters.</p>
+            <div class="tool-card-features"><span>Tweet Preview</span><span>Overflow Highlight</span></div>
           </div>
-        </div>
+          <span class="tool-card-cta">Open tool →</span>
+        </a>
+
+        <a href="/instagram-caption-checker" class="tool-card">
+          <div class="tool-card-icon">📸</div>
+          <div class="tool-card-body">
+            <h3>Instagram Checker</h3>
+            <p>Caption mode (2200 chars) and bio mode (150 chars). Counts hashtags (max 30), emoji, and shows an Instagram feed preview.</p>
+            <div class="tool-card-features"><span>Caption/Bio Toggle</span><span>Hashtag Counter</span></div>
+          </div>
+          <span class="tool-card-cta">Open tool →</span>
+        </a>
+
+        <a href="/meta-description-checker" class="tool-card">
+          <div class="tool-card-icon">🔍</div>
+          <div class="tool-card-body">
+            <h3>Meta Description Checker</h3>
+            <p>Live Google SERP preview with title (60 chars) and description (155 chars) inputs. SEO checklist with pass/fail criteria.</p>
+            <div class="tool-card-features"><span>Google Preview</span><span>SEO Checklist</span></div>
+          </div>
+          <span class="tool-card-cta">Open tool →</span>
+        </a>
+
+        <a href="/text-case-converter" class="tool-card">
+          <div class="tool-card-icon">✏️</div>
+          <div class="tool-card-body">
+            <h3>Text Case Converter</h3>
+            <p>Eight transformations: UPPERCASE, lowercase, Title Case, Sentence case, Alternating, Remove Spaces, Reverse Text, Reverse Words. Undo up to 10 steps.</p>
+            <div class="tool-card-features"><span>8 Transforms</span><span>Undo History</span></div>
+          </div>
+          <span class="tool-card-cta">Open tool →</span>
+        </a>
+
+        <a href="/readability-checker" class="tool-card">
+          <div class="tool-card-icon">📖</div>
+          <div class="tool-card-body">
+            <h3>Readability Checker</h3>
+            <p>Flesch Reading Ease score with visual gauge, sentence length breakdown, syllable analysis, and dynamic improvement suggestions.</p>
+            <div class="tool-card-features"><span>Flesch Score</span><span>Score Gauge</span><span>Suggestions</span></div>
+          </div>
+          <span class="tool-card-cta">Open tool →</span>
+        </a>
 
       </div>
     </div>
@@ -384,7 +419,7 @@ const faqSchema = [
 
   .tools-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     gap: var(--space-4);
     margin-top: var(--space-8);
   }
@@ -504,14 +539,19 @@ const faqSchema = [
   .faq-list { margin-top: var(--space-8); max-width: 800px; }
 
   /* ── Responsive ──────────────────────── */
+  @media (max-width: 1280px) {
+    .tools-grid { grid-template-columns: repeat(4, 1fr); }
+  }
+
   @media (max-width: 1024px) {
+    .tools-grid { grid-template-columns: repeat(2, 1fr); }
     .why-grid { grid-template-columns: repeat(2, 1fr); }
   }
 
   @media (max-width: 768px) {
     .hero .container { grid-template-columns: 1fr; }
     .hero-visual { display: none; }
-    .tools-grid { grid-template-columns: 1fr; }
+    .tools-grid { grid-template-columns: repeat(2, 1fr); }
     .why-grid { grid-template-columns: 1fr; }
     .privacy-card { flex-direction: column; gap: var(--space-4); padding: var(--space-6); }
     .hero-heading { font-size: 2rem; }

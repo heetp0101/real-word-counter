@@ -1,0 +1,382 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const faqSchema = [
+  {
+    q: 'What is the difference between characters with and without spaces?',
+    a: 'Characters with spaces counts every character including spaces, tabs, and newlines. Characters without spaces removes all whitespace before counting, giving you only the number of visible letters, digits, and punctuation marks.',
+  },
+  {
+    q: 'Does this character counter count emoji as one character?',
+    a: 'Most emoji are counted as 2 characters in JavaScript because they use two code units in UTF-16 encoding. However some platforms like Twitter count all emoji as 2 characters from their own character limit perspective. This tool shows the raw JavaScript character count.',
+  },
+  {
+    q: 'What is the character limit for Twitter?',
+    a: 'Twitter (now X) has a limit of 280 characters per tweet for most accounts. This tool shows your current character count against the 280-character limit in the Platform Limits Checker below.',
+  },
+  {
+    q: 'Why do different platforms have different character limits?',
+    a: 'Each platform sets its own limit based on its design philosophy and technical constraints. Twitter chose 280 to encourage concise communication. SMS is limited to 160 by the GSM protocol. Instagram captions allow up to 2200 to accommodate storytelling. Meta descriptions are limited to around 155 by Google\'s display constraints.',
+  },
+  {
+    q: 'Is this character counter free and private?',
+    a: 'Yes, completely free and 100% private. All counting happens in your browser using JavaScript. Your text is never sent to any server. No account is required and no data is stored anywhere except your optional autosaved draft in your own browser\'s localStorage.',
+  },
+];
+
+const platforms = [
+  { id: 'twitter',   emoji: '🐦', name: 'Twitter / X',          limit: 280 },
+  { id: 'ig-post',   emoji: '📸', name: 'Instagram Post',        limit: 2200 },
+  { id: 'ig-bio',    emoji: '📱', name: 'Instagram Bio',         limit: 150 },
+  { id: 'whatsapp',  emoji: '💬', name: 'WhatsApp',              limit: 65536 },
+  { id: 'linkedin',  emoji: '💼', name: 'LinkedIn Post',         limit: 3000 },
+  { id: 'meta-desc', emoji: '🔍', name: 'Meta Description',      limit: 155 },
+  { id: 'yt-title',  emoji: '▶️', name: 'YouTube Title',         limit: 100 },
+  { id: 'yt-desc',   emoji: '📺', name: 'YouTube Description',   limit: 5000 },
+  { id: 'sms',       emoji: '📨', name: 'SMS',                   limit: 160 },
+  { id: 'facebook',  emoji: '👍', name: 'Facebook Post',         limit: 63206 },
+];
+---
+
+<BaseLayout
+  title="Character Counter Online Free — Count Letters, Spaces and Characters Instantly"
+  description="Free online character counter. Count characters with and without spaces, words, sentences, and check Twitter, Instagram, SMS and other platform limits live. No signup needed."
+  canonical="https://realwordcounter.com/character-counter"
+  schemaType="WebApplication"
+  faqSchema={faqSchema}
+>
+
+  <div class="container" style="padding-top:var(--space-8);padding-bottom:var(--space-4)">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Character Counter</span>
+    </nav>
+    <div class="page-header">
+      <h1>Character Counter — Free Online Tool</h1>
+      <p class="page-sub">Count characters instantly with and without spaces. Check all major platform limits live as you type. <strong>100% private</strong> — your text never leaves your browser.</p>
+      <span class="tool-privacy-badge">🔒 100% Private — Runs in your browser</span>
+    </div>
+  </div>
+
+  <div class="container tool-wrap">
+
+    <!-- Textarea -->
+    <div class="card editor-card">
+      <textarea id="cc-editor" class="cc-textarea" placeholder="Type or paste your text here..."></textarea>
+      <div class="autosave-bar">
+        <span id="cc-autosave" class="autosave-indicator"><span class="autosave-dot"></span> Auto-save on</span>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div class="action-row" style="margin-top:var(--space-3)">
+      <button id="cc-paste"  class="btn btn-secondary btn-sm">📋 Paste</button>
+      <button id="cc-clear"  class="btn btn-secondary btn-sm">🗑️ Clear</button>
+      <label  class="btn btn-secondary btn-sm" for="cc-upload" style="cursor:pointer">📁 Upload</label>
+      <input type="file" id="cc-upload" accept=".txt,.docx" style="display:none" />
+      <button id="cc-copy-stats" class="btn btn-secondary btn-sm">📊 Copy Stats</button>
+    </div>
+
+    <!-- Ad zone 1 -->
+    <div class="ad-zone" style="margin-top:var(--space-4)"><!-- Google AdSense ad unit — character-counter above-fold --><span>Advertisement</span></div>
+
+    <!-- PRIMARY: Big character count card -->
+    <div class="primary-char-card card card-body" style="margin-top:var(--space-4)">
+      <div class="primary-count-wrap">
+        <div class="primary-number" id="cc-chars">0</div>
+        <div class="primary-label">Characters</div>
+      </div>
+      <div class="primary-divider"></div>
+      <div class="secondary-char-stat">
+        <div class="sc-val" id="cc-chars-ns">0</div>
+        <div class="sc-lbl">Without Spaces</div>
+      </div>
+    </div>
+
+    <!-- Secondary stats row -->
+    <div class="secondary-stats-row">
+      <div class="sec-stat-card card card-body-sm">
+        <div class="sec-val" id="cc-words">0</div>
+        <div class="sec-lbl">Words</div>
+      </div>
+      <div class="sec-stat-card card card-body-sm">
+        <div class="sec-val" id="cc-sentences">0</div>
+        <div class="sec-lbl">Sentences</div>
+      </div>
+      <div class="sec-stat-card card card-body-sm">
+        <div class="sec-val" id="cc-paragraphs">0</div>
+        <div class="sec-lbl">Paragraphs</div>
+      </div>
+      <div class="sec-stat-card card card-body-sm">
+        <div class="sec-val" id="cc-reading">0 min</div>
+        <div class="sec-lbl">Reading Time</div>
+      </div>
+    </div>
+
+    <!-- HERO: Platform limits checker -->
+    <div class="card card-body" style="margin-top:var(--space-4)">
+      <div class="card-title">📱 Platform Limits Checker <span style="font-size:12px;font-weight:400;color:var(--color-mute)">updates live as you type</span></div>
+      <div class="platforms-grid">
+        {platforms.map(p => (
+          <div class="platform-card" data-limit={p.limit}>
+            <div class="platform-top">
+              <span class="platform-emoji">{p.emoji}</span>
+              <span class="platform-name">{p.name}</span>
+            </div>
+            <div class="platform-count-row">
+              <span class="platform-count">0</span>
+              <span class="platform-sep"> / {p.limit}</span>
+            </div>
+            <div class="platform-mini-bar"><div class="platform-bar-fill"></div></div>
+            <div class="platform-status">—</div>
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <!-- Ad zone 2 -->
+    <div class="ad-zone" style="margin-top:var(--space-4)"><!-- Google AdSense ad unit — character-counter below-platforms --><span>Advertisement</span></div>
+
+    <!-- Export panel -->
+    <div class="card card-body" style="margin-top:var(--space-4)">
+      <div class="card-title">⬇️ Export</div>
+      <div class="export-row">
+        <button id="cc-export-copy"  class="btn btn-secondary">📋 Copy Text</button>
+        <button id="cc-export-txt"   class="btn btn-secondary">📄 Download .txt</button>
+        <button id="cc-export-md"    class="btn btn-secondary">📝 Download .md</button>
+        <button id="cc-export-print" class="btn btn-secondary">🖨️ Print</button>
+      </div>
+    </div>
+
+    <!-- SEO content -->
+    <div class="seo-section" style="margin-top:var(--space-12)">
+      <h2>How to Use This Character Counter</h2>
+      <p>Type or paste your text into the editor above. The character count, word count, and all platform limits update instantly on every keystroke — no button to click. Here is what each stat means and how to use them:</p>
+      <ul class="how-to-list">
+        <li><strong>Characters (with spaces):</strong> The total number of characters including every space, tab, and newline. This is what most platforms use as their limit.</li>
+        <li><strong>Characters without spaces:</strong> Removes all whitespace before counting. Useful when you need to know the density of actual content in your text.</li>
+        <li><strong>Platform Limits Checker:</strong> All 10 platform cards update live. Green means your text fits. Red means you have gone over. Use this to ensure you stay within limits before copying and pasting into any platform.</li>
+        <li><strong>File upload:</strong> Click Upload to load a <code>.txt</code> or <code>.docx</code> file from your device. The text loads instantly and all counts update.</li>
+        <li><strong>Export:</strong> Copy to clipboard, download as <code>.txt</code> or <code>.md</code>, or print a clean version of your text.</li>
+      </ul>
+      <p>Your draft is automatically saved every second to your browser's localStorage. If you close the tab and reopen it, your text will be restored. No account needed — your text stays on your device.</p>
+
+      <h2>Who Needs a Character Counter</h2>
+      <p>Character counting is needed any time you write content for a specific medium with length restrictions:</p>
+      <ul class="how-to-list">
+        <li><strong>Social media managers</strong> need to stay within Twitter's 280 characters, Instagram bio's 150 characters, and LinkedIn's 3000 character post limit simultaneously.</li>
+        <li><strong>SEO professionals</strong> must keep meta descriptions between 120 and 155 characters and page titles under 60 characters to avoid truncation in Google search results.</li>
+        <li><strong>Marketers</strong> writing SMS campaigns must stay within 160 characters per message to avoid being split into multiple SMS messages and doubling costs.</li>
+        <li><strong>Email marketers</strong> count subject line characters to optimise mobile preview display.</li>
+        <li><strong>Students and exam candidates</strong> in exams that set character limits instead of word limits.</li>
+        <li><strong>Developers</strong> checking field length requirements before saving content to a database.</li>
+      </ul>
+
+      <h2>Understanding Platform Character Limits</h2>
+      <p>Every platform has its own limit based on its purpose and technical design. Twitter chose 280 characters to force clarity and brevity — its original 140-character limit was set to fit in an SMS. Instagram allows 2200 characters for captions to support storytelling and long-form content, but only shows the first 125 characters in the feed before truncating with "more". Meta descriptions are capped at around 155 characters by Google's display algorithm — longer descriptions are simply cut off in search results. SMS messages are technically limited to 160 characters by the GSM protocol, though most modern phones silently combine multi-part messages. Knowing these limits and checking them before posting saves editing time and prevents embarrassing truncation.</p>
+
+      <h2>Frequently Asked Questions</h2>
+      <div class="faq-list">
+        {faqSchema.map(({ q, a }) => (
+          <details><summary>{q}</summary><div class="details-body">{a}</div></details>
+        ))}
+      </div>
+
+      <h2>More Free Writing Tools</h2>
+      <div class="more-tools-grid">
+        <a href="/word-counter" class="more-tool-link">📝 Word Counter</a>
+        <a href="/twitter-character-counter" class="more-tool-link">🐦 Twitter Counter</a>
+        <a href="/instagram-caption-checker" class="more-tool-link">📸 Instagram Checker</a>
+        <a href="/meta-description-checker" class="more-tool-link">🔍 Meta Description</a>
+        <a href="/text-case-converter" class="more-tool-link">✏️ Case Converter</a>
+        <a href="/readability-checker" class="more-tool-link">📖 Readability Checker</a>
+        <a href="/upsc-word-counter" class="more-tool-link">🏛️ UPSC Counter</a>
+      </div>
+    </div>
+
+  </div>
+
+</BaseLayout>
+
+<script>
+(function(){
+  const editor    = document.getElementById('cc-editor') as HTMLTextAreaElement;
+  if (!editor) return;
+  const STORAGE_KEY = 'realwordcounter_character_draft';
+  let charCount = 0;
+
+  function update(text: string) {
+    charCount = text.length;
+    const charsNs   = text.replace(/\s/g,'').length;
+    const words     = text.trim() ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+    const sentences = text.trim() ? Math.max(text.split(/[.!?]+/).filter(s=>s.trim().length>2).length,1) : 0;
+    const paragraphs= text.trim() ? (text.split(/\n\n+/).filter(p=>p.trim()).length || 1) : 0;
+    const reading   = words > 0 ? Math.ceil(words/200)+' min' : '0 min';
+
+    const $=document.getElementById.bind(document);
+    const set=(id:string,v:string|number)=>{const el=$(`cc-${id}`);if(el)el.textContent=String(v)};
+    set('chars', charCount.toLocaleString());
+    set('chars-ns', charsNs.toLocaleString());
+    set('words', words.toLocaleString());
+    set('sentences', sentences.toLocaleString());
+    set('paragraphs', paragraphs.toLocaleString());
+    set('reading', reading);
+    updatePlatforms(charCount);
+  }
+
+  function updatePlatforms(chars: number) {
+    document.querySelectorAll<HTMLElement>('.platform-card[data-limit]').forEach(card=>{
+      const limit = parseInt(card.dataset.limit||'0');
+      const countEl  = card.querySelector('.platform-count');
+      const fillEl   = card.querySelector<HTMLElement>('.platform-bar-fill');
+      const statusEl = card.querySelector('.platform-status');
+      if(countEl) countEl.textContent = chars.toLocaleString();
+      const pct = Math.min((chars/limit)*100,100);
+      if(fillEl) fillEl.style.width = pct+'%';
+      card.classList.remove('platform-ok','platform-over');
+      if(chars===0){
+        if(statusEl) statusEl.textContent='—';
+        if(fillEl) fillEl.style.background='';
+      } else if(chars>limit){
+        card.classList.add('platform-over');
+        if(statusEl) statusEl.textContent=`✕ Over by ${chars-limit}`;
+        if(fillEl) fillEl.style.background='var(--color-error)';
+      } else {
+        card.classList.add('platform-ok');
+        if(statusEl) statusEl.textContent='✓ Fits';
+        if(fillEl) fillEl.style.background='var(--color-success)';
+      }
+    });
+  }
+
+  function toast(msg:string,type='success'){
+    const c=document.getElementById('toast-container');if(!c)return;
+    const el=document.createElement('div');
+    el.className=`toast toast-${type}`;el.textContent=msg;c.appendChild(el);
+    requestAnimationFrame(()=>el.classList.add('toast-visible'));
+    setTimeout(()=>{el.classList.remove('toast-visible');el.classList.add('toast-hiding');setTimeout(()=>el.remove(),350);},2000);
+  }
+
+  let saveTimer: number;
+  function autosave(text:string){
+    clearTimeout(saveTimer);
+    saveTimer=window.setTimeout(()=>{
+      try{localStorage.setItem(STORAGE_KEY,text);}catch(_){}
+      const ind=document.getElementById('cc-autosave');
+      if(ind){ind.innerHTML='<span class="autosave-dot"></span> Draft auto-saved';ind.className='autosave-indicator saved';}
+    },1000);
+  }
+
+  // Init — restore draft
+  try{
+    const saved=localStorage.getItem(STORAGE_KEY);
+    if(saved){editor.value=saved;update(saved);}
+  }catch(_){}
+
+  editor.addEventListener('input',()=>{update(editor.value);autosave(editor.value);});
+
+  // Paste
+  document.getElementById('cc-paste')?.addEventListener('click',async()=>{
+    try{const t=await navigator.clipboard.readText();editor.value=t;update(t);autosave(t);toast('Pasted from clipboard');}
+    catch(_){toast('Clipboard access denied','error');}
+  });
+
+  // Clear
+  document.getElementById('cc-clear')?.addEventListener('click',()=>{
+    if(charCount>200&&!confirm('Clear all text?'))return;
+    editor.value='';update('');try{localStorage.removeItem(STORAGE_KEY);}catch(_){}toast('Cleared','info');
+  });
+
+  // Copy stats
+  document.getElementById('cc-copy-stats')?.addEventListener('click',()=>{
+    const stats=`Characters: ${charCount}\nWords: ${editor.value.trim().split(/\s+/).filter(Boolean).length}`;
+    navigator.clipboard.writeText(stats).then(()=>toast('Stats copied')).catch(()=>toast('Copy failed','error'));
+  });
+
+  // File upload
+  const fileInput=document.getElementById('cc-upload') as HTMLInputElement;
+  fileInput?.addEventListener('change',async()=>{
+    const file=fileInput.files?.[0];if(!file)return;fileInput.value='';
+    if(file.name.endsWith('.txt')){
+      const r=new FileReader();r.onload=e=>{const t=(e.target?.result as string)||'';editor.value=t;update(t);autosave(t);toast('File loaded');};r.readAsText(file);
+    } else if(file.name.endsWith('.docx')){
+      toast('Loading...','info');
+      try{
+        if(!(window as any).mammoth){await new Promise<void>((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js';s.onload=()=>res();s.onerror=rej;document.head.appendChild(s);});}
+        const buf=await file.arrayBuffer();const result=await (window as any).mammoth.extractRawValue({arrayBuffer:buf});
+        editor.value=result.value;update(result.value);autosave(result.value);toast('Document loaded');
+      }catch(_){toast('Error loading .docx','error');}
+    } else {toast('Upload .txt or .docx files','error');}
+  });
+
+  // Export
+  function dl(content:string,name:string,mime:string){
+    const b=new Blob([content],{type:mime});const u=URL.createObjectURL(b);const a=document.createElement('a');a.href=u;a.download=name;a.click();URL.revokeObjectURL(u);
+  }
+  document.getElementById('cc-export-copy')?.addEventListener('click',()=>navigator.clipboard.writeText(editor.value).then(()=>toast('Copied!')).catch(()=>toast('Failed','error')));
+  document.getElementById('cc-export-txt')?.addEventListener('click',()=>{dl(editor.value,'document.txt','text/plain');toast('Downloading .txt');});
+  document.getElementById('cc-export-md')?.addEventListener('click',()=>{dl(`# Document\n\n${editor.value}`,'document.md','text/markdown');toast('Downloading .md');});
+  document.getElementById('cc-export-print')?.addEventListener('click',()=>{
+    const w=window.open('','_blank');if(!w)return;
+    w.document.write(`<!doctype html><html><head><title>Document</title><style>body{font-family:serif;max-width:800px;margin:40px auto;line-height:1.7;white-space:pre-wrap}</style></head><body>${editor.value.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</body></html>`);
+    w.document.close();w.print();toast('Print dialog opened','info');
+  });
+})();
+</script>
+
+<style>
+  .page-header{margin-bottom:var(--space-6);}
+  .page-header h1{font-size:clamp(1.75rem,3vw,2.5rem);margin-bottom:var(--space-3);}
+  .page-sub{font-size:17px;color:var(--color-body);line-height:1.6;max-width:700px;margin-bottom:var(--space-4);}
+  .tool-wrap{padding-bottom:var(--space-16);}
+  .editor-card{padding:0;overflow:hidden;}
+  .cc-textarea{display:block;width:100%;min-height:220px;padding:var(--space-4);font-family:var(--font-sans);font-size:15px;line-height:1.7;color:var(--color-ink);background:var(--color-canvas);border:none;border-radius:var(--radius-md) var(--radius-md) 0 0;resize:vertical;}
+  .cc-textarea:focus{outline:none;box-shadow:inset 0 0 0 2px var(--color-primary);}
+  .autosave-bar{padding:var(--space-2) var(--space-4);border-top:1px solid var(--color-hairline);background:var(--color-canvas-soft);}
+  .action-row{display:flex;flex-wrap:wrap;gap:var(--space-2);}
+  /* Primary char card */
+  .primary-char-card{display:flex;align-items:center;gap:var(--space-8);background:var(--color-primary-soft);border-color:var(--color-primary-light);}
+  .primary-count-wrap{text-align:center;}
+  .primary-number{font-size:60px;font-weight:800;letter-spacing:-0.04em;color:var(--color-primary);line-height:1;}
+  .primary-label{font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:0.06em;color:var(--color-primary);margin-top:4px;}
+  .primary-divider{width:1px;height:60px;background:var(--color-primary-light);}
+  .secondary-char-stat{text-align:center;}
+  .sc-val{font-size:28px;font-weight:700;color:var(--color-ink);letter-spacing:-0.02em;}
+  .sc-lbl{font-size:12px;font-weight:500;text-transform:uppercase;letter-spacing:0.05em;color:var(--color-mute);margin-top:3px;}
+  /* Secondary stats */
+  .secondary-stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-3);margin-top:var(--space-3);}
+  .sec-stat-card{text-align:center;}
+  .sec-val{font-size:22px;font-weight:700;color:var(--color-ink);letter-spacing:-0.02em;line-height:1;margin-bottom:4px;}
+  .sec-lbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.04em;color:var(--color-mute);}
+  /* Platforms */
+  .platforms-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:var(--space-3);}
+  .platform-card{background:var(--color-canvas-soft);border:1px solid var(--color-hairline);border-radius:var(--radius-md);padding:var(--space-3);transition:border-color var(--transition-fast);}
+  .platform-card.platform-ok{border-color:var(--color-success);background:var(--color-success-soft);}
+  .platform-card.platform-over{border-color:var(--color-error);background:var(--color-error-soft);}
+  .platform-top{display:flex;align-items:center;gap:5px;margin-bottom:5px;}
+  .platform-emoji{font-size:13px;}
+  .platform-name{font-size:11px;font-weight:600;color:var(--color-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .platform-count-row{font-size:12px;color:var(--color-body);margin-bottom:5px;}
+  .platform-count{font-weight:700;color:var(--color-ink);}
+  .platform-sep{color:var(--color-mute);}
+  .platform-mini-bar{height:3px;background:var(--color-hairline);border-radius:var(--radius-full);overflow:hidden;margin-bottom:4px;}
+  .platform-bar-fill{height:100%;border-radius:var(--radius-full);background:var(--color-primary-light);transition:width 150ms ease,background 150ms ease;}
+  .platform-status{font-size:11px;font-weight:600;color:var(--color-mute);}
+  .platform-card.platform-ok .platform-status{color:var(--color-success);}
+  .platform-card.platform-over .platform-status{color:var(--color-error);}
+  /* Export */
+  .export-row{display:flex;flex-wrap:wrap;gap:var(--space-2);}
+  /* SEO content */
+  .seo-section h2{font-size:var(--text-2xl);margin-bottom:var(--space-4);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-hairline);margin-top:var(--space-8);}
+  .seo-section p{max-width:800px;margin-bottom:var(--space-4);}
+  .how-to-list{padding-left:var(--space-5);margin-bottom:var(--space-4);}
+  .how-to-list li{margin-bottom:var(--space-3);color:var(--color-body);line-height:1.7;}
+  .faq-list{max-width:800px;margin-top:var(--space-4);}
+  .more-tools-grid{display:flex;flex-wrap:wrap;gap:var(--space-2);margin-top:var(--space-4);}
+  .more-tool-link{display:inline-flex;align-items:center;gap:var(--space-2);padding:var(--space-3) var(--space-4);background:var(--color-canvas);border:1px solid var(--color-hairline);border-radius:var(--radius-md);font-size:14px;font-weight:500;color:var(--color-ink);text-decoration:none;box-shadow:var(--shadow-xs);transition:all var(--transition-fast);}
+  .more-tool-link:hover{border-color:var(--color-primary);color:var(--color-primary);text-decoration:none;}
+  @media(max-width:1024px){.platforms-grid{grid-template-columns:repeat(3,1fr);}}
+  @media(max-width:768px){.primary-char-card{flex-direction:column;gap:var(--space-4);text-align:center;}.primary-number{font-size:48px;}.secondary-stats-row{grid-template-columns:repeat(2,1fr);}.platforms-grid{grid-template-columns:repeat(2,1fr);}}
+  @media(max-width:480px){.platforms-grid{grid-template-columns:1fr 1fr;}}
+</style>
