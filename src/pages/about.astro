@@ -1,0 +1,237 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const canonical = new URL('/about', Astro.site).href;
+---
+
+<BaseLayout
+  title="About Us — RealWordCounter"
+  description="Learn about RealWordCounter — free writing tools built for Indian students, bloggers, and content creators. No sign-up, no data stored, 100% private."
+  canonical={canonical}
+  ogImage="og-home.png"
+>
+
+  <div class="container" style="padding-top:var(--space-8);padding-bottom:var(--space-4)">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">About Us</span>
+    </nav>
+  </div>
+
+  <!-- Hero -->
+  <div class="container about-hero">
+    <h1>About RealWordCounter</h1>
+    <p class="about-lead">
+      Free writing tools built for Indian students, UPSC aspirants, bloggers, and content
+      creators — with privacy as the default, not an afterthought.
+    </p>
+  </div>
+
+  <!-- Story -->
+  <div class="container about-wrap">
+
+    <section class="about-section">
+      <h2>Why We Built This</h2>
+      <p>
+        Most free word counter tools online are slow, cluttered with ads, and send your text
+        to remote servers. For a student practising UPSC answer writing at 11 PM, or a blogger
+        checking their article length before publishing, that is simply not good enough.
+      </p>
+      <p>
+        RealWordCounter was created to fix that. Every feature runs locally in your browser —
+        no text ever leaves your device, no account is needed, and the tool keeps working even
+        if your internet connection drops. It is the tool we wished existed.
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2>Who We Serve</h2>
+      <div class="audience-grid">
+        <div class="audience-card">
+          <div class="audience-icon">🏛️</div>
+          <h3>UPSC Aspirants</h3>
+          <p>
+            We built the UPSC Word Counter with GS paper presets (150 and 250 words),
+            essay mode, and a full reference table so you can practise answer writing
+            exactly to the exam's requirements.
+          </p>
+        </div>
+        <div class="audience-card">
+          <div class="audience-icon">🎓</div>
+          <h3>Students</h3>
+          <p>
+            Whether it is a CBSE assignment, an IELTS essay, or a college application,
+            knowing your exact word count — and having a live progress bar — removes
+            the guesswork entirely.
+          </p>
+        </div>
+        <div class="audience-card">
+          <div class="audience-icon">✍️</div>
+          <h3>Bloggers & Creators</h3>
+          <p>
+            Check platform limits for Twitter, Instagram, LinkedIn, and more without
+            switching tabs. See readability scores and keyword density without any
+            third-party SEO tools.
+          </p>
+        </div>
+        <div class="audience-card">
+          <div class="audience-icon">📰</div>
+          <h3>Journalists & Editors</h3>
+          <p>
+            Publisher word limits, reading time estimates, and export options all in
+            one place — with no sign-in friction, so you can get back to writing faster.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section">
+      <h2>Our Tools</h2>
+      <p>
+        RealWordCounter is a suite of eight free writing tools, each designed around a specific
+        use case:
+      </p>
+      <ul class="tools-list">
+        <li><a href="/word-counter"><strong>Word Counter</strong></a> — the flagship tool with goal tracker, readability, keyword density, platform limits, and file upload</li>
+        <li><a href="/upsc-word-counter"><strong>UPSC Word Counter</strong></a> — dedicated presets for GS papers and essays</li>
+        <li><a href="/character-counter"><strong>Character Counter</strong></a> — character-focused with all 10 platform limits</li>
+        <li><a href="/twitter-character-counter"><strong>Twitter Counter</strong></a> — live tweet preview with overflow highlighting</li>
+        <li><a href="/instagram-caption-checker"><strong>Instagram Checker</strong></a> — caption and bio mode with hashtag counter</li>
+        <li><a href="/meta-description-checker"><strong>Meta Description Checker</strong></a> — Google SERP preview with SEO checklist</li>
+        <li><a href="/text-case-converter"><strong>Text Case Converter</strong></a> — eight text transformations with undo history</li>
+        <li><a href="/readability-checker"><strong>Readability Checker</strong></a> — Flesch score, sentence analysis, and improvement suggestions</li>
+      </ul>
+    </section>
+
+    <section class="about-section">
+      <h2>Our Privacy Commitment</h2>
+      <p>
+        We make one simple promise: <strong>your text never leaves your device.</strong>
+        All analysis happens in JavaScript running in your browser. We have no database of
+        user drafts, no server that processes your content, and no way to access what you write.
+      </p>
+      <p>
+        The only data stored anywhere is your draft in your own browser's
+        <code>localStorage</code> — on your device, accessible only by you.
+        Read our full <a href="/privacy-policy">Privacy Policy</a> for details.
+      </p>
+    </section>
+
+    <section class="about-section">
+      <h2>Get in Touch</h2>
+      <p>
+        Found a bug? Have a feature idea? We read every message and build features based on
+        real requests from our users. Reach us via the <a href="/contact">Contact page</a>.
+        We reply within 48 hours on weekdays.
+      </p>
+    </section>
+
+  </div>
+
+</BaseLayout>
+
+<style>
+  .about-hero {
+    max-width: 800px;
+    padding-bottom: var(--space-10);
+  }
+
+  .about-hero h1 {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    margin-bottom: var(--space-4);
+  }
+
+  .about-lead {
+    font-size: 18px;
+    line-height: 1.7;
+    color: var(--color-body);
+  }
+
+  .about-wrap {
+    max-width: 800px;
+    padding-bottom: var(--space-16);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+
+  .about-section h2 {
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
+    margin-bottom: var(--space-4);
+    padding-bottom: var(--space-2);
+    border-bottom: 2px solid var(--color-primary-soft);
+  }
+
+  .about-section p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-body);
+    margin-bottom: var(--space-3);
+  }
+
+  .about-section code {
+    background: var(--color-canvas-soft-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+
+  .about-section a {
+    color: var(--color-primary);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .about-section a:hover { text-decoration: underline; }
+
+  /* Audience grid */
+  .audience-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+
+  .audience-card {
+    padding: var(--space-6);
+    background: var(--color-canvas-soft);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+  }
+
+  .audience-icon {
+    font-size: 28px;
+    margin-bottom: var(--space-3);
+  }
+
+  .audience-card h3 {
+    font-size: var(--text-md);
+    margin-bottom: var(--space-2);
+  }
+
+  .audience-card p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-body);
+    margin-bottom: 0;
+  }
+
+  /* Tools list */
+  .tools-list {
+    margin: var(--space-4) 0 0 var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .tools-list li {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--color-body);
+  }
+
+  @media (max-width: 640px) {
+    .audience-grid { grid-template-columns: 1fr; }
+  }
+</style>

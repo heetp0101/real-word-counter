@@ -44,6 +44,7 @@ const platforms = [
   canonical="https://realwordcounter.com/character-counter"
   schemaType="WebApplication"
   faqSchema={faqSchema}
+  ogImage="og-home.png"
 >
 
   <div class="container" style="padding-top:var(--space-8);padding-bottom:var(--space-4)">
@@ -337,7 +338,7 @@ const platforms = [
       toast('Loading document...','info');
       try{
         if(!(window as any).mammoth){await new Promise<void>((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js';s.onload=()=>res();s.onerror=rej;document.head.appendChild(s);});}
-        const buf=await file.arrayBuffer();const result=await (window as any).mammoth.extractRawValue({arrayBuffer:buf});
+        const buf=await file.arrayBuffer();const result=await (window as any).mammoth.extractRawText({arrayBuffer:buf});
         editor.value=result.value;update(result.value);autosave(result.value);
         const w=result.value.trim()?result.value.trim().split(/\s+/).filter(Boolean).length:0;
         showFileInfo(name,w);toast('Document loaded');
@@ -460,5 +461,5 @@ const platforms = [
   .more-tool-link:hover{border-color:var(--color-primary);color:var(--color-primary);text-decoration:none;}
   @media(max-width:1024px){.platforms-grid{grid-template-columns:repeat(3,1fr);}}
   @media(max-width:768px){.primary-char-card{flex-direction:column;gap:var(--space-4);text-align:center;}.primary-number{font-size:48px;}.secondary-stats-row{grid-template-columns:repeat(2,1fr);}.platforms-grid{grid-template-columns:repeat(2,1fr);}}
-  @media(max-width:480px){.platforms-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:480px){.platforms-grid{grid-template-columns:1fr;}}
 </style>

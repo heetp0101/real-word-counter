@@ -1,0 +1,21 @@
+[build]
+  command   = "npm run build"
+  publish   = "dist"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options        = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy        = "strict-origin-when-cross-origin"
+
+# Custom error pages
+[[redirects]]
+  from   = "/*"
+  to     = "/404"
+  status = 404
+
+[[redirects]]
+  from   = "/*"
+  to     = "/500"
+  status = 500

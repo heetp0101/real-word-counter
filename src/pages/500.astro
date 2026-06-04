@@ -1,0 +1,174 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Server Error (500) — RealWordCounter"
+  description="Something went wrong on our end. Please try again or head back to RealWordCounter's free word counter and writing tools."
+  canonical="https://realwordcounter.com/500"
+>
+
+  <div class="container error-wrap">
+    <div class="error-content">
+      <div class="error-code" aria-hidden="true">500</div>
+      <h1>Something went wrong</h1>
+      <p class="error-desc">
+        We hit an unexpected error on our end. Your text is safe — all processing
+        happens in your browser, so nothing was lost. Please try again or come back shortly.
+      </p>
+
+      <div class="error-actions">
+        <a href="/" class="btn btn-primary btn-pill">← Back to Home</a>
+        <button onclick="window.location.reload()" class="btn btn-secondary btn-pill">Try Again</button>
+      </div>
+
+      <div class="error-note">
+        <span class="error-note-icon">🔒</span>
+        <p>
+          Since RealWordCounter runs 100% in your browser, your draft is safe in
+          your browser's local storage — nothing was sent to a server.
+        </p>
+      </div>
+
+      <div class="error-links-section">
+        <p class="error-links-label">Go directly to a tool</p>
+        <div class="error-links-grid">
+          <a href="/word-counter" class="error-link-card">
+            <span class="error-link-icon">📝</span>
+            <span>Word Counter</span>
+          </a>
+          <a href="/upsc-word-counter" class="error-link-card">
+            <span class="error-link-icon">🏛️</span>
+            <span>UPSC Counter</span>
+          </a>
+          <a href="/character-counter" class="error-link-card">
+            <span class="error-link-icon">🔢</span>
+            <span>Character Counter</span>
+          </a>
+          <a href="/contact" class="error-link-card">
+            <span class="error-link-icon">✉️</span>
+            <span>Report Issue</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</BaseLayout>
+
+<style>
+  .error-wrap {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-16) var(--space-4);
+  }
+
+  .error-content {
+    text-align: center;
+    max-width: 560px;
+    width: 100%;
+  }
+
+  .error-code {
+    font-size: clamp(6rem, 16vw, 10rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.05em;
+    color: var(--color-error, #ef4444);
+    opacity: 0.15;
+    margin-bottom: var(--space-4);
+    user-select: none;
+  }
+
+  .error-content h1 {
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    margin-bottom: var(--space-3);
+  }
+
+  .error-desc {
+    font-size: 16px;
+    line-height: 1.65;
+    color: var(--color-body);
+    margin-bottom: var(--space-6);
+  }
+
+  .error-actions {
+    display: flex;
+    gap: var(--space-3);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: var(--space-8);
+  }
+
+  .error-note {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-3);
+    padding: var(--space-4) var(--space-5);
+    background: var(--color-success-soft);
+    border: 1px solid rgba(22, 163, 74, 0.2);
+    border-radius: var(--radius-lg);
+    text-align: left;
+    margin-bottom: var(--space-8);
+  }
+
+  .error-note-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+  .error-note p {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-body);
+    margin: 0;
+  }
+
+  .error-links-section {
+    border-top: 1px solid var(--color-hairline);
+    padding-top: var(--space-8);
+  }
+
+  .error-links-label {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-mute);
+    margin-bottom: var(--space-4);
+  }
+
+  .error-links-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-3);
+  }
+
+  .error-link-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-3) var(--space-4);
+    background: var(--color-canvas-soft);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    text-decoration: none;
+    color: var(--color-ink);
+    font-size: 14px;
+    font-weight: 500;
+    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  }
+
+  .error-link-card:hover {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-sm);
+    color: var(--color-primary);
+  }
+
+  .error-link-icon { font-size: 18px; flex-shrink: 0; }
+
+  @media (max-width: 400px) {
+    .error-links-grid { grid-template-columns: 1fr; }
+    .error-actions { flex-direction: column; align-items: center; }
+    .error-actions .btn { width: 100%; justify-content: center; }
+  }
+</style>

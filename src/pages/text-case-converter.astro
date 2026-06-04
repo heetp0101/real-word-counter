@@ -31,6 +31,7 @@ const faqSchema = [
   canonical="https://realwordcounter.com/text-case-converter"
   schemaType="WebApplication"
   faqSchema={faqSchema}
+  ogImage="og-home.png"
 >
 
   <div class="container" style="padding-top:var(--space-8);padding-bottom:var(--space-4)">
@@ -82,7 +83,7 @@ const faqSchema = [
         </button>
         <button class="tc-btn" data-op="alt">
           <span class="tc-btn-title">aLtErNaTiNg</span>
-          <span class="tc-btn-sub">aLtErNaTeS eVeRy LeItTeR</span>
+          <span class="tc-btn-sub">aLtErNaTeS eVeRy LeTtEr</span>
         </button>
         <button class="tc-btn" data-op="spaces">
           <span class="tc-btn-title">Remove Extra Spaces</span>
@@ -305,5 +306,5 @@ const faqSchema = [
   .more-tool-link:hover{border-color:var(--color-primary);color:var(--color-primary);text-decoration:none;}
   @media(max-width:1024px){.transform-grid{grid-template-columns:repeat(2,1fr);}}
   @media(max-width:768px){.transform-grid{grid-template-columns:repeat(2,1fr);}.compare-grid{grid-template-columns:1fr;}}
-  @media(max-width:480px){.transform-grid{grid-template-columns:1fr 1fr;}}
+  @media(max-width:480px){.transform-grid{grid-template-columns:1fr 1fr;}.tc-stats-row{grid-template-columns:repeat(2,1fr);}}
 </style>

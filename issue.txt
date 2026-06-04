@@ -1,2 +1,0 @@
-Footer links for Character Counter and Reading Time Calculator both point to /word-counter instead of their correct pages. 
-Tell Claude Code to either fix them to the correct URLs or mark them as Coming Soon until Phase 2 is deployed.

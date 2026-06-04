@@ -1,0 +1,221 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+
+const canonical = new URL('/privacy-policy', Astro.site).href;
+---
+
+<BaseLayout
+  title="Privacy Policy — RealWordCounter"
+  description="RealWordCounter's privacy policy. Learn how we handle your data — spoiler: we don't collect any. All text processing happens 100% in your browser."
+  canonical={canonical}
+  ogImage="og-home.png"
+>
+
+  <div class="container" style="padding-top:var(--space-8);padding-bottom:var(--space-4)">
+    <nav class="breadcrumb" aria-label="Breadcrumb">
+      <a href="/">Home</a>
+      <span class="breadcrumb-sep">›</span>
+      <span class="breadcrumb-current">Privacy Policy</span>
+    </nav>
+  </div>
+
+  <div class="container policy-wrap">
+    <div class="policy-header">
+      <h1>Privacy Policy</h1>
+      <p class="policy-meta">Last updated: June 2025 · Effective immediately</p>
+      <p class="policy-intro">
+        RealWordCounter is built on a simple principle: <strong>your text is yours</strong>.
+        We do not collect it, store it, or process it on any server. This page explains
+        exactly what we do — and don't — do with any information related to your use of this site.
+      </p>
+    </div>
+
+    <div class="policy-body">
+
+      <section class="policy-section">
+        <h2>1. No Text Is Ever Collected</h2>
+        <p>
+          Every feature on RealWordCounter — word count, character count, readability analysis,
+          keyword density, platform limits checker, UPSC presets — runs entirely in your browser
+          using JavaScript. Your text is <strong>never sent to our servers</strong>. We have no
+          server-side processing of any content you type or paste into our tools.
+        </p>
+        <p>
+          The only place your draft is stored is your own browser's <code>localStorage</code>,
+          which is accessible only by you on your device. Clearing your browser data removes it.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>2. What We Do Collect</h2>
+        <p>We collect minimal, anonymised data to understand how the site is used:</p>
+        <ul>
+          <li><strong>Page views and navigation paths</strong> — via Google Analytics (anonymised IP). This tells us which tools are most used, nothing about content.</li>
+          <li><strong>Device and browser type</strong> — to ensure compatibility and fix rendering issues.</li>
+          <li><strong>Country and region</strong> — to confirm we are serving our primary audience (India) correctly.</li>
+        </ul>
+        <p>
+          We do <strong>not</strong> collect: your name, email address, text content, uploaded files,
+          IP address (full), or any personally identifiable information unless you voluntarily submit
+          our contact form.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>3. Contact Form Data</h2>
+        <p>
+          If you send us a message via the <a href="/contact">Contact page</a>, your name, email
+          address, and message are processed by
+          <a href="https://web3forms.com" target="_blank" rel="noopener noreferrer">Web3Forms</a>
+          and delivered to our inbox. We use this data only to respond to your enquiry.
+          We do not add you to any mailing list or share your details with third parties.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>4. Cookies</h2>
+        <p>
+          We use only one first-party cookie: a <strong>theme preference</strong> stored in
+          <code>localStorage</code> (light/dark mode). This is not a tracking cookie and contains
+          no personal information.
+        </p>
+        <p>
+          Google Analytics may set anonymised analytics cookies. You can opt out of Google Analytics
+          by installing the
+          <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">Google Analytics opt-out browser add-on</a>.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>5. Third-Party Services</h2>
+        <ul>
+          <li><strong>Google Analytics</strong> — anonymised usage statistics</li>
+          <li><strong>Google Fonts</strong> — the Inter typeface is loaded from Google's CDN</li>
+          <li><strong>Web3Forms</strong> — contact form submission processing</li>
+        </ul>
+        <p>
+          Each of these services has its own privacy policy. We have no control over their data
+          practices and encourage you to review their policies directly.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>6. Children's Privacy</h2>
+        <p>
+          RealWordCounter does not knowingly collect any information from children under the age
+          of 13. If you are a parent or guardian and believe your child has submitted personal data
+          via our contact form, please contact us and we will delete it promptly.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>7. Your Rights</h2>
+        <p>
+          Since we store no personal data beyond voluntarily submitted contact form messages,
+          there is very little to request. However, you may:
+        </p>
+        <ul>
+          <li>Request deletion of any contact form message you submitted</li>
+          <li>Clear your browser's localStorage at any time to remove your saved drafts</li>
+          <li>Opt out of Google Analytics using the link in section 4</li>
+        </ul>
+        <p>To exercise these rights, email us via the <a href="/contact">Contact page</a>.</p>
+      </section>
+
+      <section class="policy-section">
+        <h2>8. Changes to This Policy</h2>
+        <p>
+          We may update this privacy policy from time to time. The "Last updated" date at the top
+          of this page reflects when it was last revised. Continued use of the site after changes
+          are posted constitutes acceptance of the updated policy.
+        </p>
+      </section>
+
+      <section class="policy-section">
+        <h2>9. Contact</h2>
+        <p>
+          Questions about this policy? Reach us via the <a href="/contact">Contact page</a>.
+          We aim to respond within 48 hours on weekdays.
+        </p>
+      </section>
+
+    </div>
+  </div>
+
+</BaseLayout>
+
+<style>
+  .policy-wrap {
+    max-width: 800px;
+    padding-bottom: var(--space-16);
+  }
+
+  .policy-header {
+    margin-bottom: var(--space-10);
+    padding-bottom: var(--space-8);
+    border-bottom: 1px solid var(--color-hairline);
+  }
+
+  .policy-header h1 {
+    font-size: clamp(1.75rem, 3vw, 2.5rem);
+    margin-bottom: var(--space-2);
+  }
+
+  .policy-meta {
+    font-size: 13px;
+    color: var(--color-mute);
+    margin-bottom: var(--space-4);
+  }
+
+  .policy-intro {
+    font-size: 17px;
+    line-height: 1.7;
+    color: var(--color-body);
+  }
+
+  .policy-body {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+  }
+
+  .policy-section h2 {
+    font-size: var(--text-xl);
+    margin-bottom: var(--space-3);
+  }
+
+  .policy-section p {
+    font-size: 15px;
+    line-height: 1.75;
+    color: var(--color-body);
+    margin-bottom: var(--space-3);
+  }
+
+  .policy-section ul {
+    margin: 0 0 var(--space-3) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .policy-section li {
+    font-size: 15px;
+    line-height: 1.65;
+    color: var(--color-body);
+  }
+
+  .policy-section code {
+    background: var(--color-canvas-soft-2);
+    padding: 1px 5px;
+    border-radius: 4px;
+    font-size: 13px;
+  }
+
+  .policy-section a {
+    color: var(--color-primary);
+    font-weight: 500;
+    text-decoration: none;
+  }
+
+  .policy-section a:hover { text-decoration: underline; }
+</style>

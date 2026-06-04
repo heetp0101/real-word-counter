@@ -2,13 +2,64 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 
 const faqSchema = [
+
+
+
   {
-    q: 'Is RealWordCounter completely free?',
-    a: 'Yes, RealWordCounter is 100% free. No sign-up, no subscription, no credit card required. All tools are free forever.',
+    q: 'What is the best free Word Counter?',
+    a: 'RealWordCounter is widely considered the best free word counter online. It offers live word count, character count, goal tracker, readability score, platform limits checker, and UPSC/CBSE exam presets — all in one place, with no sign-up required and 100% private in-browser processing.',
   },
   {
-    q: 'Does my text ever leave my device?',
-    a: 'No. All text processing happens entirely in your browser using JavaScript. Your text is never uploaded to any server. We cannot see what you write.',
+    q: 'Can ChatGPT do word count?',
+    a: 'ChatGPT can estimate word count when you paste text into it, but it is not always precise and does not offer real-time counting, goal tracking, or character-level analysis. A dedicated tool like RealWordCounter gives you instant, accurate counts as you type — without uploading your text to any external AI service.',
+  },
+  {
+    q: 'How long is a 700 word talk?',
+    a: 'A 700-word talk takes approximately 4 to 5 minutes at an average speaking pace of 130–150 words per minute. At a slow, deliberate pace (100 wpm) it runs about 7 minutes; at a fast pace (180 wpm) it comes in around 4 minutes. Use RealWordCounter\'s speaking time estimate to plan your talk length accurately.',
+  },
+  {
+    q: 'How can I count words online for free?',
+    a: 'To count words online for free, open RealWordCounter.com, paste or type your text into the editor, and the word count updates instantly as you type. No sign-up, no payment, and no data is ever sent to a server. You can also upload .txt, .docx, .pdf, or .md files directly.',
+  },
+  {
+    q: 'Can I speak 1000 words in 5 minutes?',
+    a: 'Speaking 1000 words in 5 minutes requires a pace of 200 words per minute, which is on the faster end of natural speech. Most people speak at 130–150 wpm, making 1000 words a 6–7 minute delivery at a comfortable pace. RealWordCounter displays your estimated speaking time automatically as you write.',
+  },
+  {
+    q: 'How many pages is 300 word count?',
+    a: '300 words is approximately half a page when typed in 12-point font with double spacing (the common academic format). In single spacing it is roughly a quarter of a page. The exact length varies depending on font size, margins, and line spacing.',
+  },
+  {
+    q: 'Which app can count words?',
+    a: 'Microsoft Word, Google Docs, and Apple Pages all have built-in word counters. For a dedicated, free, and privacy-focused option that requires no app install, RealWordCounter.com works directly in any browser on any device — including mobile — and also shows character count, readability, and platform limits.',
+  },
+  {
+    q: 'Does Google Docs have a word counter?',
+    a: 'Yes. Google Docs has a built-in word counter. Go to Tools → Word count (or press Ctrl+Shift+C on Windows / Cmd+Shift+C on Mac) to see word count, character count, and page count. You can also enable "Display word count while typing" for a live counter. For additional metrics like readability and keyword density, use RealWordCounter alongside Google Docs.',
+  },
+  {
+    q: 'Does Microsoft Word have a word counter?',
+    a: 'Yes. Microsoft Word displays the word count in the status bar at the bottom of every document. For more detail — including characters, paragraphs, and lines — go to Review → Word Count. The count updates automatically as you type.',
+  },
+  {
+    q: 'Which word would best introduce a counter claim?',
+    a: 'Words that best introduce a counter claim include: "However," "On the other hand," "Nevertheless," "Admittedly," "Although," "Despite this," and "Critics argue that." These transition words signal to the reader that you are acknowledging an opposing viewpoint before refuting or qualifying it in your argument.',
+  },
+  {
+    q: 'What is the best free online word counter tool?',
+    a: 'RealWordCounter.com is the best free online word counter tool available today. It combines live word count, character count, reading and speaking time, keyword density, readability score (Flesch), platform limits checker, word goal tracker, and exam presets for UPSC and CBSE — all completely free, with no sign-up and full in-browser privacy.',
+  },
+  {
+    q: 'How to word a counter offer?',
+    a: 'To word a counter offer effectively: (1) Thank the other party for their offer to set a positive tone. (2) Reference the specific terms you are countering. (3) State your position clearly with a specific number or condition. (4) Briefly justify it with relevant experience, market data, or value you bring. (5) Invite further discussion and express willingness to reach an agreement.',
+  },
+  {
+    q: 'How to word a counter offer for salary?',
+    a: 'To word a salary counter offer professionally: start by expressing genuine enthusiasm for the role, then acknowledge the offer and state a specific higher figure based on your research or experience. For example: "I\'m very excited about this opportunity. Based on my experience and current market rates, I was expecting a salary closer to ₹X. Is there flexibility there?" Keep the tone collaborative, not adversarial.',
+  },
+  {
+    q: 'What does the word counter mean?',
+    a: 'The word "counter" in "word counter" means a tool that counts — specifically one that tallies the number of individual words in a given piece of text. A word counter helps writers, students, and professionals measure text length, meet word limits for exams or platforms, and track writing progress toward a target.',
   },
   {
     q: 'Which Indian exams are supported?',
@@ -26,10 +77,12 @@ const faqSchema = [
 ---
 
 <BaseLayout
-  title="RealWordCounter — Free Word Counter and Writing Tools for India"
-  description="Free writing tools for Indian students and creators. Word counter with goal tracker, UPSC and CBSE exam presets, platform limits checker. 100% private, no signup required."
+  title="Word Counter Online — Free Word Counter Tool | RealWordCounter"
+  description="Free word counter online with live word count, character count, goal tracker, UPSC & CBSE exam presets, and platform limits checker. 100% private — no signup required."
   canonical="https://realwordcounter.com/"
   faqSchema={faqSchema}
+  keywords="word counter, word counter free, word counter online, word counter tool, free word counter, online word counter, word counter google docs, word counter website, text word counter, essay word counter"
+  ogImage="og-home.png"
 >
 
   <!-- ── Hero ──────────────────────────────────────── -->
@@ -41,13 +94,14 @@ const faqSchema = [
         </div>
 
         <h1 class="hero-heading">
-          Free Writing Tools<br />That Help You<br />
-          <span class="hero-accent">Write Better.</span>
+          Free Word Counter<br />Online &amp; Writing Tools<br />
+          <span class="hero-accent">100% Free.</span>
         </h1>
 
         <p class="hero-sub">
-          Track word goals, prep for UPSC &amp; CBSE exams, check platform limits,
-          and write with full privacy — no sign-up, no data stored, works offline.
+          The free word counter online tool for students and creators. Track word goals,
+          prep for UPSC &amp; CBSE exams, check platform limits, and write with full
+          privacy — no sign-up, no data stored, works offline.
         </p>
 
         <div class="hero-cta-row">
@@ -61,6 +115,16 @@ const faqSchema = [
           <span class="trust-badge">✓ Works Offline</span>
           <span class="trust-badge trust-badge-green">🔒 100% Private</span>
         </div>
+
+        <nav class="hero-page-links" aria-label="Quick links">
+          <a href="/about">About Us</a>
+          <span class="hero-page-sep" aria-hidden="true">·</span>
+          <a href="/contact">Contact</a>
+          <span class="hero-page-sep" aria-hidden="true">·</span>
+          <a href="/privacy-policy">Privacy Policy</a>
+          <span class="hero-page-sep" aria-hidden="true">·</span>
+          <a href="/terms">Terms &amp; Conditions</a>
+        </nav>
       </div>
 
       <div class="hero-visual" aria-hidden="true">
@@ -254,6 +318,175 @@ const faqSchema = [
     </div>
   </section>
 
+  <!-- ── Company links ────────────────────────────── -->
+  <section class="section company-section">
+    <div class="container">
+      <div class="section-eyebrow">About</div>
+      <h2 class="section-heading">Get to know RealWordCounter</h2>
+      <p class="section-subtext">Built for Indian students and writers. Free forever. 100% private.</p>
+
+      <div class="company-grid">
+        <a href="/about" class="company-card">
+          <div class="company-card-icon">👋</div>
+          <div>
+            <h3>About Us</h3>
+            <p>Learn why we built RealWordCounter and who we're building it for.</p>
+          </div>
+          <span class="company-card-cta">Read more →</span>
+        </a>
+
+        <a href="/contact" class="company-card">
+          <div class="company-card-icon">✉️</div>
+          <div>
+            <h3>Contact Us</h3>
+            <p>Found a bug or have a feature idea? We reply within 48 hours on weekdays.</p>
+          </div>
+          <span class="company-card-cta">Get in touch →</span>
+        </a>
+
+        <a href="/privacy-policy" class="company-card">
+          <div class="company-card-icon">🔒</div>
+          <div>
+            <h3>Privacy Policy</h3>
+            <p>We never store your text. See exactly what data we do and don't collect.</p>
+          </div>
+          <span class="company-card-cta">Read policy →</span>
+        </a>
+
+        <a href="/terms" class="company-card">
+          <div class="company-card-icon">📄</div>
+          <div>
+            <h3>Terms &amp; Conditions</h3>
+            <p>The rules that govern your use of the site — short and plain-English.</p>
+          </div>
+          <span class="company-card-cta">Read terms →</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── SEO Article ───────────────────────────────── -->
+  <section class="section seo-article-section">
+    <div class="container">
+      <div class="seo-article">
+        <h2>What Is a Word Counter and Why Do You Need One?</h2>
+
+        <p>
+          A <strong>word counter</strong> is a tool that counts the number of words in a piece
+          of text — instantly and accurately. Whether you are writing an essay, a blog post,
+          a social media caption, or an exam answer, knowing your word count is essential.
+          RealWordCounter is a <strong>free word counter online</strong> that goes far beyond
+          a simple number: it gives you live word count, character count, readability scores,
+          keyword density, and more — all in one place.
+        </p>
+
+        <h3>Why Use a Free Word Counter Online?</h3>
+
+        <p>
+          Word processors like Microsoft Word and Google Docs do have built-in word count
+          features. But a dedicated <strong>free word counter</strong> offers clear advantages
+          over them. Unlike the <strong>word counter in Google Docs</strong>, RealWordCounter
+          works directly in your browser on any device — without needing a Google account,
+          an active document, or any software installed. Just open the page, paste your text,
+          and get instant results. It is faster, lighter, and continues to work offline after
+          the first page load.
+        </p>
+
+        <p>
+          A standalone <strong>word counter tool</strong> also gives you far more than a single
+          number. Our <strong>online word counter</strong> displays word count, character count
+          (with and without spaces), sentence count, paragraph count, estimated reading time,
+          speaking time, and the number of unique words — all updating live as you type. No
+          other <strong>word counter website</strong> in India offers this combination of
+          features completely free, with zero tracking and no login required.
+        </p>
+
+        <h3>Features That Make RealWordCounter the Best Word Counter Tool</h3>
+
+        <p>
+          Most <strong>text word counter</strong> websites show one number and stop there.
+          RealWordCounter is built differently. Here is what sets it apart:
+        </p>
+
+        <ul>
+          <li>
+            <strong>Word Goal Tracker</strong> — Set a target and watch a live progress bar fill
+            as you write. Presets include UPSC 150, UPSC 250, UPSC Essay 1100, CBSE 500,
+            IELTS Task 1 &amp; 2, Blog 1500, and LinkedIn 300. No competitor has this.
+          </li>
+          <li>
+            <strong>Platform Limits Checker</strong> — See instantly whether your text fits
+            Twitter/X (280 characters), Instagram post (2,200 characters), LinkedIn post
+            (3,000 characters), Meta description (155 characters), YouTube title, SMS, and more.
+          </li>
+          <li>
+            <strong>Readability Score</strong> — Get a Flesch Reading Ease score with a grade-level
+            label so you always know if your text is easy, standard, or difficult to read.
+          </li>
+          <li>
+            <strong>Keyword Density</strong> — The top 10 non-stop keywords appear with frequency
+            bars, making it easy to check on-page SEO without leaving the editor.
+          </li>
+          <li>
+            <strong>File Import</strong> — Upload .txt, .docx, .pdf, or .md files and count
+            words without manual copy-pasting.
+          </li>
+          <li>
+            <strong>Autosave</strong> — Your draft is saved automatically to your browser every
+            second you type, so you never lose work if you close the tab.
+          </li>
+        </ul>
+
+        <h3>Who Uses This Online Word Counter?</h3>
+
+        <p>
+          Our <strong>word counter free</strong> tool is used by a wide range of writers every day:
+        </p>
+
+        <ul>
+          <li>
+            <strong>UPSC aspirants</strong> practising answer writing within the 150-word and
+            250-word limits for General Studies papers.
+          </li>
+          <li>
+            <strong>Students</strong> completing CBSE assignments, IELTS essays, and college
+            application essays that have strict word limits.
+          </li>
+          <li>
+            <strong>Bloggers and content creators</strong> hitting target lengths for SEO articles
+            and social media posts.
+          </li>
+          <li>
+            <strong>Journalists and editors</strong> submitting pieces with publisher-mandated
+            word counts.
+          </li>
+          <li>
+            <strong>Social media managers</strong> keeping LinkedIn posts, Instagram captions,
+            and tweets within platform character limits.
+          </li>
+        </ul>
+
+        <h3>100% Private — Your Text Never Leaves Your Device</h3>
+
+        <p>
+          Unlike many word counter websites that send your text to a server for processing,
+          RealWordCounter analyses everything locally in your browser using JavaScript. Your
+          text is never uploaded anywhere — not even to our servers. The tool works completely
+          offline after the first page load, and the only thing stored is your own draft in your
+          own browser's localStorage, accessible only by you.
+        </p>
+
+        <p>
+          Whether you need a quick <strong>text word counter</strong> for a single paragraph or a
+          full-featured <strong>free word counter online</strong> for exam preparation or
+          professional writing, RealWordCounter has every feature you need — free, fast, and
+          private.
+          <a href="/word-counter">Open the word counter tool →</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
 </BaseLayout>
 
 <style>
@@ -325,6 +558,26 @@ const faqSchema = [
     border-color: rgba(22,163,74,0.2);
     color: var(--color-success);
   }
+
+  .hero-page-links {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-2);
+    margin-top: var(--space-4);
+  }
+
+  .hero-page-links a {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-body);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+  }
+
+  .hero-page-links a:hover { color: var(--color-primary); text-decoration: underline; }
+
+  .hero-page-sep { font-size: 13px; color: var(--color-mute); }
 
   /* Hero visual / mockup */
   .hero-visual { display: flex; justify-content: flex-end; }
@@ -538,6 +791,54 @@ const faqSchema = [
   .faq-section { background: var(--color-canvas); }
   .faq-list { margin-top: var(--space-8); max-width: 800px; }
 
+  /* ── SEO Article ──────────────────────── */
+  .seo-article-section { background: var(--color-canvas-soft); }
+
+  .seo-article {
+    max-width: 800px;
+  }
+
+  .seo-article h2 {
+    font-size: clamp(1.4rem, 2.5vw, 2rem);
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-4);
+  }
+
+  .seo-article h3 {
+    font-size: var(--text-xl);
+    letter-spacing: -0.01em;
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-3);
+  }
+
+  .seo-article p {
+    font-size: 16px;
+    line-height: 1.75;
+    color: var(--color-body);
+    margin-bottom: var(--space-4);
+  }
+
+  .seo-article ul {
+    margin: 0 0 var(--space-4) var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .seo-article li {
+    font-size: 16px;
+    line-height: 1.7;
+    color: var(--color-body);
+  }
+
+  .seo-article a {
+    color: var(--color-primary);
+    font-weight: 600;
+    text-decoration: none;
+  }
+
+  .seo-article a:hover { text-decoration: underline; }
+
   /* ── Responsive ──────────────────────── */
   @media (max-width: 1280px) {
     .tools-grid { grid-template-columns: repeat(4, 1fr); }
@@ -559,5 +860,65 @@ const faqSchema = [
 
   @media (max-width: 480px) {
     .tools-grid { grid-template-columns: 1fr; }
+    .hero-cta-row { flex-direction: column; align-items: stretch; }
+    .hero-cta-row .btn { width: 100%; justify-content: center; }
+    .trust-badges { justify-content: center; }
+  }
+
+  /* ── Company section ─────────────────── */
+  .company-section { background: var(--color-canvas); }
+
+  .company-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    margin-top: var(--space-8);
+  }
+
+  .company-card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    padding: var(--space-6);
+    background: var(--color-canvas-soft);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-lg);
+    text-decoration: none !important;
+    color: inherit;
+    transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+  }
+
+  .company-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: var(--color-primary);
+  }
+
+  .company-card-icon { font-size: 28px; }
+
+  .company-card h3 {
+    font-size: var(--text-md);
+    margin-bottom: var(--space-1);
+  }
+
+  .company-card p {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--color-body);
+    margin: 0;
+  }
+
+  .company-card-cta {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-top: auto;
+  }
+
+  @media (max-width: 1024px) {
+    .company-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 480px) {
+    .company-grid { grid-template-columns: 1fr; }
   }
 </style>
