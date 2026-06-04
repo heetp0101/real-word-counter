@@ -90,7 +90,7 @@ const faqSchema = [
             <li id="check-title-max"  class="check-item check-neutral">Title is 60 characters or under</li>
             <li id="check-desc-min"   class="check-item check-neutral">Description is at least 120 characters</li>
             <li id="check-desc-max"   class="check-item check-neutral">Description is 155 characters or under</li>
-            <li id="check-desc-cta"   class="check-item check-neutral">Description ends with a call to action</li>
+            <li id="check-desc-cta"   class="check-item check-neutral">Description contains a call to action</li>
             <li class="check-item check-tip">💡 Tip: Include your primary keyword in both the title and description</li>
           </ul>
         </div>
@@ -207,20 +207,25 @@ const faqSchema = [
     setCheck('check-desc-min',  dLen===0 ? null : dLen >= DESC_MIN);
     setCheck('check-desc-max',  dLen===0 ? null : dLen <= DESC_MAX);
 
-    const lastWord = desc.trim().split(/\s+/).pop()?.toLowerCase().replace(/[^a-z]/g,'') || '';
     const hasCta = CTA_WORDS.some(w => desc.toLowerCase().includes(w));
     setCheck('check-desc-cta', dLen===0 ? null : hasCta);
   }
 
-  function toast(msg:string){
+  function toast(msg:string, type='success'){
     const c=document.getElementById('toast-container');if(!c)return;
-    const el=document.createElement('div');el.className='toast toast-success';el.textContent=msg;c.appendChild(el);
+    const el=document.createElement('div');el.className=`toast toast-${type}`;el.textContent=msg;c.appendChild(el);
     requestAnimationFrame(()=>el.classList.add('toast-visible'));
     setTimeout(()=>{el.classList.remove('toast-visible');el.classList.add('toast-hiding');setTimeout(()=>el.remove(),350);},2000);
   }
 
-  document.getElementById('copy-title')?.addEventListener('click',()=>navigator.clipboard.writeText(titleEl.value).then(()=>toast('Title copied!')));
-  document.getElementById('copy-desc')?.addEventListener('click',()=>navigator.clipboard.writeText(descEl.value).then(()=>toast('Description copied!')));
+  document.getElementById('copy-title')?.addEventListener('click',()=>{
+    if(!titleEl.value) return;
+    navigator.clipboard.writeText(titleEl.value).then(()=>toast('Title copied!')).catch(()=>toast('Copy failed','error'));
+  });
+  document.getElementById('copy-desc')?.addEventListener('click',()=>{
+    if(!descEl.value) return;
+    navigator.clipboard.writeText(descEl.value).then(()=>toast('Description copied!')).catch(()=>toast('Copy failed','error'));
+  });
 
   titleEl.addEventListener('input', update);
   descEl.addEventListener('input', update);

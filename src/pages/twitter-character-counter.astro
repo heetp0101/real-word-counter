@@ -185,10 +185,10 @@ const LIMIT = 280;
     if(countEl) countEl.textContent = String(count);
     if(fracEl){
       fracEl.className = 'tw-fraction';
-      if(count > LIMIT)      fracEl.classList.add('tw-over');
-      else if(count >= 240)  fracEl.classList.add('tw-warn');
+      if(count > LIMIT)        fracEl.classList.add('tw-over');
       else if(count === LIMIT) fracEl.classList.add('tw-exact');
-      else                   fracEl.classList.add('tw-ok');
+      else if(count >= 240)    fracEl.classList.add('tw-warn');
+      else                     fracEl.classList.add('tw-ok');
     }
     if(remMsg){
       if(count > LIMIT) remMsg.textContent = `${count - LIMIT} characters over limit`;

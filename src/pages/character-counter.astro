@@ -73,8 +73,6 @@ const platforms = [
     <div class="action-row" style="margin-top:var(--space-3)">
       <button id="cc-paste"  class="btn btn-secondary btn-sm">📋 Paste</button>
       <button id="cc-clear"  class="btn btn-secondary btn-sm">🗑️ Clear</button>
-      <label  class="btn btn-secondary btn-sm" for="cc-upload" style="cursor:pointer">📁 Upload</label>
-      <input type="file" id="cc-upload" accept=".txt,.docx" style="display:none" />
       <button id="cc-copy-stats" class="btn btn-secondary btn-sm">📊 Copy Stats</button>
     </div>
 
@@ -137,6 +135,20 @@ const platforms = [
 
     <!-- Ad zone 2 -->
     <div class="ad-zone" style="margin-top:var(--space-4)"><!-- Google AdSense ad unit — character-counter below-platforms --><span>Advertisement</span></div>
+
+    <!-- Import card -->
+    <div class="card card-body" style="margin-top:var(--space-4)">
+      <div class="card-title">📂 Import</div>
+      <div id="cc-import-dropzone" class="import-zone" role="region" aria-label="File drop zone">
+        <div class="import-zone-icon">📄</div>
+        <div class="import-zone-text">Drag and drop your file here</div>
+        <div class="import-formats">.txt · .docx · .pdf · .md</div>
+      </div>
+      <div id="cc-import-file-info" class="import-file-info" style="display:none"></div>
+      <label class="btn btn-success import-browse-btn" for="cc-upload">📁 Browse File</label>
+      <input type="file" id="cc-upload" accept=".txt,.docx,.pdf,.md" style="display:none" aria-label="Import file" />
+      <p class="import-privacy-note">🔒 Files are read locally — never uploaded to any server</p>
+    </div>
 
     <!-- Export panel -->
     <div class="card card-body" style="margin-top:var(--space-4)">
@@ -274,7 +286,7 @@ const platforms = [
     if(saved){editor.value=saved;update(saved);}
   }catch(_){}
 
-  editor.addEventListener('input',()=>{update(editor.value);autosave(editor.value);});
+  editor.addEventListener('input',()=>{update(editor.value);autosave(editor.value);hideFileInfo();});
 
   // Paste
   document.getElementById('cc-paste')?.addEventListener('click',async()=>{
@@ -285,7 +297,7 @@ const platforms = [
   // Clear
   document.getElementById('cc-clear')?.addEventListener('click',()=>{
     if(charCount>200&&!confirm('Clear all text?'))return;
-    editor.value='';update('');try{localStorage.removeItem(STORAGE_KEY);}catch(_){}toast('Cleared','info');
+    editor.value='';update('');hideFileInfo();try{localStorage.removeItem(STORAGE_KEY);}catch(_){}toast('Cleared','info');
   });
 
   // Copy stats
@@ -294,21 +306,80 @@ const platforms = [
     navigator.clipboard.writeText(stats).then(()=>toast('Stats copied')).catch(()=>toast('Copy failed','error'));
   });
 
-  // File upload
+  // ── Import card ─────────────────────────────────
   const fileInput=document.getElementById('cc-upload') as HTMLInputElement;
-  fileInput?.addEventListener('change',async()=>{
-    const file=fileInput.files?.[0];if(!file)return;fileInput.value='';
-    if(file.name.endsWith('.txt')){
-      const r=new FileReader();r.onload=e=>{const t=(e.target?.result as string)||'';editor.value=t;update(t);autosave(t);toast('File loaded');};r.readAsText(file);
-    } else if(file.name.endsWith('.docx')){
-      toast('Loading...','info');
+  const dropzone=document.getElementById('cc-import-dropzone');
+  const fileInfoEl=document.getElementById('cc-import-file-info');
+
+  function showFileInfo(filename:string,words:number){
+    if(!fileInfoEl)return;
+    fileInfoEl.textContent=`✓ ${filename} imported · ${words.toLocaleString()} words`;
+    fileInfoEl.style.display='flex';
+  }
+
+  function hideFileInfo(){
+    if(fileInfoEl)fileInfoEl.style.display='none';
+  }
+
+  async function handleFile(file:File){
+    const name=file.name;
+    if(name.endsWith('.txt')||name.endsWith('.md')){
+      const r=new FileReader();
+      r.onload=e=>{
+        const t=(e.target?.result as string)||'';
+        editor.value=t;update(t);autosave(t);
+        const w=t.trim()?t.trim().split(/\s+/).filter(Boolean).length:0;
+        showFileInfo(name,w);toast('File loaded');
+      };
+      r.onerror=()=>toast('Error reading file','error');
+      r.readAsText(file);
+    } else if(name.endsWith('.docx')){
+      toast('Loading document...','info');
       try{
         if(!(window as any).mammoth){await new Promise<void>((res,rej)=>{const s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js';s.onload=()=>res();s.onerror=rej;document.head.appendChild(s);});}
         const buf=await file.arrayBuffer();const result=await (window as any).mammoth.extractRawValue({arrayBuffer:buf});
-        editor.value=result.value;update(result.value);autosave(result.value);toast('Document loaded');
+        editor.value=result.value;update(result.value);autosave(result.value);
+        const w=result.value.trim()?result.value.trim().split(/\s+/).filter(Boolean).length:0;
+        showFileInfo(name,w);toast('Document loaded');
       }catch(_){toast('Error loading .docx','error');}
-    } else {toast('Upload .txt or .docx files','error');}
+    } else if(name.endsWith('.pdf')){
+      toast('Loading PDF...','info');
+      try{
+        if(!(window as any).pdfjsLib){
+          await new Promise<void>((res,rej)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';s.onload=()=>res();s.onerror=rej;document.head.appendChild(s);});
+          (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+        }
+        const buf=await file.arrayBuffer();
+        const pdf=await (window as any).pdfjsLib.getDocument({data:buf}).promise;
+        const pages:string[]=[];
+        for(let i=1;i<=pdf.numPages;i++){
+          const page=await pdf.getPage(i);
+          const content=await page.getTextContent();
+          pages.push(content.items.map((item:any)=>item.str).join(' '));
+        }
+        const t=pages.join('\n\n');
+        editor.value=t;update(t);autosave(t);
+        const w=t.trim()?t.trim().split(/\s+/).filter(Boolean).length:0;
+        showFileInfo(name,w);toast('PDF loaded successfully');
+      }catch(_){toast('Error loading PDF','error');}
+    } else {toast('Upload .txt, .docx, .pdf or .md files only','error');}
+  }
+
+  fileInput?.addEventListener('change',async()=>{
+    const file=fileInput.files?.[0];if(!file)return;fileInput.value='';
+    await handleFile(file);
   });
+
+  if(dropzone){
+    dropzone.addEventListener('click',()=>fileInput?.click());
+    dropzone.addEventListener('dragover',e=>{e.preventDefault();dropzone.classList.add('drag-over');});
+    dropzone.addEventListener('dragleave',()=>dropzone.classList.remove('drag-over'));
+    dropzone.addEventListener('drop',async e=>{
+      e.preventDefault();dropzone.classList.remove('drag-over');
+      const file=(e as DragEvent).dataTransfer?.files[0];
+      if(file) await handleFile(file);
+    });
+  }
 
   // Export
   function dl(content:string,name:string,mime:string){
@@ -367,6 +438,17 @@ const platforms = [
   .platform-card.platform-over .platform-status{color:var(--color-error);}
   /* Export */
   .export-row{display:flex;flex-wrap:wrap;gap:var(--space-2);}
+  /* Import card */
+  .import-zone{border:2px dashed var(--color-hairline-strong);border-radius:var(--radius-md);padding:var(--space-6) var(--space-4);text-align:center;cursor:pointer;transition:border-color var(--transition-fast),background var(--transition-fast);}
+  .import-zone:hover,.import-zone.drag-over{border-color:var(--color-primary);background:var(--color-primary-soft);}
+  .import-zone-icon{font-size:28px;margin-bottom:var(--space-2);}
+  .import-zone-text{font-size:14px;font-weight:500;color:var(--color-body);margin-bottom:var(--space-1);}
+  .import-formats{font-size:12px;color:var(--color-mute);}
+  .import-file-info{align-items:center;gap:var(--space-2);padding:var(--space-2) var(--space-3);background:var(--color-success-soft);color:var(--color-success);border-radius:var(--radius-sm);font-size:13px;font-weight:500;margin-top:var(--space-3);border:1px solid rgba(22,163,74,0.2);}
+  .import-browse-btn{display:flex;align-items:center;justify-content:center;gap:var(--space-2);width:100%;margin-top:var(--space-3);cursor:pointer;}
+  .btn-success{background:var(--color-success);color:white;border:1px solid var(--color-success);}
+  .btn-success:hover{filter:brightness(0.9);}
+  .import-privacy-note{font-size:12px;color:var(--color-mute);text-align:center;margin-top:var(--space-3);margin-bottom:0;}
   /* SEO content */
   .seo-section h2{font-size:var(--text-2xl);margin-bottom:var(--space-4);padding-bottom:var(--space-3);border-bottom:1px solid var(--color-hairline);margin-top:var(--space-8);}
   .seo-section p{max-width:800px;margin-bottom:var(--space-4);}

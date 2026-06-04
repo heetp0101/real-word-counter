@@ -42,6 +42,23 @@ const presets = [
     <!-- ════ LEFT COLUMN ════ -->
     <div class="tool-left">
 
+      <!-- Writing toolbar -->
+      <div class="writing-toolbar" id="writing-toolbar">
+        <button id="toolbar-autosave-toggle" class="toolbar-autosave" aria-pressed="true" aria-label="Toggle autosave">Autosave ON</button>
+        <div class="toolbar-divider" aria-hidden="true"></div>
+        <div class="toolbar-group" role="group" aria-label="Font size">
+          <button class="toolbar-size-btn" data-size="13" aria-label="Small font" style="font-size:10px;font-weight:700">A</button>
+          <button class="toolbar-size-btn" data-size="15" aria-label="Medium font" style="font-size:13px;font-weight:700">A</button>
+          <button class="toolbar-size-btn" data-size="18" aria-label="Large font" style="font-size:16px;font-weight:700">A</button>
+        </div>
+        <div class="toolbar-divider" aria-hidden="true"></div>
+        <div class="toolbar-group" role="group" aria-label="Font family">
+          <button class="toolbar-font-btn" data-font-key="sans">Sans</button>
+          <button class="toolbar-font-btn" data-font-key="serif" style="font-family:Georgia,serif">Serif</button>
+          <button class="toolbar-font-btn" data-font-key="mono" style="font-family:monospace">Mono</button>
+        </div>
+      </div>
+
       <!-- Textarea card -->
       <div class="card editor-card">
         <textarea
@@ -63,18 +80,15 @@ const presets = [
       <div class="action-row">
         <button id="btn-paste" class="btn btn-secondary btn-sm">📋 Paste</button>
         <button id="btn-clear" class="btn btn-secondary btn-sm">🗑️ Clear</button>
-        <label class="btn btn-secondary btn-sm" for="file-upload" style="cursor:pointer">
-          📁 Upload
-        </label>
-        <input type="file" id="file-upload" accept=".txt,.docx" style="display:none" aria-label="Upload text file" />
         <button id="btn-copy-stats" class="btn btn-secondary btn-sm">📊 Copy Stats</button>
       </div>
 
-      <!-- Ad Zone 1 -->
+      <!-- AdSense code goes here after approval — uncomment this div -->
+      <!--
       <div class="ad-zone" aria-hidden="true">
-        <!-- Google AdSense ad unit goes here after approval -->
         <span>Advertisement</span>
       </div>
+      -->
 
       <!-- Stats grid -->
       <div class="stats-grid" role="region" aria-label="Text statistics">
@@ -236,6 +250,20 @@ const presets = [
         <p class="session-note">Tracks from your first keystroke. Data stays local.</p>
       </div>
 
+      <!-- Import -->
+      <div class="card card-body">
+        <div class="card-title">📂 Import</div>
+        <div id="import-dropzone" class="import-zone" role="region" aria-label="File drop zone">
+          <div class="import-zone-icon">📄</div>
+          <div class="import-zone-text">Drag and drop your file here</div>
+          <div class="import-formats">.txt · .docx · .pdf · .md</div>
+        </div>
+        <div id="import-file-info" class="import-file-info" style="display:none"></div>
+        <label class="btn btn-success import-browse-btn" for="file-upload">📁 Browse File</label>
+        <input type="file" id="file-upload" accept=".txt,.docx,.pdf,.md" style="display:none" aria-label="Import file" />
+        <p class="import-privacy-note">🔒 Files are read locally — never uploaded to any server</p>
+      </div>
+
       <!-- Export Panel -->
       <div class="card card-body">
         <div class="card-title">⬇️ Export</div>
@@ -247,11 +275,12 @@ const presets = [
         </div>
       </div>
 
-      <!-- Ad Zone 2 -->
+      <!-- AdSense code goes here after approval — uncomment this div -->
+      <!--
       <div class="ad-zone" aria-hidden="true">
-        <!-- Google AdSense ad unit goes here after approval -->
         <span>Advertisement</span>
       </div>
+      -->
 
     </div><!-- /.tool-right -->
   </div><!-- /.tool-layout -->
@@ -593,9 +622,162 @@ const presets = [
 
   .export-grid .btn { justify-content: flex-start; font-size: 13px; }
 
+  /* ── Import card ─────────────────────── */
+  .import-zone {
+    border: 2px dashed var(--color-hairline-strong);
+    border-radius: var(--radius-md);
+    padding: var(--space-6) var(--space-4);
+    text-align: center;
+    cursor: pointer;
+    transition: border-color var(--transition-fast), background var(--transition-fast);
+  }
+
+  .import-zone:hover,
+  .import-zone.drag-over {
+    border-color: var(--color-primary);
+    background: var(--color-primary-soft);
+  }
+
+  .import-zone-icon { font-size: 28px; margin-bottom: var(--space-2); }
+
+  .import-zone-text {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--color-body);
+    margin-bottom: var(--space-1);
+  }
+
+  .import-formats { font-size: 12px; color: var(--color-mute); }
+
+  .import-file-info {
+    align-items: center;
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-3);
+    background: var(--color-success-soft);
+    color: var(--color-success);
+    border-radius: var(--radius-sm);
+    font-size: 13px;
+    font-weight: 500;
+    margin-top: var(--space-3);
+    border: 1px solid rgba(22, 163, 74, 0.2);
+  }
+
+  .import-browse-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    width: 100%;
+    margin-top: var(--space-3);
+    cursor: pointer;
+  }
+
+  .btn-success {
+    background: var(--color-success);
+    color: white;
+    border: 1px solid var(--color-success);
+  }
+
+  .btn-success:hover { filter: brightness(0.9); }
+
+  .import-privacy-note {
+    font-size: 12px;
+    color: var(--color-mute);
+    text-align: center;
+    margin-top: var(--space-3);
+    margin-bottom: 0;
+  }
+
   /* ── Responsive ──────────────────────── */
   @media (max-width: 1024px) {
     .tool-layout { grid-template-columns: 1fr; }
+  }
+
+  /* ── Writing toolbar ─────────────────── */
+  .writing-toolbar {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    padding: 6px var(--space-3);
+    background: var(--color-canvas);
+    border: 1px solid var(--color-hairline);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-3);
+    flex-wrap: wrap;
+    box-shadow: var(--shadow-xs);
+  }
+
+  .toolbar-divider {
+    width: 1px;
+    height: 18px;
+    background: var(--color-hairline);
+    flex-shrink: 0;
+  }
+
+  .toolbar-group {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+  }
+
+  .toolbar-autosave {
+    padding: 3px 10px;
+    border-radius: var(--radius-full);
+    font-size: 12px;
+    font-weight: 600;
+    border: 1px solid var(--color-success);
+    background: var(--color-success-soft);
+    color: var(--color-success);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    white-space: nowrap;
+    line-height: 1.5;
+  }
+
+  .toolbar-autosave.off {
+    background: var(--color-canvas-soft-2);
+    color: var(--color-mute);
+    border-color: var(--color-hairline);
+  }
+
+  .toolbar-size-btn,
+  .toolbar-font-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: var(--radius-xs);
+    border: 1px solid transparent;
+    background: none;
+    cursor: pointer;
+    color: var(--color-body);
+    transition: all var(--transition-fast);
+    line-height: 1;
+  }
+
+  .toolbar-size-btn {
+    width: 26px;
+    height: 26px;
+  }
+
+  .toolbar-font-btn {
+    padding: 0 var(--space-2);
+    height: 26px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  .toolbar-size-btn:hover,
+  .toolbar-font-btn:hover {
+    background: var(--color-canvas-soft-2);
+    color: var(--color-ink);
+  }
+
+  .toolbar-size-btn.active,
+  .toolbar-font-btn.active {
+    background: var(--color-primary-soft);
+    color: var(--color-primary);
+    border-color: var(--color-primary-light);
   }
 
   @media (max-width: 768px) {
@@ -658,8 +840,11 @@ const presets = [
     const presetBtns    = document.querySelectorAll<HTMLElement>('[data-preset]');
 
     // ── Constants ─────────────────────────────────────
-    const STORAGE_DRAFT = 'RealWordCounter_draft';
-    const STORAGE_GOAL  = 'RealWordCounter_goal';
+    const STORAGE_DRAFT      = 'RealWordCounter_draft';
+    const STORAGE_GOAL       = 'RealWordCounter_goal';
+    const STORAGE_AUTOSAVE   = 'textcount_autosave';
+    const STORAGE_FONTSIZE   = 'textcount_fontsize';
+    const STORAGE_FONTFAMILY = 'textcount_fontfamily';
 
     const STOP_WORDS = new Set([
       'a','about','above','after','again','against','all','am','an','and','any','are','as','at',
@@ -683,12 +868,13 @@ const presets = [
     ]);
 
     // ── State ──────────────────────────────────────────
-    let currentWords = 0;
-    let currentChars = 0;
-    let goalValue    = 0;
+    let currentWords    = 0;
+    let currentChars    = 0;
+    let goalValue       = 0;
     let sessionStart: number | null = null;
     let autosaveTimer: number;
     let keywordTimer: number;
+    let autosaveEnabled = true;
 
     // ── Syllable counting (for Flesch) ─────────────────
     function syllables(word: string): number {
@@ -879,6 +1065,7 @@ const presets = [
 
     // ── Autosave ───────────────────────────────────────
     function autosave(text: string) {
+      if (!autosaveEnabled) return;
       clearTimeout(autosaveTimer);
       autosaveTimer = window.setTimeout(() => {
         try {
@@ -983,6 +1170,7 @@ const presets = [
       startSession();
       updateAll(editor.value);
       autosave(editor.value);
+      hideFileInfo();
     });
 
     // Presets
@@ -1031,6 +1219,7 @@ const presets = [
         if (currentWords > 50 && !confirm('Clear all text? This cannot be undone.')) return;
         editor.value = '';
         updateAll('');
+        hideFileInfo();
         try { localStorage.removeItem(STORAGE_DRAFT); } catch (_) {}
         toast('Text cleared', 'info');
       });
@@ -1051,47 +1240,113 @@ const presets = [
       });
     }
 
-    // File upload
-    const fileInput = $id('file-upload') as HTMLInputElement;
+    // ── Import card ────────────────────────────────────
+    const fileInput  = $id('file-upload') as HTMLInputElement;
+    const dropzone   = $id('import-dropzone');
+    const fileInfoEl = $id('import-file-info');
+
+    function showFileInfo(filename: string, words: number) {
+      if (!fileInfoEl) return;
+      fileInfoEl.textContent = `✓ ${filename} imported · ${words.toLocaleString()} words`;
+      fileInfoEl.style.display = 'flex';
+    }
+
+    function hideFileInfo() {
+      if (fileInfoEl) fileInfoEl.style.display = 'none';
+    }
+
+    async function handleFile(file: File) {
+      const name = file.name;
+      if (name.endsWith('.txt') || name.endsWith('.md')) {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const text = (e.target?.result as string) || '';
+          editor.value = text;
+          updateAll(text);
+          autosave(text);
+          const words = text.trim() ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+          showFileInfo(name, words);
+          toast('File loaded successfully');
+        };
+        reader.onerror = () => toast('Error reading file', 'error');
+        reader.readAsText(file);
+      } else if (name.endsWith('.docx')) {
+        toast('Loading document...', 'info');
+        try {
+          if (!(window as any).mammoth) {
+            await new Promise<void>((resolve, reject) => {
+              const s = document.createElement('script');
+              s.src = 'https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js';
+              s.onload = () => resolve();
+              s.onerror = reject;
+              document.head.appendChild(s);
+            });
+          }
+          const buf = await file.arrayBuffer();
+          const result = await (window as any).mammoth.extractRawValue({ arrayBuffer: buf });
+          editor.value = result.value;
+          updateAll(result.value);
+          autosave(result.value);
+          const words = result.value.trim() ? result.value.trim().split(/\s+/).filter(Boolean).length : 0;
+          showFileInfo(name, words);
+          toast('Document loaded successfully');
+        } catch (_) { toast('Error loading .docx file', 'error'); }
+      } else if (name.endsWith('.pdf')) {
+        toast('Loading PDF...', 'info');
+        try {
+          if (!(window as any).pdfjsLib) {
+            await new Promise<void>((resolve, reject) => {
+              const s = document.createElement('script');
+              s.src = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js';
+              s.onload = () => resolve();
+              s.onerror = reject;
+              document.head.appendChild(s);
+            });
+            (window as any).pdfjsLib.GlobalWorkerOptions.workerSrc =
+              'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+          }
+          const buf = await file.arrayBuffer();
+          const pdf = await (window as any).pdfjsLib.getDocument({ data: buf }).promise;
+          const pages: string[] = [];
+          for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const content = await page.getTextContent();
+            pages.push(content.items.map((item: any) => item.str).join(' '));
+          }
+          const text = pages.join('\n\n');
+          editor.value = text;
+          updateAll(text);
+          autosave(text);
+          const words = text.trim() ? text.trim().split(/\s+/).filter(Boolean).length : 0;
+          showFileInfo(name, words);
+          toast('PDF loaded successfully');
+        } catch (_) { toast('Error loading PDF', 'error'); }
+      } else {
+        toast('Upload .txt, .docx, .pdf or .md files only', 'error');
+      }
+    }
+
     if (fileInput) {
       fileInput.addEventListener('change', async () => {
         const file = fileInput.files?.[0];
         if (!file) return;
         fileInput.value = '';
+        await handleFile(file);
+      });
+    }
 
-        if (file.name.endsWith('.txt')) {
-          const reader = new FileReader();
-          reader.onload = e => {
-            const text = (e.target?.result as string) || '';
-            editor.value = text;
-            updateAll(text);
-            autosave(text);
-            toast('File loaded successfully');
-          };
-          reader.onerror = () => toast('Error reading file', 'error');
-          reader.readAsText(file);
-        } else if (file.name.endsWith('.docx')) {
-          toast('Loading document...', 'info');
-          try {
-            if (!(window as any).mammoth) {
-              await new Promise<void>((resolve, reject) => {
-                const s = document.createElement('script');
-                s.src = 'https://cdn.jsdelivr.net/npm/mammoth@1.6.0/mammoth.browser.min.js';
-                s.onload = () => resolve();
-                s.onerror = reject;
-                document.head.appendChild(s);
-              });
-            }
-            const buf = await file.arrayBuffer();
-            const result = await (window as any).mammoth.extractRawValue({ arrayBuffer: buf });
-            editor.value = result.value;
-            updateAll(result.value);
-            autosave(result.value);
-            toast('Document loaded successfully');
-          } catch (_) { toast('Error loading .docx file', 'error'); }
-        } else {
-          toast('Upload .txt or .docx files only', 'error');
-        }
+    if (dropzone) {
+      dropzone.addEventListener('click', () => fileInput?.click());
+      dropzone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropzone.classList.add('drag-over');
+      });
+      dropzone.addEventListener('dragleave', () => dropzone.classList.remove('drag-over'));
+      dropzone.addEventListener('drop', async e => {
+        e.preventDefault();
+        dropzone.classList.remove('drag-over');
+        const file = (e as DragEvent).dataTransfer?.files[0];
+        if (file) await handleFile(file);
       });
     }
 
@@ -1180,6 +1435,86 @@ const presets = [
       }
     });
 
+    // ── Writing toolbar ────────────────────────────────
+    function initToolbar() {
+      const autosaveToggle = $id('toolbar-autosave-toggle');
+      const sizeBtns = document.querySelectorAll<HTMLElement>('.toolbar-size-btn');
+      const fontBtns = document.querySelectorAll<HTMLElement>('.toolbar-font-btn');
+
+      // Font size
+      function applyFontSize(size: string) {
+        editor.style.fontSize = size + 'px';
+        sizeBtns.forEach(b => b.classList.toggle('active', b.dataset.size === size));
+      }
+      const savedSize = (() => { try { return localStorage.getItem(STORAGE_FONTSIZE); } catch (_) { return null; } })();
+      applyFontSize(savedSize || '15');
+      sizeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const s = btn.dataset.size || '15';
+          applyFontSize(s);
+          try { localStorage.setItem(STORAGE_FONTSIZE, s); } catch (_) {}
+        });
+      });
+
+      // Font family
+      const fontMap: Record<string, string> = {
+        sans:  'system-ui, sans-serif',
+        serif: 'Georgia, serif',
+        mono:  'monospace',
+      };
+      function applyFontFamily(key: string) {
+        editor.style.fontFamily = fontMap[key] || fontMap.sans;
+        fontBtns.forEach(b => b.classList.toggle('active', b.dataset.fontKey === key));
+      }
+      const savedFont = (() => { try { return localStorage.getItem(STORAGE_FONTFAMILY); } catch (_) { return null; } })();
+      applyFontFamily(savedFont || 'sans');
+      fontBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const k = btn.dataset.fontKey || 'sans';
+          applyFontFamily(k);
+          try { localStorage.setItem(STORAGE_FONTFAMILY, k); } catch (_) {}
+        });
+      });
+
+      // Autosave toggle — restore preference first
+      const savedAutosave = (() => { try { return localStorage.getItem(STORAGE_AUTOSAVE); } catch (_) { return null; } })();
+      if (savedAutosave === 'off') {
+        autosaveEnabled = false;
+        if (autosaveToggle) {
+          autosaveToggle.textContent = 'Autosave OFF';
+          autosaveToggle.classList.add('off');
+          autosaveToggle.setAttribute('aria-pressed', 'false');
+        }
+        if (autosaveIndicator) {
+          autosaveIndicator.textContent = 'Autosave off';
+          autosaveIndicator.className = 'autosave-indicator';
+        }
+      }
+
+      autosaveToggle?.addEventListener('click', () => {
+        autosaveEnabled = !autosaveEnabled;
+        try { localStorage.setItem(STORAGE_AUTOSAVE, autosaveEnabled ? 'on' : 'off'); } catch (_) {}
+        if (autosaveEnabled) {
+          autosaveToggle.textContent = 'Autosave ON';
+          autosaveToggle.classList.remove('off');
+          autosaveToggle.setAttribute('aria-pressed', 'true');
+          if (autosaveIndicator) {
+            autosaveIndicator.innerHTML = '<span class="autosave-dot"></span> Auto-save on';
+            autosaveIndicator.className = 'autosave-indicator';
+          }
+        } else {
+          autosaveToggle.textContent = 'Autosave OFF';
+          autosaveToggle.classList.add('off');
+          autosaveToggle.setAttribute('aria-pressed', 'false');
+          try { localStorage.removeItem(STORAGE_DRAFT); } catch (_) {}
+          if (autosaveIndicator) {
+            autosaveIndicator.textContent = 'Autosave off';
+            autosaveIndicator.className = 'autosave-indicator';
+          }
+        }
+      });
+    }
+
     // ── Init ───────────────────────────────────────────
     const defaultGoal = root.dataset.defaultGoal;
     const defaultPreset = root.dataset.defaultPreset;
@@ -1192,6 +1527,7 @@ const presets = [
       updateGoal(0);
     }
 
+    initToolbar();
     restoreDraft();
     if (editor.value) updateAll(editor.value);
   })();

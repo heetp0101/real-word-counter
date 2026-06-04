@@ -71,7 +71,7 @@ const faqSchema = [
           <div class="ig-count-wrap">
             <span id="ig-count" class="ig-count-num">0</span>
             <span class="ig-sep"> / </span>
-            <span id="ig-limit-display" class="ig-limit-num">2200</span>
+            <span id="ig-limit-display" class="ig-limit-num">2,200</span>
           </div>
           <div class="ig-bar">
             <div id="ig-bar-fill" class="ig-bar-fill"></div>
@@ -187,7 +187,7 @@ const faqSchema = [
   }
 
   function countHashtags(text: string): number {
-    return (text.match(/#\w+/g) || []).length;
+    return (text.match(/#[\p{L}\p{N}_]+/gu) || []).length;
   }
 
   function update(){
@@ -202,6 +202,12 @@ const faqSchema = [
     const set=(id:string,v:string|number)=>{const el=$(id);if(el)el.textContent=String(v);};
 
     set('ig-count', count.toLocaleString());
+    const countNumEl = $('ig-count');
+    if(countNumEl){
+      countNumEl.className = 'ig-count-num';
+      if(count > currentLimit)  countNumEl.classList.add('count-over');
+      else if(pct >= 90)        countNumEl.classList.add('count-warn');
+    }
 
     const fill = $('ig-bar-fill') as HTMLElement;
     if(fill){
@@ -291,7 +297,9 @@ const faqSchema = [
   .ig-textarea:focus{outline:none;box-shadow:inset 0 0 0 2px var(--color-primary);}
   /* Counter card */
   .ig-count-wrap{display:flex;align-items:baseline;gap:4px;margin-bottom:var(--space-3);}
-  .ig-count-num{font-size:48px;font-weight:800;letter-spacing:-0.04em;color:var(--color-ink);}
+  .ig-count-num{font-size:48px;font-weight:800;letter-spacing:-0.04em;color:var(--color-ink);transition:color var(--transition-fast);}
+  .ig-count-num.count-warn{color:var(--color-warning);}
+  .ig-count-num.count-over{color:var(--color-error);}
   .ig-sep{font-size:24px;color:var(--color-mute);}
   .ig-limit-num{font-size:24px;color:var(--color-mute);}
   .ig-bar{height:8px;background:var(--color-canvas-soft-2);border-radius:var(--radius-full);overflow:hidden;margin-bottom:var(--space-3);}

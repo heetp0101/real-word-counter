@@ -23,7 +23,8 @@ const isToolActive = toolsLinks.some(t => path === t.href || path.startsWith(t.h
   <div class="navbar-inner">
     <!-- Logo -->
     <a href="/" class="navbar-logo" aria-label="RealWordCounter home">
-      RealWord<span class="logo-accent">Count</span>er
+      <img src="/favicon.png" alt="" class="navbar-logo-img" width="28" height="28" />
+      <span>RealWord<span class="logo-accent">Count</span>er</span>
     </a>
 
     <!-- Desktop nav -->
@@ -59,6 +60,17 @@ const isToolActive = toolsLinks.some(t => path === t.href || path.startsWith(t.h
             ))}
           </div>
         </li>
+
+        <!-- Contact -->
+        <li>
+          <a
+            href="/contact"
+            class={path === '/contact' ? 'active' : ''}
+            aria-current={path === '/contact' ? 'page' : undefined}
+          >
+            Contact
+          </a>
+        </li>
       </ul>
     </nav>
 
@@ -90,6 +102,7 @@ const isToolActive = toolsLinks.some(t => path === t.href || path.startsWith(t.h
     {mainLinks.map(({ href, label }) => (
       <a href={href} class={path === href || (href !== '/' && path.startsWith(href)) ? 'active' : ''}>{label}</a>
     ))}
+    <a href="/contact" class={path === '/contact' ? 'active' : ''}>Contact</a>
     <div class="mobile-tools-section">
       <div class="mobile-section-label">More Tools</div>
       {toolsLinks.map(({ href, label, emoji }) => (
