@@ -2,6 +2,7 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
+/** @type {Record<string, { priority: number; changefreq: any }>} */
 const priorityMap = {
   'https://realwordcounter.com/': { priority: 1.0, changefreq: 'daily' },
   'https://realwordcounter.com/word-counter/': { priority: 0.9, changefreq: 'weekly' },
@@ -21,6 +22,7 @@ const priorityMap = {
 export default defineConfig({
   site: 'https://realwordcounter.com',
   output: 'static',
+  trailingSlash: 'always',
   integrations: [
     sitemap({
       lastmod: new Date('2026-06-04'),
