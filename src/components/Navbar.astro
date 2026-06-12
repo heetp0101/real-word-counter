@@ -48,16 +48,18 @@ const isToolActive = toolsLinks.some(t => path === t.href || path.startsWith(t.h
             Tools <span class="dropdown-arrow">▾</span>
           </button>
           <div class="dropdown" role="menu" id="tools-dropdown">
-            {toolsLinks.map(({ href, label, emoji }) => (
-              <a
-                href={href}
-                class={`dropdown-item${path === href ? ' active' : ''}`}
-                role="menuitem"
-              >
-                <span class="dropdown-emoji">{emoji}</span>
-                {label}
-              </a>
-            ))}
+            <div class="dropdown-inner">
+              {toolsLinks.map(({ href, label, emoji }) => (
+                <a
+                  href={href}
+                  class={`dropdown-item${path === href ? ' active' : ''}`}
+                  role="menuitem"
+                >
+                  <span class="dropdown-emoji">{emoji}</span>
+                  {label}
+                </a>
+              ))}
+            </div>
           </div>
         </li>
 
@@ -142,16 +144,20 @@ const isToolActive = toolsLinks.some(t => path === t.href || path.startsWith(t.h
   .dropdown {
     display: none;
     position: absolute;
-    top: calc(100% + 8px);
+    top: 100%;
     left: 50%;
     transform: translateX(-50%);
+    padding-top: 8px;
+    min-width: 220px;
+    z-index: 200;
+  }
+
+  .dropdown-inner {
     background: var(--color-canvas);
     border: 1px solid var(--color-hairline);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow-lg);
     padding: var(--space-2);
-    min-width: 220px;
-    z-index: 200;
   }
 
   .has-dropdown:hover .dropdown,
